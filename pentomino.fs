@@ -31,26 +31,29 @@ POINT, POINT, POINT, POINT,
 : NTH-PIECE ( n -- addr )
     5 * PIECES + ;
 
-DEFER .(POINT)
-
 : .(COORD) ( x,y -- )
     ." (" SWAP . ." ," . ." )" ;
 
 : .(SHARP) ( x,y -- )
     AT-XY 35 EMIT ;
 
-' .(SHARP) IS .(POINT) 
+: .(PIVOT) ( x,y -- )
+    AT-XY ." ▓" ;
+
+: .(POINT) ( x,y -- )
+    AT-XY ." ▒" ;
 
 : .(PIECE) ( x,y,addr -- )
     DUP 5 + SWAP DO
         2DUP I C@ COORD>ROW-COL 
+        2DUP 0 0 D= >R
         ROT + -ROT +
-        .(POINT)
+        R> IF .(PIVOT) ELSE .(POINT) THEN 
     LOOP 2DROP ;
 
 : .PIECE ( x,y,addr -- )
     DUP C@ 128 AND IF
-        DROP .(POINT)
+        DROP .(PIVOT)
     ELSE
         .(PIECE)
     THEN ;
