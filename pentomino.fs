@@ -1,19 +1,8 @@
-: ), ( r,c -- )
-    15 AND SWAP
-    15 AND 4 LSHIFT
-    OR C, ;
-
-: POINT,
-    5 0 DO 0 0 ), LOOP ;
-
-\ categories of pieces
-\ the puzzle can contain only 1 piece per category
-
   1 CONSTANT POINT-1   \ #
   2 CONSTANT POINT-2   \ #
   3 CONSTANT POINT-3   \ #
   4 CONSTANT POINT-4   \ #
-  5 CONSTANT I-LETTER  \ #####
+  5 CONSTANT BEAM      \ #####
 
                        \    #
   6 CONSTANT L-LETTER  \ ####
@@ -21,117 +10,232 @@
                        \   #
   7 CONSTANT LOWER-T   \ ####
 
+                       \   ##
+ 8 CONSTANT SNAKE      \ ###
+
+                       \ ##
+                       \  ##
+ 9 CONSTANT STAIRS     \   #
+
                        \   #
                        \ ###
-  8 CONSTANT S-LETTER  \ #
-
-                       \   ##
- 9 CONSTANT SNAKE      \ ###
+ 10 CONSTANT S-LETTER  \ #
 
                        \ # #
- 10 CONSTANT U-LETTER  \ ###
+ 11 CONSTANT U-LETTER  \ ###
 
                        \  ##
                        \ ##
- 11 CONSTANT BIRD      \  #
+ 12 CONSTANT BIRD      \  #
 
                        \ ###
                        \  #
-12 CONSTANT UPPER-T    \  #
-
-                       \ ##
-                       \  ##
-13 CONSTANT STAIRS     \   #
+ 13 CONSTANT UPPER-T   \  #
 
                        \  #
                        \ ###
-14 CONSTANT CROSS      \  #
+ 14 CONSTANT CROSS     \  #
 
 
                        \ #
                        \ #
-15 CONSTANT CORNER     \ ###
+ 15 CONSTANT CORNER    \ ###
 
                        \ #
                        \ ##
-16 CONSTANT HOUSE      \ ##
+ 16 CONSTANT HOUSE     \ ##
 
-DECIMAL
-CREATE SHAPES
-HERE
-POINT-1 C,  POINT,
-POINT-2 C,  POINT,
-POINT-3 C,  POINT,
-POINT-4 C,  POINT,
-I-LETTER C, 0 0 ), 0 1 ), 0 2 ), 0 3 ), 0 4 ),              \ #####
 
-I-LETTER C, 0 0 ), 1 0 ), 2 0 ), 3 0 ), 4 0 ),              \ #
-                                                            \ #
-                                                            \ #
-                                                            \ #
-                                                            \ #
+: SHAPE ( k,n -- <name> )
+    CREATE C, C, ;
 
-L-LETTER C,  0  0 ),  0  1 ),  0  2 ),  0  3 ), -1  3 ),    \    #
-                                                            \ ####
+: | ( addr <ccccc|> -- )
+    124 WORD
+    COUNT OVER + SWAP
+    DO I C@ C, LOOP ;
 
-L-LETTER C,  0  0 ),   1 0 ),  2  0 ),  3  0 ),  3  1 ),    \ #
-                                                            \ #
-                                                            \ #
-                                                            \ ##
+\ 012
+\ 345
+\ 678
+\ ←    →
+\ 258  630
+\ 147  741
+\ 036  852
 
-L-LETTER C,  0  0 ),  0  1 ),  0  2 ),  0  3 ),  1  0 ),    \ ####
-                                                            \ #
+VARIABLE DIMENSION
+: DIM ( -- n )
+    DIMENSION @ ;
 
-L-LETTER C,  0  0 ),  0  1 ),  1  1 ),  2  1 ),  3  1 ),    \ ##
-                                                            \  #
-                                                            \  #
-                                                            \  #
-
-L-LETTER C,  0  0 ),  0  1 ),  0  2 ),  0  3 ),  1  3 ),    \ ####
-                                                            \    #
-
-L-LETTER C,  0  0 ),  1  0 ),  2  0 ),  3  0 ),  3 -1 ),    \  #
-                                                            \  #
-                                                            \  #
-                                                            \ ##
-
-L-LETTER C,  0  0 ),  1  0 ),  1  1 ),  1  2 ),  1  3 ),   \ #
-                                                           \ ####
-
-L-LETTER C,  0  0 ),  0  1 ),  1  0 ),  2  0 ),  3  0 ),   \ ##
-                                                           \ #
-                                                           \ #
-                                                           \ #
-
-HERE SWAP - 6 / CONSTANT MAX-SHAPE
-: NTH-SHAPE ( n -- addr )
-    6 * SHAPES + ;
-
-HEX FFFFFFFFFFFFFFF0 CONSTANT NEG-MASK DECIMAL
-: NIBBLE>COORD ( b -- n )
-    15 AND DUP 8 AND IF NEG-MASK OR THEN ;
-
-: BYTE>XY ( b -- x,y )
-    DUP   NIBBLE>COORD
-    SWAP  4 RSHIFT NIBBLE>COORD ;
-
-: .BLOCK ( c,x,y -- )
-AT-XY EMIT ;
-
-: ADD-COORDS ( x,y,r,c -- x+c,y+r )
-    -ROT + -ROT + SWAP ;
-
-: .SHAPE ( x,y,c,addr -- )
-    1+ DUP 5 + SWAP DO
-        I C@
-        2OVER
-        ROT BYTE>XY
-        ADD-COORDS
-        ROT DUP
-        2SWAP .BLOCK
+: ROTATE ( srce,dest,n )
+    DIMENSION !
+    2 + SWAP 2 + SWAP
+    DIM 0 DO
+        DIM 0 DO
+            OVER J DIM * I + + C@
+            OVER DIM I - 1- DIM  * J + + C!
+        LOOP
     LOOP
-    DROP 2DROP ;
+    2DROP ;
 
-: DEMO 
-    MAX-SHAPE 0 DO PAGE I . 10 10 64 I NTH-SHAPE DUP C@ ROT + SWAP .SHAPE CR KEY DROP LOOP ;
+: FLIP-VERT ( srce,dest,n )
+    DIMENSION !
+    2 + SWAP 2 + SWAP
+    DIM 0 DO
+        DIM 0 DO
+            OVER J DIM * I + + C@
+            OVER J DIM * DIM I - 1- + + C!
+        LOOP
+    LOOP
+    2DROP ;
+
+: ADD-COORDS ( x,y,i,j -- x+i,y+j )
+    ROT +
+    -ROT +
+    SWAP ;
+
+: .SHAPE ( addr,x,y -- )
+    ROT DUP C@ DIMENSION !
+    2 + DIM 0 DO
+        DIM 0 DO
+           DUP J DIM * I + + C@  \ x,y,addr,c
+           2OVER I J ADD-COORDS AT-XY EMIT
+        LOOP
+    LOOP DROP ;
+            
+
+POINT-1 1 SHAPE POINT-1-SHAPE | @|
+POINT-2 1 SHAPE POINT-2-SHAPE | @|
+POINT-3 1 SHAPE POINT-3-SHAPE | @|
+POINT-4 1 SHAPE POINT-4-SHAPE | @|
+
+BEAM 5 SHAPE BEAM-SHAPE-VERT
+| @    |
+| #    |
+| #    |
+| #    |
+| #    |
+BEAM 5 SHAPE BEAM-SHAPE-HORZ 25 ALLOT
+BEAM-SHAPE-VERT BEAM-SHAPE-HORZ 5 ROTATE
+
+L-LETTER 4 SHAPE L-LETTER-SHAPE-L1
+| @   |
+| #   |
+| #   |
+| ##  |
+L-LETTER 4 SHAPE L-LETTER-SHAPE-L2 16 ALLOT
+L-LETTER-SHAPE-L1 L-LETTER-SHAPE-L2 4 ROTATE
+L-LETTER 4 SHAPE L-LETTER-SHAPE-L3 16 ALLOT
+L-LETTER-SHAPE-L2 L-LETTER-SHAPE-L3 4 ROTATE
+L-LETTER 4 SHAPE L-LETTER-SHAPE-L4 16 ALLOT
+L-LETTER-SHAPE-L3 L-LETTER-SHAPE-L4 4 ROTATE
+L-LETTER 4 SHAPE L-LETTER-SHAPE-R1 16 ALLOT
+L-LETTER-SHAPE-L1 L-LETTER-SHAPE-R1 4 FLIP-VERT
+L-LETTER 4 SHAPE L-LETTER-SHAPE-R2 16 ALLOT
+L-LETTER-SHAPE-R1 L-LETTER-SHAPE-R2 4 ROTATE
+L-LETTER 4 SHAPE L-LETTER-SHAPE-R3 16 ALLOT
+L-LETTER-SHAPE-R2 L-LETTER-SHAPE-R3 4 ROTATE
+L-LETTER 4 SHAPE L-LETTER-SHAPE-R4 16 ALLOT
+L-LETTER-SHAPE-R3 L-LETTER-SHAPE-R4 4 ROTATE
+
+
+L-LETTER-SHAPE-L1 0 0 .SHAPE 
+L-LETTER-SHAPE-L2 5 0 .SHAPE 
+L-LETTER-SHAPE-L3 10 0 .SHAPE 
+L-LETTER-SHAPE-L4 15 0 .SHAPE 
+L-LETTER-SHAPE-R1 0 5 .SHAPE 
+L-LETTER-SHAPE-R2 5 5 .SHAPE 
+L-LETTER-SHAPE-R3 10 5 .SHAPE 
+L-LETTER-SHAPE-R4 15 5 .SHAPE 
+
+BYE
+BEAM 5 SHAPE BEAM-SHAPE-HORZ
+| @####|
+|      |
+|      |
+|      |
+|      |
+L-LETTER 4 SHAPE L-LETTER-SHAPE-L1
+| @   |
+| #   |
+| #   |
+| ##  |
+L-LETTER 4 SHAPE L-LETTER-SHAPE-L2
+|     |
+|     |
+|    #|
+| @###|
+L-LETTER 4 SHAPE L-LETTER-SHAPE-L3
+|   ##|
+|    #|
+|    #|
+|    @|
+L-LETTER 4 SHAPE L-LETTER-SHAPE-L4
+| @###|
+| #   |
+|     |
+|     |
+L-LETTER 4 SHAPE L-LETTER-SHAPE-R1
+|    #|
+|    #|
+|    #|
+|   @#|
+L-LETTER 4 SHAPE L-LETTER-SHAPE-R2
+| @###|
+|    #|
+|     |
+|     |
+L-LETTER 4 SHAPE L-LETTER-SHAPE-R3
+| @#  |
+| #   |
+| #   |
+| #   |
+L-LETTER 4 SHAPE L-LETTER-SHAPE-R4
+|     |
+|     |
+| @   |
+| ####|
+LOWER-T 4 SHAPE LOWER-T-SHAPE-L1
+| @   |
+| ##  |
+| #   |
+| #   |
+S-LETTER 4 SHAPE SNAKE-SHAPE
+| *   |
+| ##  |
+|  #  |
+|  #  |
+STAIRS 3 SHAPE STAIRS-SHAPE
+| *# |
+|  ##|
+|   #|
+S-LETTER 3 SHAPE S-LETTER-SHAPE
+| *# |
+|  # |
+|  ##|
+U-LETTER 3 SHAPE U-LETTER-SHAPE
+| * #|
+| ###|
+|    |
+BIRD 3 SHAPE BIRD-SHAPE
+| *# |
+|  ##|
+|  # |
+UPPER-T 3 SHAPE UPPER-T-SHAPE
+| *##|
+|  # |
+|  # |
+CROSS 3 SHAPE CROSS-SHAPE
+|  * |
+| ###|
+|  # |
+CORNER 3 SHAPE CORNER-SHAPE
+| *  |
+| #  |
+| ###|
+HOUSE 3 SHAPE HOUSE-SHAPE
+| *  |
+| ## |
+| ## |
+
+
 
