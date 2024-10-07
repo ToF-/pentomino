@@ -1,10 +1,10 @@
 0 CONSTANT BEAM        \ #####
 
                        \    #
-1 CONSTANT UPPER-L     \ ####
+1 CONSTANT UPPERL      \ ####
 
                        \  #
-2 CONSTANT LOWER-T     \ ####
+2 CONSTANT LOWERT      \ ####
 
                        \   ##
 3 CONSTANT SNAKE       \ ###
@@ -14,7 +14,7 @@
 
                        \  ##
                        \  #
-5 CONSTANT LOWER-S     \ ##
+5 CONSTANT LOWERS      \ ##
 
                        \  ##
                        \ ##
@@ -22,7 +22,7 @@
 
                        \ ###
                        \  #
-7 CONSTANT UPPER-T     \  #
+7 CONSTANT UPPERT      \  #
 
                        \ #
                        \ #
@@ -40,16 +40,13 @@
                        \  ##
 11 CONSTANT STAIRS     \   #
 
-5 CONSTANT SIZE-LENGTH 
-SIZE-LENGTH DUP * CONSTANT SHAPE-AREA
+5 CONSTANT SL 
+SL DUP * CONSTANT SHAPE-AREA
 
 : SHAPE ( npos -- <name> )
-    CREATE
-    DUP C, HERE
-    SWAP SHAPE-AREA * DUP ALLOT
-    ERASE ;
+    CREATE C, ;
 
-: POSITION ( adr,p -- adr )
+: POSITION ( shape,p -- adr )
     SHAPE-AREA * SWAP 1+ + ;
 
 : | ( addr <ccccc|> )
@@ -59,19 +56,43 @@ SIZE-LENGTH DUP * CONSTANT SHAPE-AREA
 
 
 : ROTATE ( srce,dest )
-    SIZE-LENGTH 0 DO
-        SIZE-LENGTH 0 DO
-            OVER J SIZE-LENGTH * I + + C@
-            OVER SIZE-LENGTH I - 1- SIZE-LENGTH  * J + + C!
+    SL 0 DO
+        SL 0 DO
+            OVER J SL * I + + C@
+            OVER SL I - 1- SL  * J + + C!
         LOOP
     LOOP
     2DROP ;
 
+\ 012   258
+\ 345 → 147
+\ 678   036
+
+: ROTATE, ( srce -- )
+    SL 0 DO
+        SL 0 DO
+            DUP SL I * +
+            SL J - 1- + 
+            C@ C,
+    LOOP LOOP DROP ;
+
+\ 012   210
+\ 345 → 543
+\ 678   876
+
+: FLIP, ( srce -- )
+    SL 0 DO
+        SL 0 DO
+            DUP SL J * +
+            SL I - 1- +
+            C@ C,
+    LOOP LOOP DROP ;
+
 : FLIP-VERT ( srce,dest,n )
-    SIZE-LENGTH 0 DO
-        SIZE-LENGTH 0 DO
-            OVER J SIZE-LENGTH * I + + C@
-            OVER J SIZE-LENGTH * SIZE-LENGTH I - 1- + + C!
+    SL 0 DO
+        SL 0 DO
+            OVER J SL * I + + C@
+            OVER J SL * SL I - 1- + + C!
         LOOP
     LOOP
     2DROP ;
@@ -86,154 +107,80 @@ VARIABLE PATTERN
 
 : .POSITION ( addr,x,y -- )
     ROT
-    SIZE-LENGTH 0 DO
-        SIZE-LENGTH 0 DO
-           DUP J SIZE-LENGTH * I + + C@
+    SL 0 DO
+        SL 0 DO
+           DUP J SL * I + + C@
            2OVER I J ADD-COORDS AT-XY EMIT
         LOOP
+    LOOP 2DROP DROP ;
+
+: .DEMO ( addr )
+    DUP C@ 0 DO
+        DUP I POSITION I 8 * 10 .POSITION
     LOOP DROP ;
 
 2 SHAPE BEAM-SHAPE
-BEAM-SHAPE 0 POSITION 
-| @#####|
-|       |
-|       |
-|       |
-|       |
-BEAM-SHAPE 0 POSITION
-BEAM-SHAPE 0 POSITION 50 DUMP bye
-PAGE 0 0  .POSITION
-BYE
-BEAM-SHAPE DUP C@ .s SWAP 0 NTH-POSITION SWAP 0 0 .SHAPE
+HERE
+| #####|
+|      |
+|      |
+|      |
+|      |
+ROTATE,
 
- \ BEAM 5 SHAPE BEAM-SHAPE-VERT
- \ | @    |
- \ | #    |
- \ | #    |
- \ | #    |
- \ | #    |
- \ BEAM 5 SHAPE BEAM-SHAPE-HORZ 25 ALLOT
- \ BEAM-SHAPE-VERT BEAM-SHAPE-HORZ 5 ROTATE
- \ 
- \ L-LETTER 4 SHAPE L-LETTER-SHAPE-L1
- \ | @   |
- \ | #   |
- \ | #   |
- \ | ##  |
- \ L-LETTER 4 SHAPE L-LETTER-SHAPE-L2 16 ALLOT
- \ L-LETTER-SHAPE-L1 L-LETTER-SHAPE-L2 4 ROTATE
- \ L-LETTER 4 SHAPE L-LETTER-SHAPE-L3 16 ALLOT
- \ L-LETTER-SHAPE-L2 L-LETTER-SHAPE-L3 4 ROTATE
- \ L-LETTER 4 SHAPE L-LETTER-SHAPE-L4 16 ALLOT
- \ L-LETTER-SHAPE-L3 L-LETTER-SHAPE-L4 4 ROTATE
- \ L-LETTER 4 SHAPE L-LETTER-SHAPE-R1 16 ALLOT
- \ L-LETTER-SHAPE-L1 L-LETTER-SHAPE-R1 4 FLIP-VERT
- \ L-LETTER 4 SHAPE L-LETTER-SHAPE-R2 16 ALLOT
- \ L-LETTER-SHAPE-R1 L-LETTER-SHAPE-R2 4 ROTATE
- \ L-LETTER 4 SHAPE L-LETTER-SHAPE-R3 16 ALLOT
- \ L-LETTER-SHAPE-R2 L-LETTER-SHAPE-R3 4 ROTATE
- \ L-LETTER 4 SHAPE L-LETTER-SHAPE-R4 16 ALLOT
- \ L-LETTER-SHAPE-R3 L-LETTER-SHAPE-R4 4 ROTATE
- \ 
- \ 
- \ L-LETTER-SHAPE-L1 0 0 .SHAPE 
- \ L-LETTER-SHAPE-L2 5 0 .SHAPE 
- \ L-LETTER-SHAPE-L3 10 0 .SHAPE 
- \ L-LETTER-SHAPE-L4 15 0 .SHAPE 
- \ L-LETTER-SHAPE-R1 0 5 .SHAPE 
- \ L-LETTER-SHAPE-R2 5 5 .SHAPE 
- \ L-LETTER-SHAPE-R3 10 5 .SHAPE 
- \ L-LETTER-SHAPE-R4 15 5 .SHAPE 
- \ 
- \ BYE
- \ BEAM 5 SHAPE BEAM-SHAPE-HORZ
- \ | @####|
- \ |      |
- \ |      |
- \ |      |
- \ |      |
- \ L-LETTER 4 SHAPE L-LETTER-SHAPE-L1
- \ | @   |
- \ | #   |
- \ | #   |
- \ | ##  |
- \ L-LETTER 4 SHAPE L-LETTER-SHAPE-L2
- \ |     |
- \ |     |
- \ |    #|
- \ | @###|
- \ L-LETTER 4 SHAPE L-LETTER-SHAPE-L3
- \ |   ##|
- \ |    #|
- \ |    #|
- \ |    @|
- \ L-LETTER 4 SHAPE L-LETTER-SHAPE-L4
- \ | @###|
- \ | #   |
- \ |     |
- \ |     |
- \ L-LETTER 4 SHAPE L-LETTER-SHAPE-R1
- \ |    #|
- \ |    #|
- \ |    #|
- \ |   @#|
- \ L-LETTER 4 SHAPE L-LETTER-SHAPE-R2
- \ | @###|
- \ |    #|
- \ |     |
- \ |     |
- \ L-LETTER 4 SHAPE L-LETTER-SHAPE-R3
- \ | @#  |
- \ | #   |
- \ | #   |
- \ | #   |
- \ L-LETTER 4 SHAPE L-LETTER-SHAPE-R4
- \ |     |
- \ |     |
- \ | @   |
- \ | ####|
- \ LOWER-T 4 SHAPE LOWER-T-SHAPE-L1
- \ | @   |
- \ | ##  |
- \ | #   |
- \ | #   |
- \ S-LETTER 4 SHAPE SNAKE-SHAPE
- \ | *   |
- \ | ##  |
- \ |  #  |
- \ |  #  |
- \ STAIRS 3 SHAPE STAIRS-SHAPE
- \ | *# |
- \ |  ##|
- \ |   #|
- \ S-LETTER 3 SHAPE S-LETTER-SHAPE
- \ | *# |
- \ |  # |
- \ |  ##|
- \ U-LETTER 3 SHAPE U-LETTER-SHAPE
- \ | * #|
- \ | ###|
- \ |    |
- \ BIRD 3 SHAPE BIRD-SHAPE
- \ | *# |
- \ |  ##|
- \ |  # |
- \ UPPER-T 3 SHAPE UPPER-T-SHAPE
- \ | *##|
- \ |  # |
- \ |  # |
- \ CROSS 3 SHAPE CROSS-SHAPE
- \ |  * |
- \ | ###|
- \ |  # |
- \ CORNER 3 SHAPE CORNER-SHAPE
- \ | *  |
- \ | #  |
- \ | ###|
- \ HOUSE 3 SHAPE HOUSE-SHAPE
- \ | *  |
- \ | ## |
- \ | ## |
- \ 
- \ 
- \ 
+page BEAM-SHAPE .DEMO cr key drop
+8 SHAPE UPPERL-SHAPE
+HERE
+| #    |
+| #    |
+| #    |
+| ##   |
+|      |
+HERE SWAP ROTATE, HERE SWAP ROTATE, HERE SWAP ROTATE,
+HERE SWAP FLIP, HERE SWAP ROTATE, HERE SWAP ROTATE, ROTATE,
+page UPPERL-SHAPE .DEMO cr key drop
+
+8 SHAPE LOWERT-SHAPE
+HERE
+| #    |
+| ##   |
+| #    |
+| #    |
+|      |
+HERE SWAP ROTATE, HERE SWAP ROTATE, HERE SWAP ROTATE,
+HERE SWAP FLIP, HERE SWAP ROTATE, HERE SWAP ROTATE, ROTATE,
+page LOWERT-SHAPE .DEMO cr key drop
+
+8 SHAPE SNAKE-SHAPE
+HERE
+|   ## |
+| ###  |
+|      |
+|      |
+|      |
+HERE SWAP ROTATE, HERE SWAP ROTATE, HERE SWAP ROTATE,
+HERE SWAP FLIP, HERE SWAP ROTATE, HERE SWAP ROTATE, ROTATE,
+page SNAKE-SHAPE .DEMO cr key drop
+
+4 SHAPE BRIDGE-SHAPE
+HERE
+| ###  |
+| # #  |
+|      |
+|      |
+|      |
+HERE SWAP ROTATE, HERE SWAP ROTATE, ROTATE,
+page BRIDGE-SHAPE .DEMO cr key drop
+
+4 SHAPE LOWERS-SHAPE
+HERE
+|  ##  |
+|  #   |
+| ##   |
+|      |
+|      |
+HERE SWAP ROTATE,
+HERE SWAP FLIP, ROTATE,
+page LOWERS-SHAPE .DEMO cr key drop
+
+BYE
