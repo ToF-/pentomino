@@ -107,28 +107,29 @@ VARIABLE PATTERN
 
 2VARIABLE ORIGIN
 
-: .COORD ( x,y -- )
-    SWAP 40 EMIT . 44 EMIT . 41 EMIT  ;
+: .COORD, ( x,y -- )
+    SWAP 3 .R 32 EMIT 3 .R 32 EMIT ." ), " ;
 
-: .COORDS ( addr -- )
+: .COORDS, ( addr -- )
     DUP FIRST-COORDS
     NEGATE SWAP NEGATE SWAP
     ORIGIN 2!
     SL 0 DO
         SL 0 DO
             DUP J SL * I + + C@
-            DUP 32 <> IF
+            32 <> IF
                 J I ORIGIN 2@ ADD-COORDS
-                .COORD
+                .COORD,
             THEN
         LOOP
-    LOOP DROP 2DROP ; 
+    LOOP DROP ;
 
 : .DEMO ( addr )
     DUP C@ 0 DO
         DUP I POSITION FIRST-COORDS SWAP I 8 * 1 AT-XY . .
-        0 0 AT-XY DUP .COORDS
         DUP I POSITION I 8 * 10 .POSITION
+        I 8 * 16 I + AT-XY 
+        DUP I POSITION .COORDS,
     LOOP DROP ;
 
 2 SHAPE BEAM-SHAPE
@@ -140,7 +141,7 @@ HERE
 |      |
 ROTATE,
 
-PAGE ." beam" BEAM-SHAPE dbg .DEMO cr key drop
+PAGE ." beam" BEAM-SHAPE .DEMO cr key drop
 8 SHAPE UPPERL-SHAPE
 HERE
 | #    |
