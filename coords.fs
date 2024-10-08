@@ -15,3 +15,11 @@ HEX FFFFFFFFFFFFFFF0 CONSTANT NEGMASK DECIMAL
 
 : ), ( r,c -- )
     XY>COORDS C, ;
+
+: TRANSLATE-COORDS ( x,y,c-- x+cx,y+cy )
+    COORDS>XY
+    ROT + -ROT + SWAP ;
+
+: CHECK-COORDS ( x,y -- f )
+    0 8 WITHIN SWAP
+    0 8 WITHIN AND ;
