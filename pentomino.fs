@@ -1,45 +1,3 @@
-0 CONSTANT BEAM        \ #####
-
-                       \    #
-1 CONSTANT UPPERL      \ ####
-
-                       \  #
-2 CONSTANT LOWERT      \ ####
-
-                       \   ##
-3 CONSTANT SNAKE       \ ###
-
-                       \ ###
-4 CONSTANT BRIDGE      \ # #
-
-                       \  ##
-                       \  #
-5 CONSTANT LOWERS      \ ##
-
-                       \  ##
-                       \ ##
-6 CONSTANT BIRD        \  #
-
-                       \ ###
-                       \  #
-7 CONSTANT UPPERT      \  #
-
-                       \ #
-                       \ #
-8 CONSTANT CORNER      \ ###
-
-                       \  #
-                       \ ###
-9 CONSTANT CROSS       \  #
-
-                       \ #
-                       \ ##
-10 CONSTANT HOUSE      \ ##
-
-                       \ ##
-                       \  ##
-11 CONSTANT STAIRS     \   #
-
 5 CONSTANT SL 
 SL DUP * CONSTANT SHAPE-AREA
 
@@ -124,6 +82,26 @@ VARIABLE PATTERN
         LOOP
     LOOP DROP ;
 
+: .\POSITION ( addr -- )
+    CR
+    SL 0 DO
+        92 EMIT 32 EMIT
+        SL 0 DO
+            DUP J SL * I + + C@
+            32 = IF 46  ELSE 35 THEN EMIT
+        LOOP CR
+    LOOP DROP ;
+
+: .SHAPE ( addr -- )
+    32 EMIT
+    DUP C@ . ." ,"
+    DUP 0 POSITION .\POSITION
+    DUP C@
+    0 DO
+        DUP I POSITION .COORDS, CR
+    LOOP DROP ;
+        
+
 : .DEMO ( addr )
     DUP C@ 0 DO
         DUP I POSITION FIRST-COORDS SWAP I 8 * 1 AT-XY . .
@@ -132,7 +110,8 @@ VARIABLE PATTERN
         DUP I POSITION .COORDS,
     LOOP DROP ;
 
-2 SHAPE BEAM-SHAPE
+
+2 SHAPE BEAM
 HERE
 | #####|
 |      |
@@ -141,8 +120,7 @@ HERE
 |      |
 ROTATE,
 
-PAGE ." beam" BEAM-SHAPE .DEMO cr key drop
-8 SHAPE UPPERL-SHAPE
+8 SHAPE UPPERL
 HERE
 | #    |
 | #    |
@@ -151,9 +129,9 @@ HERE
 |      |
 HERE SWAP ROTATE, HERE SWAP ROTATE, HERE SWAP ROTATE,
 HERE SWAP FLIP, HERE SWAP ROTATE, HERE SWAP ROTATE, ROTATE,
-PAGE ." upperl" UPPERL-SHAPE .DEMO cr key drop
 
-8 SHAPE LOWERT-SHAPE
+
+8 SHAPE LOWERT
 HERE
 | #    |
 | ##   |
@@ -162,9 +140,9 @@ HERE
 |      |
 HERE SWAP ROTATE, HERE SWAP ROTATE, HERE SWAP ROTATE,
 HERE SWAP FLIP, HERE SWAP ROTATE, HERE SWAP ROTATE, ROTATE,
-PAGE ." lowert" LOWERT-SHAPE .DEMO cr key drop
 
-8 SHAPE SNAKE-SHAPE
+
+8 SHAPE SNAKE
 HERE
 |   ## |
 | ###  |
@@ -173,9 +151,9 @@ HERE
 |      |
 HERE SWAP ROTATE, HERE SWAP ROTATE, HERE SWAP ROTATE,
 HERE SWAP FLIP, HERE SWAP ROTATE, HERE SWAP ROTATE, ROTATE,
-PAGE ." snake" SNAKE-SHAPE .DEMO cr key drop
 
-4 SHAPE BRIDGE-SHAPE
+
+4 SHAPE BRIDGE
 HERE
 | ###  |
 | # #  |
@@ -183,9 +161,9 @@ HERE
 |      |
 |      |
 HERE SWAP ROTATE, HERE SWAP ROTATE, ROTATE,
-PAGE ." bridge" BRIDGE-SHAPE .DEMO cr key drop
 
-4 SHAPE LOWERS-SHAPE
+
+4 SHAPE LOWERS
 HERE
 |  ##  |
 |  #   |
@@ -194,9 +172,9 @@ HERE
 |      |
 HERE SWAP ROTATE,
 HERE SWAP FLIP, ROTATE,
-PAGE ." lowers" LOWERS-SHAPE .DEMO cr key drop
 
-8 SHAPE BIRD-SHAPE
+
+8 SHAPE BIRD
 HERE
 |  ##  |
 | ##   |
@@ -205,9 +183,9 @@ HERE
 |      |
 HERE SWAP ROTATE, HERE SWAP ROTATE, HERE SWAP ROTATE,
 HERE SWAP FLIP, HERE SWAP ROTATE, HERE SWAP ROTATE, ROTATE,
-PAGE ." bird" BIRD-SHAPE .DEMO cr key drop
 
-4 SHAPE UPPERT-SHAPE
+
+4 SHAPE UPPERT
 HERE
 | ###  |
 |  #   |
@@ -215,9 +193,9 @@ HERE
 |      |
 |      |
 HERE SWAP ROTATE, HERE SWAP ROTATE, ROTATE,
-PAGE ." uppert" UPPERT-SHAPE .DEMO cr key drop
 
-4 SHAPE CORNER-SHAPE
+
+4 SHAPE CORNER
 HERE
 | ###  |
 | #    |
@@ -225,18 +203,18 @@ HERE
 |      |
 |      |
 HERE SWAP ROTATE, HERE SWAP ROTATE, ROTATE,
-PAGE ." corner" CORNER-SHAPE .DEMO cr key drop
 
-1 SHAPE CROSS-SHAPE
+
+1 SHAPE CROSS
 HERE
 |  #   |
 | ###  |
 |  #   |
 |      |
 |      |
-PAGE ." cross" CROSS-SHAPE .DEMO cr key drop
 
-4 SHAPE HOUSE-SHAPE
+
+4 SHAPE HOUSE
 HERE
 | ##   |
 | ###  |
@@ -244,9 +222,9 @@ HERE
 |      |
 |      |
 HERE SWAP ROTATE, HERE SWAP ROTATE, ROTATE,
-PAGE ." house" HOUSE-SHAPE .DEMO cr key drop
 
-4 SHAPE STAIRS-SHAPE
+
+4 SHAPE STAIRS
 HERE
 | ##   |
 |  ##  |
@@ -254,5 +232,18 @@ HERE
 |      |
 |      |
 HERE SWAP ROTATE, HERE SWAP ROTATE, ROTATE,
-PAGE ." stairs" STAIRS-SHAPE .DEMO cr key drop
+
+." SHAPE BEAM" BEAM   .SHAPE
+." SHAPE UPPERL" UPPERL .SHAPE
+." SHAPE LOWERT" LOWERT .SHAPE
+." SHAPE SNAKE " SNAKE  .SHAPE
+." SHAPE BRIDGE" BRIDGE .SHAPE
+." SHAPE LOWERS" LOWERS .SHAPE
+." SHAPE BIRD  " BIRD   .SHAPE
+." SHAPE UPPERT" UPPERT .SHAPE
+." SHAPE CORNER" CORNER .SHAPE
+." SHAPE CROSS " CROSS  .SHAPE
+." SHAPE HOUSE " HOUSE  .SHAPE
+." SHAPE STAIRS" STAIRS .SHAPE
+
 BYE
