@@ -7,13 +7,11 @@ REQUIRE coords.fs
 
 : PUZZLE-XY? ( puzzle,xy -- b )
     ASSERT( DUP CHECK-COORDS )
-    COORDS>XY
-    8 * + MASK AND ;
+    COORDS 8 * + MASK AND ;
 
 : PUZZLE-XY! ( puzzle,xy -- )
     ASSERT( DUP CHECK-COORDS )
-    COORDS>XY
-    8 * + MASK OR ;
+    COORDS 8 * + MASK OR ;
 
 : PUZZLE-XY-FIT? ( puzzle,xy -- f )
     DUP CHECK-COORDS IF
