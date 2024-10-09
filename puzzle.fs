@@ -19,3 +19,14 @@ REQUIRE coords.fs
     ELSE
         2DROP FALSE
     THEN  ;
+
+: SOLVED? ( puzzle -- f )
+    0 SWAP
+    8 0 DO
+        8 0 DO
+            DUP J I XY PUZZLE-XY? IF
+                SWAP 1+ SWAP
+            THEN
+        LOOP
+    LOOP
+    DROP 60 >= ;
