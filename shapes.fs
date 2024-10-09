@@ -1,14 +1,16 @@
 \ shapes.fs
 
+5 CONSTANT SHAPE-LENGTH
+
 REQUIRE coords.fs
 
-: SHAPE ( n -- )
+: PIECE ( n -- )
     CREATE C, ; 
 
-: POSITION ( shape,n -- adr )
-    5 * 1+ + ;
+: SHAPE ( shape,n -- adr )
+    SHAPE-LENGTH * 1+ + ;
 
-2 SHAPE BEAM
+2 PIECE BEAM
 \ #####
 \ .....
 \ .....
@@ -17,7 +19,7 @@ REQUIRE coords.fs
   0   0 ),   0   1 ),   0   2 ),   0   3 ),   0   4 ), 
   0   0 ),   1   0 ),   2   0 ),   3   0 ),   4   0 ), 
 
-8 SHAPE UPPERL
+8 PIECE UPPERL
 \ #....
 \ #....
 \ #....
@@ -32,7 +34,7 @@ REQUIRE coords.fs
   0   0 ),   1   0 ),   1   1 ),   1   2 ),   1   3 ), 
   0   0 ),   1   0 ),   2   0 ),   3  -1 ),   3   0 ), 
 
-8 SHAPE LOWERT
+8 PIECE LOWERT
 \ #....
 \ ##...
 \ #....
@@ -47,7 +49,7 @@ REQUIRE coords.fs
   0   0 ),   1  -2 ),   1  -1 ),   1   0 ),   1   1 ), 
   0   0 ),   1  -1 ),   1   0 ),   2   0 ),   3   0 ), 
 
-8 SHAPE SNAKE 
+8 PIECE SNAKE 
 \ ..##.
 \ ###..
 \ .....
@@ -62,7 +64,7 @@ REQUIRE coords.fs
   0   0 ),   1  -1 ),   1   0 ),   2  -1 ),   3  -1 ), 
   0   0 ),   0   1 ),   1   1 ),   1   2 ),   1   3 ), 
 
-4 SHAPE BRIDGE
+4 PIECE BRIDGE
 \ ###..
 \ #.#..
 \ .....
@@ -73,7 +75,7 @@ REQUIRE coords.fs
   0   0 ),   0   2 ),   1   0 ),   1   1 ),   1   2 ), 
   0   0 ),   0   1 ),   1   1 ),   2   0 ),   2   1 ), 
 
-4 SHAPE LOWERS
+4 PIECE LOWERS
 \ .##..
 \ .#...
 \ ##...
@@ -84,7 +86,7 @@ REQUIRE coords.fs
   0   0 ),   1  -2 ),   1  -1 ),   1   0 ),   2  -2 ), 
   0   0 ),   0   1 ),   1   1 ),   2   1 ),   2   2 ), 
 
-8 SHAPE BIRD  
+8 PIECE BIRD  
 \ .##..
 \ ##...
 \ .#...
@@ -99,7 +101,7 @@ REQUIRE coords.fs
   0   0 ),   1  -2 ),   1  -1 ),   1   0 ),   2  -1 ), 
   0   0 ),   0   1 ),   1   1 ),   1   2 ),   2   1 ), 
 
-4 SHAPE UPPERT
+4 PIECE UPPERT
 \ ###..
 \ .#...
 \ .#...
@@ -110,7 +112,7 @@ REQUIRE coords.fs
   0   0 ),   1   0 ),   2  -1 ),   2   0 ),   2   1 ), 
   0   0 ),   1  -2 ),   1  -1 ),   1   0 ),   2   0 ), 
 
-4 SHAPE CORNER
+4 PIECE CORNER
 \ ###..
 \ #....
 \ #....
@@ -121,7 +123,7 @@ REQUIRE coords.fs
   0   0 ),   1   0 ),   2  -2 ),   2  -1 ),   2   0 ), 
   0   0 ),   0   1 ),   0   2 ),   1   2 ),   2   2 ), 
 
-1 SHAPE CROSS 
+1 PIECE CROSS 
 \ .#...
 \ ###..
 \ .#...
@@ -129,7 +131,7 @@ REQUIRE coords.fs
 \ .....
   0   0 ),   1  -1 ),   1   0 ),   1   1 ),   2   0 ), 
 
-4 SHAPE HOUSE 
+4 PIECE HOUSE 
 \ ##...
 \ ###..
 \ ###..
@@ -140,7 +142,7 @@ REQUIRE coords.fs
   0   0 ),   0   1 ),   0   2 ),   1   0 ),   1   1 ),   1   2 ),   2   1 ),   2   2 ), 
   0   0 ),   0   1 ),   0   2 ),   1   0 ),   1   1 ),   1   2 ),   2   0 ),   2   1 ), 
 
-4 SHAPE STAIRS
+4 PIECE STAIRS
 \ ##...
 \ .##..
 \ ..#..
@@ -151,7 +153,7 @@ REQUIRE coords.fs
   0   0 ),   1   0 ),   1   1 ),   2   1 ),   2   2 ), 
   0   0 ),   1  -1 ),   1   0 ),   2  -2 ),   2  -1 ), 
 
-CREATE SHAPES
+CREATE PIECES
 BEAM   ,
 UPPERL ,
 LOWERT ,
@@ -164,4 +166,4 @@ CORNER ,
 CROSS  ,
 HOUSE  ,
 STAIRS ,
-12 CONSTANT MAX-SHAPES
+12 CONSTANT MAX-PIECES

@@ -4,9 +4,10 @@ REQUIRE coords.fs
 REQUIRE shapes.fs
 REQUIRE puzzle.fs
 
+
 : CAN-FIT? ( puz,pos,xy -- f )
     >R TRUE -ROT R>
-    OVER 5 + ROT DO                     \ 1,puz,xy
+    OVER SHAPE-LENGTH + ROT DO                     \ 1,puz,xy
         2DUP I C@                       \ 1,puz,xy,puz,xy,ij
         TRANSLATE? IF                   \ 1,puz,xy,puz,lk
             PUZZLE-XY-FIT? IF           \ 1,puz,xy

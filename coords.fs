@@ -25,6 +25,10 @@ HEX FFFFFFFFFFFFFFF0 CONSTANT NEGMASK DECIMAL
 : WITHIN? ( n -- f )
     0 8 WITHIN ;
 
+: TRANSLATE ( xy, ij -- lk )
+    COORDS ROT COORDS
+    ROT + -ROT + SWAP XY ;
+
 : TRANSLATE? ( xy, ij -- kl,t | f )
     COORDS ROT COORDS   \ i,j,x,y
     ROT + -ROT + SWAP
