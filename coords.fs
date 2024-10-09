@@ -1,27 +1,40 @@
 \ coords.fs
 
-: XY>COORDS ( x,y -- xy )
-   15 AND
-   SWAP 15 AND
-   4 LSHIFT OR ;
-
 HEX FFFFFFFFFFFFFFF0 CONSTANT NEGMASK DECIMAL
 
-: COORD>N ( nibble -- n )
+: XY ( x,y -- xy )
+    ASSERT( 2DUP -7 8 WITHIN SWAP -7 8 WITHIN AND ) 
+    15 AND SWAP 15 AND
+    4 LSHIFT OR ;
+
+: EXPAND ( nibble -- n )
     DUP 8 AND IF NEGMASK OR THEN ;
 
-: COORDS>XY ( c -- x,y )
-    DUP 4 RSHIFT 15 AND COORD>N
-    SWAP 15 AND COORD>N ;
+: X-COORD ( xy -- x )
+    4 RSHIFT 15 AND EXPAND ;
+
+: Y-COORD ( xy -- y )
+    15 AND EXPAND ;
+
+: COORDS ( xy -- x,y )
+    DUP X-COORD SWAP Y-COORD ;
 
 : ), ( r,c -- )
-    XY>COORDS C, ;
+    XY C, ;
 
-: TRANSLATE-COORDS ( xy1,xy2 -- xy3 )
-    COORDS>XY ROT COORDS>XY
-    ROT + -ROT + SWAP XY>COORDS ;
+: WITHIN? ( n -- f )
+    0 8 WITHIN ;
+
+: TRANSLATE? ( xy, ij -- kl,t | f )
+    COORDS ROT COORDS   \ i,j,x,y
+    ROT + -ROT + SWAP
+    2DUP WITHIN? SWAP WITHIN? AND IF
+        XY TRUE
+    ELSE
+        2DROP FALSE
+    THEN ; 
 
 : CHECK-COORDS ( xy -- f )
-    COORDS>XY
+    COORDS
     0 8 WITHIN SWAP
     0 8 WITHIN AND ;
