@@ -5,17 +5,19 @@ REQUIRE coords.fs
 : MASK ( n -- bits )
     1 SWAP LSHIFT ;
 
-: PUZZLE-XY? ( puzzle,x,y -- b )
-    ASSERT( 2DUP CHECK-COORDS )
+: PUZZLE-XY? ( puzzle,xy -- b )
+    ASSERT( DUP CHECK-COORDS )
+    COORDS>XY
     8 * + MASK AND ;
 
-: PUZZLE-XY! ( puzzle,x,y -- )
-    ASSERT( 2DUP CHECK-COORDS )
+: PUZZLE-XY! ( puzzle,xy -- )
+    ASSERT( DUP CHECK-COORDS )
+    COORDS>XY
     8 * + MASK OR ;
 
-: PUZZLE-XY-FIT? ( puzzle,x,y -- f )
-    2DUP CHECK-COORDS IF
+: PUZZLE-XY-FIT? ( puzzle,xy -- f )
+    DUP CHECK-COORDS IF
         PUZZLE-XY? 0=
     ELSE
-        FALSE
-    THEN ;
+        2DROP FALSE
+    THEN  ;
