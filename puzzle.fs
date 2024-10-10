@@ -3,20 +3,19 @@
 REQUIRE coords.fs
 REQUIRE shapes.fs
 
-: MASK ( n -- bits )
-    1 SWAP LSHIFT ;
+64 CONSTANT PUZZLE-LENGTH
 
-: PUZZLE-XY? ( puzzle,xy -- b )
+: PUZZLE-XY@ ( puzzle,xy -- k )
     ASSERT( DUP CHECK-COORDS )
-    COORDS 8 * + MASK AND ;
+    COORDS 8 * + + C@ ;
 
-: PUZZLE-XY! ( puzzle,xy -- )
+: PUZZLE-XY! ( k,puzzle,xy -- )
     ASSERT( DUP CHECK-COORDS )
-    COORDS 8 * + MASK OR ;
+    COORDS 8 * + + C! ;
 
 : PUZZLE-XY-FIT? ( puzzle,xy -- f )
     DUP CHECK-COORDS IF
-        PUZZLE-XY? 0=
+        PUZZLE-XY@ 0=
     ELSE
         2DROP FALSE
     THEN  ;
@@ -47,20 +46,22 @@ REQUIRE shapes.fs
         2DROP DROP FALSE
     THEN ;
 
-: PUZZLE-PLACE-SHAPE ( puzzle,xy,shape -- )
-    ASSERT( DUP 2OVER ROT PUZZLE-SHAPE-FIT? )
-    -ROT SWAP ROT
+: 3DUP ( a,b,c -- a,b,c,a,b,c )
+    DUP 2OVER ROT ;
+
+: PUZZLE-PLACE-SHAPE ( k,puzzle,xy,shape -- )
+    ASSERT( 3DUP PUZZLE-SHAPE-FIT? )
     DUP SHAPE-LENGTH + SWAP DO
-        OVER I C@ TRANSLATE
+        3DUP I C@ TRANSLATE
         PUZZLE-XY!
-    LOOP NIP ;
+    LOOP DROP 2DROP ;
 
 : .PUZZLE ( puz -- )
     8 0 DO
         8 0 DO
+            DUP J I XY PUZZLE-XY@
+            ?DUP IF 64 + ELSE 46 THEN
             J I AT-XY
-            DUP J I XY
-            PUZZLE-XY? IF 42 ELSE 46 THEN
             EMIT
         LOOP
     LOOP CR ;
@@ -69,7 +70,7 @@ REQUIRE shapes.fs
     0 SWAP
     8 0 DO
         8 0 DO
-            DUP J I XY PUZZLE-XY? IF
+            DUP J I XY PUZZLE-XY@ IF
                 SWAP 1+ SWAP
             THEN
         LOOP
