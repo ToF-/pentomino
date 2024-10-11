@@ -24,13 +24,18 @@ CHAR . CONSTANT PIECE-EMPTY
         1-
     LOOP 2DROP ;
 
+: 2MIN ( a,b,c,d -- min a b, min c d )
+    ROT MIN -ROT MIN SWAP ;
+
 : FIRST-COORDS ( addr -- x,y )
+    7 7 ROT
     PIECE-AREA 0 DO
         DUP I + C@ PIECE-BLOCK = IF
-            I PIECE-LENGTH /MOD
-            LEAVE
+            -ROT
+            I PIECE-LENGTH /MOD 2MIN
+            ROT
         THEN
-    LOOP ROT DROP ;
+    LOOP DROP ;
 
 : TRANSLATE ( x0,y0,x1,y1 -- x0+x1,y0+y1 )
     ROT + -ROT + SWAP ;
@@ -103,27 +108,24 @@ CHAR . CONSTANT PIECE-EMPTY
     LOOP DROP ;
 
 : }MODEL ( piece,addr -- )
-    DROP DUP COPY-POSITIONS 
+    DROP DUP COPY-POSITIONS
     DUP POSITION-MAX 8 = IF
-        3 1 DO
-            DUP I POSITION
-            I 0 DO DUP ROTATE LOOP
-            CALIBRATE
-        LOOP
-        DUP 4 POSITION 
-        DUP FLIP CALIBRATE
-        3 1 DO
-            DUP I 4 + POSITION
-            I 0 DO DUP ROTATE LOOP
-            CALIBRATE
-        LOOP
+        DUP 1 POSITION DUP ROTATE CALIBRATE
+        DUP 2 POSITION DUP ROTATE DUP ROTATE CALIBRATE
+        DUP 3 POSITION DUP ROTATE DUP ROTATE DUP ROTATE CALIBRATE
+        DUP 4 POSITION DUP FLIP CALIBRATE
+        DUP 5 POSITION DUP FLIP DUP ROTATE CALIBRATE
+        DUP 6 POSITION DUP FLIP DUP ROTATE DUP ROTATE CALIBRATE
+        DUP 7 POSITION DUP FLIP DUP ROTATE DUP ROTATE DUP ROTATE CALIBRATE
     THEN DROP ;
 
-: .SHAPE ( addr -- )
+: .SHAPE ( addr,x,y -- )
     PIECE-AREA 0 DO
-        DUP I + C@
-        I PIECE-LENGTH /MOD AT-XY EMIT
-    LOOP DROP ;
+        I PIECE-LENGTH /MOD
+        2OVER TRANSLATE AT-XY
+        ROT DUP >R -ROT R>
+        I + C@ EMIT
+    LOOP 2DROP DROP ;
 
 : .DEMO ( piece -- )
     DUP POSITION-MAX 0 DO

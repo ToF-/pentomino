@@ -15,11 +15,11 @@ T{
     PAD
          | .....|
          | .....|
-         | .#.#.|
-         | .###.|
          | .....|
+         | ....#|
+         | .####|
     DROP
-    PAD FIRST-COORDS SWAP 1 ?S 2 ?S
+    PAD FIRST-COORDS SWAP 1 ?S 3 ?S
 }T
 
 ." calibrating a shape position" CR
@@ -64,19 +64,19 @@ T{
 T{
     CREATE YET-ANOTHER-SHAPE PIECE-AREA ALLOT
     YET-ANOTHER-SHAPE
-         | .....|
-         | .....|
-         | .#.#.|
-         | .###.|
+         | #....|
+         | #....|
+         | #....|
+         | ##...|
          | .....|
     DROP
     YET-ANOTHER-SHAPE ROTATE
     YET-ANOTHER-SHAPE COORDS
-    1 ?S  2 ?S  \    | .....|
-    1 ?S  3 ?S  \    | ..##.|
-    2 ?S  3 ?S  \    | ...#.|
-    3 ?S  2 ?S  \    | ..##.|
     3 ?S  3 ?S  \    | .....|
+    4 ?S  0 ?S  \    | .....|
+    4 ?S  1 ?S  \    | .....|
+    4 ?S  2 ?S  \    | ...#.|
+    4 ?S  3 ?S  \    | ####.|
 }T
 
 ." flpping a shape" CR
@@ -103,20 +103,21 @@ T{
     MY-SHAPE C@ 8 ?S
     MY-SHAPE
     MODEL{
-         | .#...|
-         | .#...|
-         | .#...|
-         | .##..|
+         | #....|
+         | #....|
+         | #....|
+         | ##...|
          | .....|
     }MODEL
-    MY-SHAPE 0 POSITION
-    DUP 0 + C@  CHAR # ?S
-    DUP 5 + C@  CHAR # ?S
-    DUP 10 + C@  CHAR # ?S
-    DUP 15 + C@  CHAR # ?S
-    DUP 16 + C@  CHAR # ?S
-    DROP
-    MY-SHAPE .DEMO
+    MY-SHAPE 0 POSITION 10 10 .SHAPE
+    MY-SHAPE 1 POSITION 16 10 .SHAPE
+    MY-SHAPE 2 POSITION 22 10 .SHAPE
+    MY-SHAPE 3 POSITION 28 10 .SHAPE
+    MY-SHAPE 4 POSITION 34 10 .SHAPE
+    MY-SHAPE 5 POSITION 40 10 .SHAPE
+    MY-SHAPE 6 POSITION 46 10 .SHAPE
+    MY-SHAPE 7 POSITION 52 10 .SHAPE
+    CR
 }T
 
 BYE
