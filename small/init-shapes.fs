@@ -6,12 +6,10 @@ CHAR # CONSTANT PIECE-BLOCK
 CHAR . CONSTANT PIECE-EMPTY
 
 : SHAPE ( n <name> -- )
-    CREATE C, ;
+    CREATE DUP C, PIECE-AREA * ALLOT ;
 
-: | ( <cccccc|> -- )
-    [CHAR] | WORD
-    COUNT OVER + SWAP
-    DO I C@ C, LOOP ;
+: POSITION-MAX ( piece -- n )
+    C@ ;
 
 : POSITION ( piece,n -- addr )
     PIECE-AREA * SWAP 1+ + ;
@@ -66,3 +64,69 @@ CHAR . CONSTANT PIECE-EMPTY
             THEN
         THEN
     LOOP DROP 2DROP ;
+
+: | ( adr <cccccc|> -- adr+5 )
+    [CHAR] | WORD
+    COUNT >R OVER R> CMOVE
+    PIECE-LENGTH + ;
+
+: MODEL{ ( piece -- adr )
+    DUP 0 POSITION ;
+
+: COPY-POSITIONS ( piece -- )
+    DUP POSITION-MAX 1 DO
+        DUP 0 POSITION DUP CALIBRATE
+        OVER I POSITION
+        PIECE-AREA CMOVE
+    LOOP DROP ;
+
+: ROTATE ( addr -- )
+    DUP COPY-SHAPE-TO-PAD
+    PIECE-LENGTH 0 DO
+        PIECE-LENGTH 0 DO
+            PAD PIECE-LENGTH I * +
+            PIECE-LENGTH J - 1- +
+            C@ OVER C!
+            1+
+        LOOP
+    LOOP DROP ;
+
+: FLIP ( addr -- )
+    DUP COPY-SHAPE-TO-PAD
+    PIECE-LENGTH 0 DO
+        PIECE-LENGTH 0 DO
+            PAD PIECE-LENGTH J * +
+            PIECE-LENGTH I - 1- +
+            C@ OVER C!
+            1+
+        LOOP
+    LOOP DROP ;
+
+: }MODEL ( piece,addr -- )
+    DROP DUP COPY-POSITIONS 
+    DUP POSITION-MAX 8 = IF
+        3 1 DO
+            DUP I POSITION
+            I 0 DO DUP ROTATE LOOP
+            CALIBRATE
+        LOOP
+        DUP 4 POSITION 
+        DUP FLIP CALIBRATE
+        3 1 DO
+            DUP I 4 + POSITION
+            I 0 DO DUP ROTATE LOOP
+            CALIBRATE
+        LOOP
+    THEN DROP ;
+
+: .SHAPE ( addr -- )
+    PIECE-AREA 0 DO
+        DUP I + C@
+        I PIECE-LENGTH /MOD AT-XY EMIT
+    LOOP DROP ;
+
+: .DEMO ( piece -- )
+    DUP POSITION-MAX 0 DO
+        DUP I POSITION .SHAPE KEY DROP
+    LOOP DROP ;
+    
