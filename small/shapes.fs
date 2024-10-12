@@ -26,10 +26,12 @@
     3 + 1 SWAP +! ;
 
 : | ( shape, <ccccc|> -- shape )
+break:
     DUP H-SIZE
     OVER CURRENT-LINE *
-    OVER GRID OVER +
-    [CHAR] | WORD COUNT CMOVE ;
+    OVER GRID +
+    [CHAR] | WORD COUNT
+    -ROT SWAP ROT CMOVE ;
 
 : APPLY-COLOR ( addr,c --  )
     OVER C@ [CHAR] . = IF DROP 0 THEN
