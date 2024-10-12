@@ -16,12 +16,8 @@ REQUIRE shapes.fs
     ESC[ ." 0m" ;
 
 : .BLOCK ( c,x,y -- )
-    2* SWAP 2* SWAP
-    ROT DUP .COLOR
-    CHAR-CODE DUP
-    2OVER AT-XY 2DUP EMIT EMIT
-    2SWAP 1+ AT-XY EMIT EMIT
-    .NORMAL ;
+    AT-XY DUP .COLOR
+    CHAR-CODE EMIT ;
 
 : <++> ( a,b,c,d -- a+b,c+d )
     ROT + -ROT + SWAP ;
@@ -36,7 +32,8 @@ REQUIRE shapes.fs
             C@ IF 
                 DUP COLOR
                 COORDS 2@ I J <++>
-                .block
+                .BLOCK
             THEN
-    LOOP LOOP DROP ;
+    LOOP LOOP DROP
+    .NORMAL ;
 
