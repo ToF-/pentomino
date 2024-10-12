@@ -51,37 +51,3 @@
 : ;SHAPE ( shape -- )
     DROP ;
 
-: .BLOCK-COLOR ( c -- )
-    8 MOD 30 + ESC[ 2 .R [CHAR] m EMIT ;
-
-: .BLOCK-CHAR ( c -- )
-    8 / IF [CHAR] X ELSE [CHAR] # THEN DUP EMIT EMIT ;
-
-: .BLOCK ( c -- )
-    DUP .BLOCK-COLOR .BLOCK-CHAR ;
-
-: .NORMAL
-    ESC[ ." 0m" ;
-
-: XY-BLOCK ( x,y -- 2x,2y,2x,2y+1 )
-    SWAP 2* SWAP 2* 2DUP 1+ ;
-
-: .SHAPE-ELEMENT ( shape,x,y -- )
-    ROT COLOR >R XY-BLOCK
-    AT-XY R@ .BLOCK
-    AT-XY R> .BLOCK
-    .NORMAL ;
-
-: <++> ( a,b,c,d -- a+b,c+d )
-    ROT + -ROT + SWAP ;
-
-: .SHAPE ( shape,x,y -- )
-    ROT DUP V-SIZE 0 DO
-        DUP H-SIZE 0 DO
-            DUP GRID OVER H-SIZE J * I + +
-            C@ IF
-                -ROT 2DUP I J <++> 2>R
-                ROT DUP 2R> .SHAPE-ELEMENT
-            THEN
-    LOOP LOOP
-    DROP 2DROP ;
