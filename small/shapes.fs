@@ -1,12 +1,15 @@
 \ shapes.fs
 
-: COLOR ( shape -- c )
+: H-SIZE ( shape -- n )
     C@ ;
 
-: H-SIZE ( shape -- n )
+: V-SIZE ( shape -- n )
     1+ C@ ;
 
-: V-SIZE ( shape -- n )
+: SIZE ( shape -- n )
+    DUP H-SIZE SWAP V-SIZE * ;
+
+: COLOR ( shape -- c )
     2 + C@ ;
 
 : CURRENT-LINE ( shape -- n )
@@ -18,45 +21,56 @@
 : CURRENT-LINE++ ( shape -- )
     3 + 1 SWAP +! ;
 
-: SHAPE ( color,h-size,v-size <name> -- addr )
-    CREATE
-    HERE >R
-    ROT C, SWAP C, C, 0 C,
-    R> DUP H-SIZE OVER V-SIZE * ALLOT ;
+: ALLOT-SHAPE ( shape -- )
+    SIZE ALLOT ;
 
-: | ( shape, <ccccc|> -- shape )
-    DUP H-SIZE
-    OVER CURRENT-LINE *
-    OVER GRID +
-    [CHAR] | WORD COUNT
-    -ROT SWAP ROT CMOVE
-    DUP CURRENT-LINE++ ;
+: ERASE-SHAPE ( shape -- )
+    DUP GRID SWAP SIZE ERASE ;
 
-: APPLY-COLOR ( addr,c --  )
-    OVER C@ [CHAR] . = IF DROP 0 THEN
+: SHAPE ( h,v,c <name> -- addr )
+    -ROT CREATE HERE -ROT
+    SWAP C, C, SWAP C, 0 C,
+    DUP ALLOT-SHAPE DUP ERASE-SHAPE ;
+
+: APPLY-COLOR ( addr,color,c --  )
+    [CHAR] . = IF DROP 0 THEN
     SWAP C! ;
 
-: ;SHAPE ( shape -- )
-    DUP V-SIZE 0 DO
-        DUP H-SIZE 0 DO
-            DUP COLOR SWAP
-            DUP GRID
-            OVER H-SIZE J * I + +
-            ROT APPLY-COLOR
-    LOOP LOOP DROP ;
+: (|) ( addr,c <ccccc|> -- )
+    [CHAR] | WORD COUNT
+    OVER + SWAP DO
+        2DUP I C@ APPLY-COLOR
+        SWAP 1+ SWAP
+    LOOP 2DROP ;
 
-: .COLOR ( c -- )
-    ESC[
-    DUP IF
-        DUP 8 < IF 30 ELSE 8 - 40 THEN +
-        2 .R [CHAR] m EMIT
-    ELSE
-        DROP ." 0m"
-    THEN ;
+: | ( shape, <ccccc|> -- shape )
+    DUP H-SIZE OVER CURRENT-LINE *
+    OVER GRID + OVER COLOR (|)
+    DUP CURRENT-LINE++ ;
+
+: ;SHAPE ( shape -- )
+    DROP ;
+
+: .BLOCK-COLOR ( c -- )
+    8 MOD 30 + ESC[ 2 .R [CHAR] m EMIT ;
+
+: .BLOCK-CHAR ( c -- )
+    8 / IF [CHAR] X ELSE [CHAR] # THEN DUP EMIT EMIT ;
+
+: .BLOCK ( c -- )
+    DUP .BLOCK-COLOR .BLOCK-CHAR ;
+
+: .NORMAL
+    ESC[ ." 0m" ;
+
+: XY-BLOCK ( x,y -- 2x,2y,2x,2y+1 )
+    SWAP 2* SWAP 2* 2DUP 1+ ;
 
 : .SHAPE-ELEMENT ( shape,x,y -- )
-    AT-XY COLOR .COLOR [CHAR] # EMIT
-    0 .COLOR ;
+    ROT COLOR >R XY-BLOCK
+    AT-XY R@ .BLOCK
+    AT-XY R> .BLOCK
+    .NORMAL ;
 
 : <++> ( a,b,c,d -- a+b,c+d )
     ROT + -ROT + SWAP ;
