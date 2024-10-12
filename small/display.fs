@@ -1,6 +1,7 @@
 \ display.fs
 
 REQUIRE shapes.fs
+REQUIRE coords.fs
 
 : COLOR-CODE ( color -- n )
     8 MOD 30 + ;
@@ -36,4 +37,15 @@ REQUIRE shapes.fs
             THEN
     LOOP LOOP DROP
     .NORMAL ;
+
+: .SHAPE-POSITION ( shape,coords,x,y -- )
+    COORDS 2!
+    SWAP COLOR SWAP
+    DUP 5 + SWAP DO
+        DUP I C@ XY
+        COORDS 2@ <++>
+        .BLOCK
+    LOOP DROP
+    .NORMAL ;
+
 

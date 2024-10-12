@@ -4,34 +4,27 @@ REQUIRE ffl/tst.fs
 REQUIRE shapes.fs
 REQUIRE display.fs
 
-PAGE
-." compile a shape with color code, dimensions, and grid" CR
+." shapes" CR
+."     compile a shape with color code, dimensions, and grid" CR
 T{
-    4 2 1 SHAPE SNAKE
+    7 CONSTANT CO
+    8 CONSTANT NBP
+    4 2 CO NBP SHAPE SNAKE
     | .###|
     | ##..|
     ;SHAPE
 
-   SNAKE COLOR 1 ?S
+   SNAKE COLOR CO ?S
+   SNAKE POSITION-MAX NBP ?S
    SNAKE H-SIZE 4 ?S
    SNAKE V-SIZE 2 ?S
-   SNAKE 1 1 .SHAPE
-
-    3 3 2 SHAPE CROSS
-    | .#.|
-    | ###|
-    | .#.|
-    ;SHAPE
-
-   CROSS 2 2 .SHAPE
-
-    3 3 12 SHAPE HOUSE
-    | #..|
-    | ##.|
-    | ##.|
-    ;SHAPE
-
-   HOUSE 1 3 .SHAPE
+   SNAKE GRID
+   DUP      C@ 0 ?S
+   DUP  1 + C@ CO ?S
+   DUP  2 + C@ CO ?S
+   DUP  3 + C@ CO ?S
+   DUP  4 + C@ CO ?S
+   DUP  5 + C@ CO ?S
+   DUP  6 + C@ 0 ?S
+        7 + C@ 0 ?S
 }T
-
-BYE

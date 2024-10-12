@@ -4,7 +4,7 @@
     C@ ;
 
 : V-SIZE ( shape -- n )
-    1+ C@ ;
+    1+ C@ 15 AND ;
 
 : SIZE ( shape -- n )
     DUP H-SIZE SWAP V-SIZE * ;
@@ -13,23 +13,29 @@
     2 + C@ ;
 
 : CURRENT-LINE ( shape -- n )
+    1+ C@ 4 RSHIFT ;
+
+: POSITION-MAX ( shape -- n )
     3 + C@ ;
 
 : GRID ( shape -- addr )
     4 + ;
 
 : CURRENT-LINE++ ( shape -- )
-    3 + 1 SWAP +! ;
+    1+ 16 SWAP +! ;
+
+: TOTAL-SIZE ( shape -- n )
+    DUP SIZE SWAP POSITION-MAX 10 * + ;
 
 : ALLOT-SHAPE ( shape -- )
-    SIZE ALLOT ;
+    TOTAL-SIZE ALLOT ;
 
 : ERASE-SHAPE ( shape -- )
-    DUP GRID SWAP SIZE ERASE ;
+    DUP GRID SWAP TOTAL-SIZE ERASE ;
 
-: SHAPE ( h,v,c <name> -- addr )
-    -ROT CREATE HERE -ROT
-    SWAP C, C, SWAP C, 0 C,
+: SHAPE ( h,v,c,p <name> -- addr )
+    2SWAP CREATE HERE -ROT
+    SWAP C, C, -ROT SWAP C, C,
     DUP ALLOT-SHAPE DUP ERASE-SHAPE ;
 
 : APPLY-COLOR ( addr,color,c --  )
@@ -51,3 +57,8 @@
 : ;SHAPE ( shape -- )
     DROP ;
 
+: ROTATE-LEFT ( x,y -- -y,x )
+    NEGATE SWAP ;
+
+: FLIP ( x,y -- x,-y )
+    NEGATE ;
