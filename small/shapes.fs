@@ -69,4 +69,5 @@
                 -ROT 2DUP I J <++> 2>R
                 ROT DUP 2R> .SHAPE-ELEMENT
             THEN
-    LOOP LOOP DROP ;
+    LOOP LOOP
+    DROP 2DROP ;
