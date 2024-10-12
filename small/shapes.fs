@@ -1,5 +1,9 @@
 \ shapes.fs
 
+REQUIRE coords.fs
+
+5 CONSTANT COORDS-PER-SHAPE
+
 : H-SIZE ( shape -- n )
     C@ ;
 
@@ -21,11 +25,19 @@
 : GRID ( shape -- addr )
     4 + ;
 
+: GRID-AT ( shape,y,x -- addr )
+    -ROT OVER H-SIZE *
+    ROT + SWAP GRID + ;
+
+: POSITION ( shape,n -- addr )
+    COORDS-PER-SHAPE * OVER SIZE +
+    SWAP GRID + ;
+
 : CURRENT-LINE++ ( shape -- )
     1+ 16 SWAP +! ;
 
 : TOTAL-SIZE ( shape -- n )
-    DUP SIZE SWAP POSITION-MAX 10 * + ;
+    DUP SIZE SWAP POSITION-MAX COORDS-PER-SHAPE * + ;
 
 : ALLOT-SHAPE ( shape -- )
     TOTAL-SIZE ALLOT ;
@@ -54,8 +66,19 @@
     OVER GRID + OVER COLOR (|)
     DUP CURRENT-LINE++ ;
 
+: CAPTURE-COORDS ( shape -- )
+    DUP 0 POSITION SWAP
+    DUP V-SIZE 0 DO
+        DUP H-SIZE 0 DO
+            DUP J I GRID-AT C@ IF
+                SWAP I J )C OVER C!
+                1+ SWAP
+            THEN
+    LOOP LOOP
+    DROP COORDS-PER-SHAPE ))CENTER ;
+
 : ;SHAPE ( shape -- )
-    DROP ;
+    CAPTURE-COORDS ;
 
 : ROTATE-LEFT ( x,y -- -y,x )
     NEGATE SWAP ;
