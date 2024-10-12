@@ -3,6 +3,7 @@
 REQUIRE ffl/tst.fs
 REQUIRE shapes.fs
 
+PAGE
 ." compile a shape with color code, dimensions, and grid" CR
 T{
     7 5 2 SHAPE SNAKE
