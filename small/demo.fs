@@ -1,9 +1,11 @@
 \ demo.fs
 
+REQUIRE ffl/tst.fs
+T{
 REQUIRE shapes.fs
 REQUIRE display.fs
 
-5 2 1 8 SHAPE UPPERI
+5 2 1 2 SHAPE UPPERI
     | #####|
     ;SHAPE
 
@@ -18,14 +20,9 @@ REQUIRE display.fs
     | ####|
     ;SHAPE
 
-3 3 4 8 SHAPE BRIDGE
+3 3 4 4 SHAPE BRIDGE
     | ###|
     | #.#|
-    ;SHAPE
-
-4 2 5 8 SHAPE UPPERL
-    | ####|
-    | #...|
     ;SHAPE
 
 4 2 6 8 SHAPE LOWERT
@@ -38,19 +35,19 @@ REQUIRE display.fs
     | ###.|
     ;SHAPE
 
-3 3 9 8 SHAPE UPPERT
+3 3 9 4 SHAPE UPPERT
     | ###|
     | .#.|
     | .#.|
     ;SHAPE
 
-3 3 10 8 SHAPE LOWERS
+3 3 10 20 SHAPE LOWERS
     | .##|
     | .#.|
     | ##.|
     ;SHAPE
 
-3 3 11 8 SHAPE CORNER
+3 3 11 4 SHAPE CORNER
     | ###|
     | #..|
     | #..|
@@ -61,24 +58,23 @@ REQUIRE display.fs
     | ###|
     ;SHAPE
 
-3 3 13 8 SHAPE STAIRS
+3 3 13 4 SHAPE STAIRS
     | ##.|
     | .##|
     | ..#|
     ;SHAPE
 
-3 3 14 8 SHAPE CROSS
+3 3 14 1 SHAPE CROSS
     | .#.|
     | ###|
     | .#.|
     ;SHAPE
 
-
 VARIABLE Y
 VARIABLE X
 
 : .ALL-POS
-    8 0 DO
+    DUP POS-MAX 15 AND 0 DO
         DUP DUP I POS
         I 6 * X @ + Y @
         .POS
@@ -99,12 +95,10 @@ VARIABLE X
     15 Y ! HOUSE  .ALL-POS
     20 Y ! STAIRS .ALL-POS
     25 Y ! SNAKE  .ALL-POS
-
-
     ;
 
-PAGE DEMO 0 60 AT-XY
-
+\ PAGE DEMO 0 60 AT-XY
+}T
 BYE
 
 
