@@ -30,5 +30,4 @@ REQUIRE display.fs
         LOOP
     LOOP DROP
     .NORMAL ;
-        
 
