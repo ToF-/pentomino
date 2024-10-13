@@ -23,8 +23,21 @@ T{
     
     BRIDGE 0 0 0 )C MY-PUZZLE PLACE-SHAPE
     CROSS  0 0 1 )C MY-PUZZLE PLACE-SHAPE
-    MY-PUZZLE PUZZLE% DUMP
-    MY-PUZZLE .PUZZLE
-    
 }T
 
+."     finding the next free cell" CR
+T{
+    MY-PUZZLE NEXT-FREE-CELL 3 0 )C ?S
+}T
+
+."     checking if a shape can fit" CR
+T{
+    4 2 6 8 SHAPE THISL
+    | ...#|
+    | ####|
+    ;SHAPE
+    
+    THISL 5 7 0 )C MY-PUZZLE  CAN-FIT ?FALSE
+    THISL 5 1 0 )C MY-PUZZLE CAN-FIT ?FALSE
+    THISL 5 2 0 )C MY-PUZZLE CAN-FIT ?TRUE
+}T
