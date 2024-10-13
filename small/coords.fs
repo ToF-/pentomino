@@ -21,6 +21,9 @@ HEX FFFFFFFFFFFFFFF0 CONSTANT NEG-MASK DECIMAL
 : )NEGATE ( xy -- -x-y )
     XY NEGATE SWAP NEGATE SWAP )C ;
 
+: )<0 ( xy -- f )
+    DUP 8 AND SWAP 128 AND OR ;
+
 : )MIN ( ab,cd -- min a c min bd )
     XY ROT XY ROT MIN -ROT MIN SWAP )C ;
 

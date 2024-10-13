@@ -23,6 +23,11 @@ T{
     3 -1 )C )NEGATE  -3 1 )C ?S
 }T
 
+."    check if a coord is negative" CR
+T{
+    7 7 )C 4 4 )C )+ )<0 ?TRUE
+}T
+
 ."    find the minimun of two coords" CR
 T{
     3 -1 )C   2 4 )C  )MIN  2 -1 )C ?S

@@ -7,7 +7,11 @@ REQUIRE coords.fs
     8 MOD 30 + ;
 
 : CHAR-CODE ( color -- c )
-    8 / IF [CHAR] X ELSE [CHAR] # THEN ;
+    ?DUP IF 
+        8 / IF [CHAR] X ELSE [CHAR] # THEN
+    ELSE
+        [CHAR] .
+    THEN ;
 
 : .COLOR ( color -- )
     ESC[ COLOR-CODE
