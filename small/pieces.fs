@@ -51,6 +51,27 @@ CORNER , STAIRS , BIRD   , LOWERS , UPPERT , CROSS  ,
 : PIECE ( n -- shape )
     CELLS PIECES + @ ;
 
+2VARIABLE SHAPE-INDEX
+
+: NEXT-SHAPE-INDEX ( -- shape,pos )
+    SHAPE-INDEX 2@ -1 -1 D= IF
+        0 0 SHAPE-INDEX 2!
+    ELSE
+        SHAPE-INDEX 2@ OVER PIECE POS-MAX OVER 1+ > IF
+            1+ SHAPE-INDEX 2!
+        ELSE
+            DROP DUP 11 < IF
+                1+ 0
+            ELSE
+                DROP -1 -1
+            THEN
+            SHAPE-INDEX 2!
+        THEN
+    THEN ;
+
+: CURRENT-SHAPE-POS ( -- shape,pos )
+    SHAPE-INDEX 2@ SWAP PIECE DUP ROT POS ;
+
 \ ##### #                                           XXX   XXX     X   X
 \       #                                           X       X     X   X
 \       #                                           X       X   XXX   XXX

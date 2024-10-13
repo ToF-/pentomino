@@ -110,6 +110,7 @@ REQUIRE coords.fs
     NEXT-POS ROTATE ;
 
 : 1ROT-FLIP-1ROT ( shape -- )
+    DUP 3 + 4 SWAP C!
     0 POS
     NEXT-POS DUP ROTATE
     NEXT-POS DUP ROTATE DUP FLIP

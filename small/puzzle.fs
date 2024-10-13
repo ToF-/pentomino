@@ -43,7 +43,7 @@ REQUIRE display.fs
 : SOLVED? ( puzzle -- f )
     0 SWAP
     DUP PUZZLE% + SWAP DO
-        I C@ 0= IF 1+ Tdbg HEN
+        I C@ 0= IF 1+ THEN
     LOOP 4 = ;
     
 
