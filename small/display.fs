@@ -38,7 +38,7 @@ REQUIRE coords.fs
     LOOP LOOP DROP
     .NORMAL ;
 
-: .SHAPE-POSITION ( shape,coords,x,y -- )
+: .POS ( shape,coords,x,y -- )
     COORDS 2!
     SWAP COLOR SWAP
     DUP 5 + SWAP DO

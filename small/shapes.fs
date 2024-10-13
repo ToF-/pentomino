@@ -2,7 +2,7 @@
 
 REQUIRE coords.fs
 
-5 CONSTANT COORDS-PER-SHAPE
+5 CONSTANT COORDS%
 
 : H-SIZE ( shape -- n )
     C@ ;
@@ -19,7 +19,7 @@ REQUIRE coords.fs
 : CURRENT-LINE ( shape -- n )
     1+ C@ 4 RSHIFT ;
 
-: POSITION-MAX ( shape -- n )
+: POS-MAX ( shape -- n )
     3 + C@ ;
 
 : GRID ( shape -- addr )
@@ -29,15 +29,15 @@ REQUIRE coords.fs
     -ROT OVER H-SIZE *
     ROT + SWAP GRID + ;
 
-: POSITION ( shape,n -- addr )
-    COORDS-PER-SHAPE * OVER SIZE +
+: POS ( shape,n -- addr )
+    COORDS% * OVER SIZE +
     SWAP GRID + ;
 
 : CURRENT-LINE++ ( shape -- )
     1+ 16 SWAP +! ;
 
 : TOTAL-SIZE ( shape -- n )
-    DUP SIZE SWAP POSITION-MAX COORDS-PER-SHAPE * + ;
+    DUP SIZE SWAP POS-MAX COORDS% * + ;
 
 : ALLOT-SHAPE ( shape -- )
     TOTAL-SIZE ALLOT ;
@@ -66,8 +66,8 @@ REQUIRE coords.fs
     OVER GRID + OVER COLOR (|)
     DUP CURRENT-LINE++ ;
 
-: CAPTURE-COORDS ( shape -- )
-    DUP 0 POSITION SWAP
+: INIT-POS ( shape -- )
+    DUP 0 POS SWAP
     DUP V-SIZE 0 DO
         DUP H-SIZE 0 DO
             DUP J I GRID-AT C@ IF
@@ -75,10 +75,25 @@ REQUIRE coords.fs
                 1+ SWAP
             THEN
     LOOP LOOP
-    DROP COORDS-PER-SHAPE ))CENTER ;
+    DROP COORDS% ))CENTER ;
+
+: COPY-POS ( srce )
+    DUP COORDS% + COORDS% CMOVE ;
+
+: 3ROT-FLIP-3ROT ( shape -- )
+    0 POS
+    DUP COPY-POS COORDS% + DUP COORDS% ))ROTATE
+    DUP COPY-POS COORDS% + DUP COORDS% ))ROTATE
+    DUP COPY-POS COORDS% + DUP COORDS% ))ROTATE
+    DUP COPY-POS COORDS% + DUP COORDS% ))ROTATE DUP COORDS% ))FLIP
+    DUP COPY-POS COORDS% + DUP COORDS% ))ROTATE
+    DUP COPY-POS COORDS% + DUP COORDS% ))ROTATE
+    DUP COPY-POS COORDS% + DUP COORDS% ))ROTATE
+    DROP ;
 
 : ;SHAPE ( shape -- )
-    CAPTURE-COORDS ;
+    DUP INIT-POS
+    3ROT-FLIP-3ROT ;
 
 : ROTATE-LEFT ( x,y -- -y,x )
     NEGATE SWAP ;
