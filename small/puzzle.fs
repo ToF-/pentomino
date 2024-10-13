@@ -13,7 +13,7 @@ REQUIRE display.fs
 : BLOCK-AT ( puzzle,xy -- c )
     XY 8 * + + C@ ;
 
-: NEXT-FREE-CELL ( puzzle -- xy )
+: NEXT-FREE-SQUARE ( puzzle -- xy )
     0 SWAP
     DUP PUZZLE% + SWAP DO
         I C@ 0= IF
@@ -39,6 +39,13 @@ REQUIRE display.fs
                 LEAVE
         THEN THEN
     LOOP 2DROP ;
+
+: SOLVED? ( puzzle -- f )
+    0 SWAP
+    DUP PUZZLE% + SWAP DO
+        I C@ 0= IF 1+ Tdbg HEN
+    LOOP 4 = ;
+    
 
 
 : PLACE-SHAPE ( shape,p,xy,puzzle -- )

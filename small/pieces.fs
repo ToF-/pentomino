@@ -51,4 +51,31 @@ CORNER , STAIRS , BIRD   , LOWERS , UPPERT , CROSS  ,
 : PIECE ( n -- shape )
     CELLS PIECES + @ ;
 
-
+\ ##### #                                           XXX   XXX     X   X
+\       #                                           X       X     X   X
+\       #                                           X       X   XXX   XXX
+\       #
+\       #
+\   ##  #      ###  #     ###    #    ##     #      XX      X   X      XX
+\ ###   #     ##    ##      ##   #     ###  ##       XX    XX   XX    XX
+\       ##           #          ##          #         X   XX     XX   X
+\        #           #          #           #
+\ 
+\    #  #     ####  ##    ####   #    #     ##       ##    #     #    #      #     #    ##      #
+\ ####  #     #      #       #   #    ####  #       ##    ###    ##   ###   ##    ###    ##   ###
+\       #            #           #          #        #      #   ##     #     ##   #      #     #
+\       ##           #          ##          #
+\ 
+\  #    #     ####   #    ####   #      #   #        XX   X     XX      X
+\ ####  ##      #    #     #    ##    ####  #        X    XXX    X    XXX
+\       #           ##           #          ##      XX      X    XX   X
+\       #            #           #          #
+\ 
+\ XX    XX    XXX    X    XXX   XX     XX   X       XXX     X    X    X
+\ XXX   XX     XX   XX    XX    XX    XXX   XX       X    XXX    X    XXX
+\       X           XX           X          XX       X      X   XXX   X
+\ 
+\ 
+\ ###   ##    # #   ##                               X
+\ # #    #    ###   #                               XXX
+\       ##          ##                               X
