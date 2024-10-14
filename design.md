@@ -264,8 +264,14 @@ their trace on the board          0010 0000  0111 0111 1110
 ```
 knowing if two pieces in their location can fit together on the same board is easy : if the piece A trace AND piece B trace yields 0, they fit together.
 
-From there, we can create a new puzzle configuration where the two pieces are set on their respective 
+The strategy is thus :
+- set the list of all possible configurations for piece A
+- set the list of all posiible configurations for piece B
 
+- compute Ai AND Bi, Aj AND Bi … An AND Bn, keeping only those configurations that are compatible R and S
+- compute Ar OR Bs, the new configurations where piece A and B coexist in a new list AB
+
+- compute ABi AND Ci, ABj AND Cj … keeping only those configurations where A,B and C pieces fit together
 
 
 
