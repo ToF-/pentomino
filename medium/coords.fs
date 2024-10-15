@@ -24,7 +24,7 @@
     NEGATE SWAP NEGATE SWAP ;
 
 : )+ ( x,y,i,j -- x+i,y+j )
-    ROT + SWAP + SWAP ;
+    ROT + -ROT + SWAP ;
 
 : ))CENTER ( addr, count -- )
     2DUP ))MIN )NEGATE 2SWAP
@@ -33,8 +33,10 @@
     2 +LOOP
     2DROP ;
 
-: )ROTATE ( x,y -- -y,x )
-    NEGATE SWAP ;
+\ AB   BD
+\ .D → A
+: )ROTATE ( x,y -- y,-x )
+    SWAP NEGATE ;
 
 : ))ROTATE ( addr, count -- )
     OVER + SWAP DO

@@ -28,10 +28,41 @@ T{
     2 + DUP )@ SWAP  3 ?S 0 ?S
     2 +     )@ SWAP  4 ?S 0 ?S
     UPPERI 1 COORDS
-        DUP )@ SWAP  0 ?S 0 ?S
-    2 + DUP )@ SWAP  0 ?S 1 ?S
-    2 + DUP )@ SWAP  0 ?S 2 ?S
+        DUP )@ SWAP  0 ?S 4 ?S
     2 + DUP )@ SWAP  0 ?S 3 ?S
-    2 +     )@ SWAP  0 ?S 4 ?S
+    2 + DUP )@ SWAP  0 ?S 2 ?S
+    2 + DUP )@ SWAP  0 ?S 1 ?S
+    2 +     )@ SWAP  0 ?S 0 ?S
 }T
+
+."    BRIDGE has color 3, 4 orientations" CR
+T{
+    BRIDGE COLOR 3 ?S
+    BRIDGE ORIENT-MAX 4 ?S
+    BRIDGE 0 COORDS
+        DUP )@ SWAP  0 ?S 0 ?S
+    2 + DUP )@ SWAP  1 ?S 0 ?S
+    2 + DUP )@ SWAP  2 ?S 0 ?S
+    2 + DUP )@ SWAP  0 ?S 1 ?S
+    2 +     )@ SWAP  2 ?S 1 ?S
+    BRIDGE 1 COORDS
+        DUP )@ SWAP  0 ?S 2 ?S
+    2 + DUP )@ SWAP  0 ?S 1 ?S
+    2 + DUP )@ SWAP  0 ?S 0 ?S
+    2 + DUP )@ SWAP  1 ?S 2 ?S
+    2 +     )@ SWAP  1 ?S 0 ?S
+    BRIDGE 2 COORDS
+        DUP )@ SWAP  2 ?S 1 ?S
+    2 + DUP )@ SWAP  1 ?S 1 ?S
+    2 + DUP )@ SWAP  0 ?S 1 ?S
+    2 + DUP )@ SWAP  2 ?S 0 ?S
+    2 +     )@ SWAP  0 ?S 0 ?S
+    BRIDGE 3 COORDS
+        DUP )@ SWAP  1 ?S 0 ?S
+    2 + DUP )@ SWAP  1 ?S 1 ?S
+    2 + DUP )@ SWAP  1 ?S 2 ?S
+    2 + DUP )@ SWAP  0 ?S 0 ?S
+    2 +     )@ SWAP  0 ?S 2 ?S
+}T
+
 
