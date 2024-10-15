@@ -43,5 +43,15 @@
         I )@ )ROTATE I )!
     2 +LOOP ;
 
+: )FLIP ( x,y -- x,-y )
+    NEGATE ;
+
+: ))FLIP ( addr, count -- )
+    OVER + SWAP DO
+        I )@ )FLIP I )!
+    2 +LOOP ;
+
+
+
 
 

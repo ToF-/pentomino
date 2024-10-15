@@ -2,6 +2,7 @@
 
 REQUIRE coords.fs
 
+CHAR # CONSTANT SHARP
 2 5 * CONSTANT COORDS%
 
 : PIECE ( <name> color,orient -- )
@@ -18,13 +19,15 @@ REQUIRE coords.fs
 : COORDS ( piece, n -- offset )
     COORDS% * 2 + + ;
 
-: | ( <cccc|> addr,y,x -- addr,y',x' )
+: ACQUIRE ( <cccc|> -- end,start )
     [CHAR] | WORD COUNT
-    OVER + SWAP DO
-        I C@ [CHAR] # = IF
-            ROT >R
-            2DUP SWAP R@ )!
-            R> 2 + -ROT
+    OVER + SWAP ;
+
+: | ( <cccc|> addr,y,x -- addr',y',x' )
+    ACQUIRE DO
+        I C@ SHARP = IF
+            2>R DUP 2R@ SWAP ROT )!
+            2 + 2R>
         THEN
         1+
     LOOP
@@ -49,28 +52,115 @@ REQUIRE coords.fs
     R> COORDS DUP COORDS% ))ROTATE
     COORDS% ))CENTER ;
 
-1 1 PIECE CROSS
+: >FLIP ( piece,n,m -- )
+    ROT DUP 2SWAP DUP >R
+    >COORDS
+    R> COORDS DUP COORDS% ))FLIP
+    COORDS% ))CENTER ;
 
+1 1 PIECE CROSS
 CROSS SHAPE| .#.|
            | ###|
-           | .#.|
-           ;SHAPE
+           | .#.| ;SHAPE
 
 2 2 PIECE UPPERI
-
-UPPERI SHAPE| #####|
-            ;SHAPE
+UPPERI SHAPE| #####| ;SHAPE
 UPPERI 0 1 >ROTATE
 
 4 3 PIECE BRIDGE
-
 BRIDGE SHAPE| ###|
-            | #.#|
-            ;SHAPE
+            | #.#| ;SHAPE
 BRIDGE 0 1 >ROTATE
 BRIDGE 1 2 >ROTATE
 BRIDGE 2 3 >ROTATE
 
+4 4 PIECE CORNER
+CORNER SHAPE| ###|
+            | #..|
+            | #..| ;SHAPE
+CORNER 0 1 >ROTATE
+CORNER 1 2 >ROTATE
+CORNER 2 3 >ROTATE
+
+4 5 PIECE STAIRS
+STAIRS SHAPE| .##|
+            | ##.|
+            | #..| ;SHAPE
+STAIRS 0 1 >ROTATE
+STAIRS 1 2 >ROTATE
+STAIRS 2 3 >ROTATE
+
+4 6 PIECE UPPERT
+UPPERT SHAPE| ###|
+            | .#.|
+            | .#.| ;SHAPE
+UPPERT 0 1 >ROTATE
+UPPERT 1 2 >ROTATE
+UPPERT 2 3 >ROTATE
+
+4 6 PIECE LOWERS
+LOWERS SHAPE| .##|
+            | .#.|
+            | ##.| ;SHAPE
+LOWERS 0 1 >ROTATE
+LOWERS 0 2 >FLIP
+LOWERS 2 3 >ROTATE
+
+8 7 PIECE LOWERT
+LOWERT SHAPE| ####|
+            | .#..| ;SHAPE
+LOWERT 0 1 >ROTATE
+LOWERT 1 2 >ROTATE
+LOWERT 2 3 >ROTATE
+LOWERT 0 4 >FLIP
+LOWERT 4 5 >ROTATE
+LOWERT 5 6 >ROTATE
+LOWERT 6 7 >ROTATE
+
+8 8 PIECE UPPERL
+UPPERL SHAPE| ####|
+            | #...| ;SHAPE
+UPPERL 0 1 >ROTATE
+UPPERL 1 2 >ROTATE
+UPPERL 2 3 >ROTATE
+UPPERL 0 4 >FLIP
+UPPERL 4 5 >ROTATE
+UPPERL 5 6 >ROTATE
+UPPERL 6 7 >ROTATE
+
+8 9 PIECE BIRD
+BIRD SHAPE| .##|
+          | ##.|
+          | .#.| ;SHAPE
+BIRD 0 1 >ROTATE
+BIRD 1 2 >ROTATE
+BIRD 2 3 >ROTATE
+BIRD 0 4 >FLIP
+BIRD 4 5 >ROTATE
+BIRD 5 6 >ROTATE
+BIRD 6 7 >ROTATE
+
+8 10 PIECE SNAKE
+SNAKE SHAPE| ###.|
+           | ..##| ;SHAPE
+SNAKE 0 1 >ROTATE
+SNAKE 1 2 >ROTATE
+SNAKE 2 3 >ROTATE
+SNAKE 0 4 >FLIP
+SNAKE 4 5 >ROTATE
+SNAKE 5 6 >ROTATE
+SNAKE 6 7 >ROTATE
+
+8 11 PIECE HOUSE
+HOUSE SHAPE| ###|
+           | ##.| ;SHAPE
+HOUSE 0 1 >ROTATE
+HOUSE 1 2 >ROTATE
+HOUSE 2 3 >ROTATE
+HOUSE 0 4 >FLIP
+HOUSE 4 5 >ROTATE
+HOUSE 5 6 >ROTATE
+HOUSE 6 7 >ROTATE
 
 \ 0: CROSS
 \ 1: UPPERI
@@ -78,4 +168,8 @@ BRIDGE 2 3 >ROTATE
 \ 6: LOWERS
 \ 7: LOWERT 8: UPPERL 9: BIRD 10: SNAKE 11: HOUSE
 
-
+CREATE PIECES
+HERE
+CROSS , UPPERI , BRIDGE , CORNER , STAIRS , UPPERT ,
+LOWERS , LOWERT , UPPERL , BIRD , SNAKE , HOUSE ,
+HERE SWAP - CELL / CONSTANT PIECE-MAX
