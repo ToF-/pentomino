@@ -2,8 +2,11 @@
 
 15 CONSTANT MAX-COORD
 
+: EXPAND ( cn -- n )
+    DUP 128 AND IF -256 OR THEN ;
+
 : )@ ( addr -- x,y )
-    DUP C@ SWAP 1+ C@ ;
+    DUP C@ EXPAND SWAP 1+ C@ EXPAND ;
 
 : )! ( x,y,addr -- )
     ROT OVER C! 1+ C! ;
@@ -23,10 +26,20 @@
 : )+ ( x,y,i,j -- x+i,y+j )
     ROT + SWAP + SWAP ;
 
-: )CENTER ( addr, count -- )
+: ))CENTER ( addr, count -- )
     2DUP ))MIN )NEGATE 2SWAP
     OVER + SWAP DO
         I )@ 2OVER )+ I )!
     2 +LOOP
     2DROP ;
+
+: )ROTATE ( x,y -- -y,x )
+    NEGATE SWAP ;
+
+: ))ROTATE ( addr, count -- )
+    OVER + SWAP DO
+        I )@ )ROTATE I )!
+    2 +LOOP ;
+
+
 

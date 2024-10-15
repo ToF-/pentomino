@@ -18,10 +18,6 @@ REQUIRE coords.fs
 : COORDS ( piece, n -- offset )
     COORDS% * 2 + + ;
 
-VARIABLE Y
-VARIABLE X
-VARIABLE COORDS^
-
 : | ( <cccc|> x,y,addr --  )
     [CHAR] | WORD COUNT
     OVER + SWAP DO
@@ -34,7 +30,14 @@ VARIABLE COORDS^
 
 
 : ;SHAPE ( piece,x,y,addr -- )
-    DROP 2DROP 0 COORDS COORDS% )CENTER ;
+    DROP 2DROP
+    DUP 0 COORDS COORDS% ))CENTER
+    DUP ORIENT-MAX 1 > IF
+        DUP 0 COORDS OVER 1 COORDS COORDS% CMOVE
+        1 COORDS COORDS% ))ROTATE
+    ELSE
+        DROP
+    THEN ;
 
 : SHAPE| ( <cccc|> piece -- piece )
     DUP 0 COORDS 0 0 ROT | ;
@@ -46,5 +49,10 @@ CROSS SHAPE| .#.|
            | ###|
            | .#.|
            ;SHAPE
+
+2 2 PIECE UPPERI
+
+UPPERI SHAPE| #####|
+            ;SHAPE
 
 
