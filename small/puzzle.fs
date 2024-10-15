@@ -66,3 +66,7 @@ REQUIRE display.fs
     LOOP DROP
     .NORMAL ;
 
+24 CONSTANT PUZZLE-KEY#
+
+: PUZZLE-KEY ( piece#,pos#,xy,addr -- )
+    

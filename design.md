@@ -226,6 +226,64 @@ For a total of 63 possibles shapes
 …
 63 : house, flipped, east
 
+cross   : 0
+upper I : 1,2 (pos:0…3,on/off)
+bridge  : 3,4,5 ditto
+corner  : 6,7,8 ditto
+stairs  : 9,10,11 ditto
+upper T : 12,13,14 ditto
+lower S : 15,16,17 ditto
+lower T : 18,19,20,21 (pos:0…7,on/off)
+upper L : 22,23,24,25 ditto
+bird    : 26,27,28,29
+snake   : 30,31,32,33
+house   : 34,36,36,37
+
+
+HOUS-SNAK-BIRD-UPPL-LOWT-LOWS-UPPT-STRS-CORN-BRDG-UPPI-CRSS = 6 bytes
+
+0: CROSS
+1: UPPERI
+2: BRIDGE 3: CORNER 4: STAIRS 5: UPPERT
+6: LOWERS
+7: LOWERT 8: UPPERL 9: BIRD 10: SNAKE 11: HOUSE
+
+0: 0 0  -1 1  0 1  1 1  0 1
+1: 0 0  1 0  2 0  3 0  4 0   0 0  0 1  0 2  0 3  0 4
+2: 0 0  1 0  2 0  0 1  2 1   0 0  1 0  0 1  0 2  1 2   0 0  2 0  0 1  1 1  2 1   0 0  1 0  1 1  0 2  1 2
+3: 0 0  1 0  2 0  0 1  0 2   0 0  0 1  0 2  1 2  2 2   0 0  1 0  2 0  2 -1  2  -2   0 0  1 0  2 0  2 1  2 2
+
+
+
+(X=not used)
+byte 0: cross on/XXX, upper I on/orient XX0…XX1
+byte 1: bridge on/X00…X11, corner on/X00…X11
+byte 2: stairs on/X00…X11, upper T on/X00…X11
+byte 3: lower S on/X00…X11, lower T on/000…111
+byte 4: upper L on/000…111,  bird on/000…111
+byte 5: snake on/000…111, house on/000…111
+
+byte 6,7,8: cross location 000000…111111, upper I location 000000…111111, bridge location 000000…111111, corner location 000000…111111
+byte 9,10,11: stairs location, upper T location, lower S location, lower T location
+byte 12,13,14: upper L location, bird Location, snake location, house location
+
+byte 15: not used
+
+byte 16: squares 0 to 7 (occupied/free)
+byte 17: squares 8 to 15
+byte 18: squares 16 to 23
+byte 19: squares 24 to 31
+byte 20: squares 32 to 39
+byte 21: squares 40 to 47
+byte 22: squares 48 to 55
+byte 23: squares 56 to 63 
+
+24 bytes = 3 cells
+
+
+
+
+
 
 Each shape taken alone can be placed on several squares on a empty puzzle
 The cross can be placed on squares 9,1 to 6,8 hence 36 possible locations
