@@ -26,6 +26,14 @@
 : )+ ( x,y,i,j -- x+i,y+j )
     ROT + -ROT + SWAP ;
 
+: ))+ ( x,y,addr,count -- )
+    OVER + SWAP DO
+        I )@ 2OVER )+ I )!
+    2 +LOOP 2DROP ;
+
+: )64 ( x,y -- y*8+x )
+    8 * + ;
+
 : ))CENTER ( addr, count -- )
     2DUP ))MIN )NEGATE 2SWAP
     OVER + SWAP DO
