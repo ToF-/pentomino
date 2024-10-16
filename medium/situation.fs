@@ -1,6 +1,9 @@
 \ situation.fs
 
 REQUIRE pieces.fs
+REQUIRE display.fs
+
+3 CELLS CONSTANT SITUATION%
 
 0 CONSTANT EMPTY-BOARD
 
@@ -32,3 +35,32 @@ REQUIRE pieces.fs
     ELSE
         2DROP 2DROP -1
     THEN ;
+
+: .BOARD ( board -- )
+    8 0 DO 8 0 DO
+        1 J 8 * I + LSHIFT
+        OVER AND IF SHARP ELSE POINT THEN
+        I J AT-XY EMIT
+    LOOP LOOP DROP ;
+
+: .SITUATION-SET ( set -- )
+    DUP @ 0 DO
+        DUP CELL+ I SITUATION% * + CELL+ CELL+ @
+        .BOARD CR
+        KEY DROP
+    LOOP DROP ;
+        
+: SITUATION-SET ( piece -- )
+    CREATE HERE 0 ,
+    OVER PIECE-NUMBER
+    ROT ORIENT-MAX 0 DO
+        8 0 DO 8 0 DO
+            DUP K I J SITUATION
+            DUP -1 <> IF
+               -ROT 2, ,
+            ELSE
+                DROP 2DROP
+            THEN
+        LOOP LOOP
+    LOOP DROP
+    HERE OVER CELL+ - SITUATION% / SWAP ! ;

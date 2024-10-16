@@ -3,6 +3,7 @@
 REQUIRE coords.fs
 
 CHAR # CONSTANT SHARP
+CHAR . CONSTANT POINT
 2 5 * CONSTANT COORDS%
 
 : PIECE ( <name> color,orient -- )
