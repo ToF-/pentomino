@@ -5,6 +5,8 @@ REQUIRE display.fs
 
 3 CELLS CONSTANT SITUATION%
 
+512 CONSTANT PIECE-SET-MASK
+
 64 8 * SITUATION% * CELL+ CONSTANT SITUATION-SET%
 
 0 CONSTANT EMPTY-BOARD
@@ -21,16 +23,21 @@ REQUIRE display.fs
 
 8 CONSTANT PIECE-MASK
 
-: SITUATION-KEY ( piece-no,orientation,x,y )
-    )64 SWAP 8 OR 4 LSHIFT OR
-    SWAP DUP 8 < IF
-        8 * LSHIFT 0 SWAP
+: SITUATION>KEY ( piece-no,orientation,x,y -- sh,sl )
+    )64 SWAP 8 OR 6 LSHIFT OR
+    SWAP DUP 6 < IF
+        10 * LSHIFT 0 SWAP
     ELSE
-        8 MOD 8 * LSHIFT 0
+        6 MOD 10 * LSHIFT 0
     THEN ;
 
+: KEY>>PIECE-SITUATION ( situation -- orientation,x,y )
+    DUP 63 AND 8 /MOD
+    ROT 6 RSHIFT 7 AND -ROT ;
+
+
 : SITUATION ( piece-no,orientation,x,y -- situation,board )
-    2OVER 2OVER SITUATION-KEY 2ROT 2ROT
+    2OVER 2OVER SITUATION>KEY 2ROT 2ROT
     2SWAP SWAP NTH-PIECE SWAP 2SWAP
     2OVER 2OVER ))WITHIN? IF
         SITUATION-BOARD
@@ -50,6 +57,32 @@ REQUIRE display.fs
         OVER AND IF SHARP ELSE POINT THEN
         I J AT-XY EMIT
     LOOP LOOP DROP ;
+
+2VARIABLE ORIGIN
+: ORIGIN-XY ( x,y )
+    ORIGIN 2@ ;
+
+: .SITUATION ( sh,sl,b,x,y -- )
+    ORIGIN ! DROP
+    6 0 DO
+        DUP PIECE-SET-MASK AND IF
+            DUP KEY>>PIECE-SITUATION
+            ROT I NTH-PIECE SWAP
+            2SWAP ORIGIN-XY )+ .PIECE
+        THEN
+        10 RSHIFT
+    LOOP
+    DROP
+    6 0 DO
+        DUP PIECE-SET-MASK AND IF
+            DUP KEY>>PIECE-SITUATION
+            ROT I 6 + NTH-PIECE SWAP
+            2SWAP ORIGIN-XY )+ .PIECE
+        THEN
+        10 RSHIFT
+    LOOP
+    2DROP ;
+
 
 : SET-LIMITS ( set -- end,start )
     DUP @ SITUATION% * OVER CELL+ + SWAP CELL + ;
