@@ -61,6 +61,16 @@ CHAR # CONSTANT SHARP
     R> COORDS DUP COORDS% ))FLIP
     COORDS% ))CENTER ;
 
+: )WITHIN? ( x,y -- f )
+   0 8 WITHIN SWAP 0 8 WITHIN AND ;
+
+: ))WITHIN? ( piece,n,i,j -- f )
+    2SWAP COORDS >R TRUE -ROT R>
+    DUP COORDS% + SWAP DO
+        I )@ 2OVER )+ )WITHIN?
+        >R ROT R> AND -ROT
+    2 +LOOP 2DROP ;
+
 1 1 PIECE CROSS
 CROSS SHAPE| .#.|
            | ###|

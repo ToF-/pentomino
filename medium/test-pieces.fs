@@ -66,3 +66,12 @@ T{
 }T
 
 
+."    check that a piece/orientation can be translated" CR
+T{
+    CROSS 0 0 0 ))WITHIN? ?TRUE
+    CROSS 0 2 3 ))WITHIN? ?TRUE
+    CROSS 0 -1 0 ))WITHIN? ?FALSE
+    CROSS 0 0 -1 ))WITHIN? ?FALSE
+    CROSS 0 0 8 ))WITHIN? ?FALSE
+    CROSS 0 8 0 ))WITHIN? ?FALSE
+}T
