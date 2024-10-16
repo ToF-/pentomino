@@ -2,7 +2,7 @@
 
 PAGE
 REQUIRE test-pieces.fs
-REQUIRE test-puzzle.fs
+REQUIRE test-situation.fs
 
 BYE
 
