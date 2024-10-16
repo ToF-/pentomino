@@ -5,6 +5,8 @@ REQUIRE display.fs
 
 3 CELLS CONSTANT SITUATION%
 
+64 8 * SITUATION% * CELL+ CONSTANT SITUATION-SET%
+
 0 CONSTANT EMPTY-BOARD
 
 : SET-SQUARE ( board,n -- board' )
@@ -36,6 +38,12 @@ REQUIRE display.fs
         2DROP 2DROP -1
     THEN ;
 
+: SITUATION@ ( addr -- situ,ation,board )
+    DUP CELL+ CELL+ SWAP 2@ ROT @ ;
+
+: SITUATION! ( situ,ation,board,addr -- )
+    DUP CELL+ CELL+ ROT SWAP ! 2! ;
+
 : .BOARD ( board -- )
     8 0 DO 8 0 DO
         1 J 8 * I + LSHIFT
@@ -43,13 +51,14 @@ REQUIRE display.fs
         I J AT-XY EMIT
     LOOP LOOP DROP ;
 
+: SET-LIMITS ( set -- end,start )
+    DUP @ SITUATION% * OVER CELL+ + SWAP CELL + ;
+
 : .SITUATION-SET ( set -- )
-    DUP @ 0 DO
-        DUP CELL+ I SITUATION% * + CELL+ CELL+ @
-        .BOARD CR
-        KEY DROP
-    LOOP DROP ;
-        
+    SET-LIMITS DO
+        I SITUATION@ -ROT 2DROP .BOARD KEY DROP
+    SITUATION% +LOOP ;
+
 : SITUATION-SET ( piece -- )
     CREATE HERE 0 ,
     OVER PIECE-NUMBER
@@ -64,3 +73,33 @@ REQUIRE display.fs
         LOOP LOOP
     LOOP DROP
     HERE OVER CELL+ - SITUATION% / SWAP ! ;
+
+: OR-SITUATION ( a,b,c,d,e,f -- a|d,b|e,c|f )
+    -ROT 2SWAP OR >R
+    ROT OR -ROT
+    OR SWAP R> ;
+
+2VARIABLE OUTER-LIMITS
+2VARIABLE INNER-LIMITS
+
+: UNION ( setA,setB,dest -- )
+    DUP CELL+ 2SWAP
+    SET-LIMITS OUTER-LIMITS 2!
+    SET-LIMITS INNER-LIMITS 2!
+    OUTER-LIMITS 2@ DO
+        INNER-LIMITS 2@ DO
+            I SITUATION@ -ROT 2DROP
+            J SITUATION@ -ROT 2DROP
+            AND 0= IF
+                I SITUATION@
+                J SITUATION@
+                OR-SITUATION   \ dest,sh,sl,b
+                2>R OVER 2R> ROT \ dest,sh,sl,b,dest
+                SITUATION!
+                SITUATION% +
+                SWAP 1 OVER +! SWAP
+            THEN
+        SITUATION% +LOOP
+    SITUATION% +LOOP
+    2DROP ;
+

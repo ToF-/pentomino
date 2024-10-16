@@ -43,3 +43,11 @@ T{
     HOUSE-SITUATIONS @ 336 ?S
 
 }T
+
+."    collect all possible unions of two pieces" CR
+T{
+    CREATE MY-SET SITUATION-SET% ALLOT
+    CROSS-SITUATIONS UPPERI-SITUATIONS MY-SET UNION
+    MY-SET @ 3146 ?S
+    MY-SET .SITUATION-SET
+}T
