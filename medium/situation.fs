@@ -19,6 +19,15 @@ REQUIRE bitfields.fs
 : PIECE-KEY ( n,o,x,y -- key )
     PIECE-INFO SWAP 10 * LSHIFT ;
 
+: PIECE-BOARD ( n,o,x,y -- board )
+    2SWAP SWAP NTH-PIECE SWAP COORDS
+    COORDS% OVER + SWAP
+    2>R EMPTY-BOARD -ROT 2R> DO
+        I )@ 2OVER )+
+        )64 1 SWAP LSHIFT
+        -ROT 2SWAP OR -ROT
+    2 +LOOP 2DROP ;
+
 \ 3 CELLS CONSTANT SITUATION%
 \ 
 \ 1023 CONSTANT KEY-MASK
