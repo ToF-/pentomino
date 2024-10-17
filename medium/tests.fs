@@ -2,7 +2,7 @@
 
 PAGE
 REQUIRE test-pieces.fs
-REQUIRE test-situation.fs
+REQUIRE test-binary.fs
 
 BYE
 

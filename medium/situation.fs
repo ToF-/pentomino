@@ -3,10 +3,20 @@
 REQUIRE pieces.fs
 REQUIRE display.fs
 
-: ORIENT-MASK ( n -- mask )
+0 CONSTANT EMPTY-BOARD
+
+6 CONSTANT :SQUARE
+3 CONSTANT :ORIENT
+1 CONSTANT :PIECE-ON
+
+: ORIENT-MASK ( n -- n )
     7 AND ;
 
-: PIECE-ON-MASK ( mask -- mask' )
+: PIECE-MASK ( n-- n )
+    1023 AND ;
+
+
+: PIECE-ON-MASK ( n -- n' )
     128 OR ;
 
 : <<ORIENT ( n -- mask )
@@ -23,6 +33,11 @@ REQUIRE display.fs
 
 : EMPTY-SITUATION ( -- khi,klo,board )
     0.0 0 ;
+
+: >>PIECE? ( key -- key',piece,n,x,y,f )
+    DUP 10 RSHIFT SWAP
+    PIECE-MASK
+    
 
 : BOARD ( khi,klo -- board )
     EMPTY-BOARD -ROT
