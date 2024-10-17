@@ -3,8 +3,25 @@
 REQUIRE ffl/tst.fs
 REQUIRE situation.fs
 
-." puzzle" CR
+: BINARY
+    2 BASE ! ;
 
+." situation" CR
+
+."    empty situation" CR
+T{   
+    EMPTY-SITUATION 0 0 0 ?S ?S ?S
+}T
+
+."    adding a piece to a situation" CR
+T{
+    EMPTY-SITUATION
+    CROSS PIECE-NUMBER 1 2 3 dbg ADD-PIECE
+    BINARY 100000011100000010 ?S DECIMAL
+    BINARY 1000000000 ?S DECIMAL
+    DROP
+}T
+BYE
 ."    a piece with a given orientation and location as puzzle sitution" CR
 T{
     CROSS PIECE-NUMBER 0 0 0 SITUATION
@@ -50,6 +67,6 @@ T{
     MY-SET SITUATION-SET% ERASE
     CROSS-SITUATIONS UPPERI-SITUATIONS MY-SET UNION
     MY-SET @ 1608 ?S
-    MY-SET CELL+ 100 SITUATION% * + SITUATION@ 40 30 hex dbg .SITUATION
+    MY-SET CELL+ 100 SITUATION% * + SITUATION@ 40 30 .SITUATION
     35 10 AT-XY KEY DROP
 }T
