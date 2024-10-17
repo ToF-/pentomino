@@ -59,7 +59,8 @@
         I )@ )FLIP I )!
     2 +LOOP ;
 
-
+: )WITHIN? ( x,y -- f )
+    0 8 WITHIN SWAP 0 8 WITHIN AND ;
 
 
 

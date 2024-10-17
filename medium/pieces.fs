@@ -150,7 +150,7 @@ HERE SWAP - CELL / CONSTANT PIECE-MAX
 : NTH-PIECE ( n -- piece )
     CELLS PIECES + @ ;
 
-: PIECE-NUMBER ( piece -- n )
+: PNO ( piece -- n )
     -1 SWAP
     PIECE-MAX 0 DO
         PIECES I CELLS + @ OVER = IF

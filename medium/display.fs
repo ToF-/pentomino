@@ -28,5 +28,9 @@ HERE SWAP - CONSTANT COLOR-MAX
     2 +LOOP
     2DROP ;
 
-
-
+: .BOARD ( board -- )
+    8 0 DO 8 0 DO
+        1 J 8 * I + LSHIFT
+        OVER AND IF SHARP ELSE POINT THEN
+        I J AT-XY EMIT
+    LOOP LOOP DROP ;
