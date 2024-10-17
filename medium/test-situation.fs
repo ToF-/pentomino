@@ -12,6 +12,13 @@ REQUIRE situation.fs
 T{   
     EMPTY-SITUATION 0 0 0 ?S ?S ?S
 }T
+."    creating a key value from a piece" CR
+T{
+    CROSS PIECE-NUMBER 1 2 3 PIECE-KEY BINARY 1001011010 ?S DECIMAL
+    UPPERI PIECE-NUMBER 1 7 7 PIECE-KEY BINARY 10011111110000000000 ?S DECIMAL
+}T
+
+BYE
 ."    adding a piece to a situation" CR
 T{
     EMPTY-SITUATION

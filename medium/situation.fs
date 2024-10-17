@@ -2,7 +2,7 @@
 
 REQUIRE pieces.fs
 REQUIRE display.fs
-REQUIRE binary.fs
+REQUIRE bitfields.fs
 
 0 CONSTANT EMPTY-BOARD
 
@@ -13,12 +13,11 @@ REQUIRE binary.fs
 : EMPTY-SITUATION ( -- kh,kl,bd )
     0.0 0 ;
 
-: KEY-VALUE ( n,o,x,y -- kh,kl )
-    ROT 0 SWAP 3 6 <<
-    -ROT )64 6 0 <<
-    SWAP 6 /MOD -ROT
-    0 -ROT 10 * <<
-    ROT IF 0 ELSE SWAP 0 THEN ;
+: PIECE-INFO ( o,x,y -- p )
+    )64 SWAP 8 OR 6 LSHIFT OR ;
+
+: PIECE-KEY ( n,o,x,y -- key )
+    PIECE-INFO SWAP 10 * LSHIFT ;
 
 \ 3 CELLS CONSTANT SITUATION%
 \ 
