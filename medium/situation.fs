@@ -50,8 +50,8 @@ REQUIRE bitfields.fs
     ROT AND 0= -ROT
     AND 0= AND R> AND ;
 
-: PIECE-SITUATIONS ( < name> n -- )
-    CREATE HERE 0 , SWAP
+: PIECE-SITUATIONS ( < name> n -- exec: addr,count )
+    CREATE HERE CELL+ CELL+ DUP , 0 , SWAP
     DUP NTH-PIECE ORIENT-MAX
     0 DO
         8 0 DO 8 0 DO
@@ -63,6 +63,14 @@ REQUIRE bitfields.fs
                 2DROP 2DROP
             THEN
         LOOP LOOP
-    LOOP DROP
-    HERE OVER CELL+ - 3 CELLS / SWAP ! ;
+    LOOP DROP 
+    HERE OVER - 3 CELLS / SWAP CELL - !
+    DOES> DUP CELL+ @ SWAP @ SWAP ;
+
+: SITUATION@ ( addr -- kh,kl,bd )
+    DUP @ SWAP CELL+
+    DUP @ SWAP CELL+
+    @ ;
+
+
 

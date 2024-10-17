@@ -79,16 +79,28 @@ T{
     SNAKE  PNO 0 0 3 PIECE-SITUATION
     MERGING? ?TRUE
 }T
-."    collect all possible for a given piece" CR
+."    collect all possible situation for a given piece" CR
+
+: .DEMO
+    3 * CELLS OVER + SWAP DO
+        I SITUATION@
+        .BOARD KEY DROP
+        2DROP 
+    3 CELLS +LOOP ;
 T{
     CROSS PNO PIECE-SITUATIONS CROSS-SITUATIONS
-    CROSS-SITUATIONS @ 36 ?S
+    CROSS-SITUATIONS 36 ?S DROP
 
     UPPERI PNO PIECE-SITUATIONS UPPERI-SITUATIONS
-    UPPERI-SITUATIONS @ 64 ?S
+    UPPERI-SITUATIONS 64 ?S DROP
 
     HOUSE PNO PIECE-SITUATIONS HOUSE-SITUATIONS
-    HOUSE-SITUATIONS @ 336 ?S
-
+    HOUSE-SITUATIONS 336 ?S DROP
 }T
+BYE
+."    collect all possible situations for two pieces" CR
+T{
+    CROSS-SITUATIONS UPPERI-SITUATIONS MERGE MY-SET
+}T
+
 
