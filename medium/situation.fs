@@ -2,6 +2,7 @@
 
 REQUIRE pieces.fs
 REQUIRE display.fs
+REQUIRE binary.fs
 
 0 CONSTANT EMPTY-BOARD
 
@@ -9,45 +10,15 @@ REQUIRE display.fs
 3 CONSTANT :ORIENT
 1 CONSTANT :PIECE-ON
 
-: ORIENT-MASK ( n -- n )
-    7 AND ;
-
-: PIECE-MASK ( n-- n )
-    1023 AND ;
-
-
-: PIECE-ON-MASK ( n -- n' )
-    128 OR ;
-
-: <<ORIENT ( n -- mask )
-    6 LSHIFT ;
-
-: <<PIECE ( khi,klo,board,n,key -- sit' )
-    SWAP 6 /MOD
-    -ROT 10 * LSHIFT
-    SWAP IF
-        ROT OR -ROT
-    ELSE
-        SWAP OR SWAP
-    THEN ;
-
-: EMPTY-SITUATION ( -- khi,klo,board )
+: EMPTY-SITUATION ( -- kh,kl,bd )
     0.0 0 ;
 
-: >>PIECE? ( key -- key',piece,n,x,y,f )
-    DUP 10 RSHIFT SWAP
-    PIECE-MASK
-    
-
-: BOARD ( khi,klo -- board )
-    EMPTY-BOARD -ROT
-
-: ADD-PIECE ( khi,klo,board,n,o,x,y -- khi',klo',board' )
-    )64 SWAP ORIENT-MASK <<ORIENT OR
-    PIECE-ON-MASK <<PIECE
-    DROP 2DUP BOARD ;
-
-
+: KEY-VALUE ( n,o,x,y -- kh,kl )
+    ROT 0 SWAP 3 6 <<
+    -ROT )64 6 0 <<
+    SWAP 6 /MOD -ROT
+    0 -ROT 10 * <<
+    ROT IF 0 ELSE SWAP 0 THEN ;
 
 \ 3 CELLS CONSTANT SITUATION%
 \ 
