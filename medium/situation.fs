@@ -50,22 +50,45 @@ REQUIRE bitfields.fs
     ROT AND 0= -ROT
     AND 0= AND R> AND ;
 
-: PIECE-SITUATIONS ( < name> n -- exec: addr,count )
-    CREATE HERE CELL+ CELL+ DUP , 0 , SWAP
-    DUP NTH-PIECE ORIENT-MAX
+: NEW-SET ( <name> n -- exec: addr )
+    CREATE 3 CELLS * CELL+ ALLOCATE ASSERT( 0= )
+    DUP , 0 SWAP !
+    DOES> @ ;
+
+: SITUATIONS ( n -- n )
+    3 CELLS * ;
+
+3 CELLS CONSTANT SITUATION% 
+
+: SITUATION! ( kh,kl,bd,addr )
+    TUCK CELL+ CELL+ !
+    TUCK CELL+ ! ! ;
+
+: +SITUATION! ( kh,kl,bd,addr )
+    DUP @ SITUATIONS OVER CELL+ + SWAP >R SITUATION! 1 R> +! ;
+
+: SET-COUNT ( addr -- addr, count )
+    DUP CELL+ SWAP @ ;
+
+
+: PIECE-SITUATIONS ( < name> n -- exec: addr)
+    4096 NEW-SET HERE CELL - @
+    SWAP DUP NTH-PIECE ORIENT-MAX
     0 DO
         8 0 DO 8 0 DO
-            DUP K I J
+            2DUP K I J
             2OVER 2OVER FITTING? IF
                 PIECE-SITUATION
-                -ROT SWAP , , ,
+                2SWAP -ROT
+                k . i . j . .s cr key drop
+                dup >r
+                +SITUATION!
+                r> set-count situations dump
             ELSE
                 2DROP 2DROP
             THEN
         LOOP LOOP
-    LOOP DROP 
-    HERE OVER - 3 CELLS / SWAP CELL - !
-    DOES> DUP CELL+ @ SWAP @ SWAP ;
+    LOOP 2DROP ;
 
 : SITUATION@ ( addr -- kh,kl,bd )
     DUP @ SWAP CELL+
