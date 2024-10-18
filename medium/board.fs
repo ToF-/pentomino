@@ -19,6 +19,9 @@
 : SQUARE-ROTATE ( x,y -- y,7-x )
     SWAP 7 SWAP - ;
 
+: SQUARE-FLIP ( x,y -- 7-x,y )
+    SWAP 7 SWAP - SWAP ;
+
 : .BOARD-COORDS ( bd -- )
     64 0 DO
         1 I LSHIFT OVER AND IF
@@ -31,6 +34,19 @@
     64 0 DO
         DUP I BOARD>XY IF
             SQUARE-ROTATE
+            2>R SWAP 2R>
+            BOARD<XY!
+            SWAP
+        ELSE
+            2DROP DROP
+        THEN
+    LOOP DROP ;
+
+: BOARD-FLIP ( bd -- bd' )
+    EMPTY-BOARD SWAP
+    64 0 DO
+        DUP I BOARD>XY IF
+            SQUARE-FLIP
             2>R SWAP 2R>
             BOARD<XY!
             SWAP

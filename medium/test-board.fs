@@ -2,6 +2,7 @@
 
 REQUIRE ffl/tst.fs
 REQUIRE board.fs
+REQUIRE display.fs
 
 ." board" CR
 ."    encode positions of squares on a binary cell" CR
@@ -27,10 +28,15 @@ T{
 }T
 ."    rotates squares on a binary cell" CR
 T{
-    EMPTY-BOARD 0 0 BOARD<XY! 1 0 BOARD<XY! 2 0 BOARD<XY! 0 1 BOARD<XY!
-    DUP .BOARD-COORDS CR
-    BOARD-ROTATE
-    DUP .BOARD-COORDS CR
-    EMPTY-BOARD 0 7 BOARD<XY! 0 6 BOARD<XY! 0 5 BOARD<XY! 1 7 BOARD<XY!
-     ?S
+    VARIABLE MY-BOARD
+    EMPTY-BOARD 0 0 BOARD<XY! 1 0 BOARD<XY! 2 0 BOARD<XY! 0 1 BOARD<XY! MY-BOARD !
+    MY-BOARD @ BOARD-ROTATE 
+    EMPTY-BOARD 0 7 BOARD<XY! 0 6 BOARD<XY! 0 5 BOARD<XY! 1 7 BOARD<XY! ?S
 }T
+."    flips squares on a binary cell" CR
+T{
+    MY-BOARD @ BOARD-FLIP
+    EMPTY-BOARD 7 0 BOARD<XY! 6 0 BOARD<XY! 5 0 BOARD<XY! 7 1 BOARD<XY! ?S
+}T
+
+
