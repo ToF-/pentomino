@@ -2,6 +2,7 @@
 
 REQUIRE coords.fs
 REQUIRE pieces.fs
+REQUIRE situation.fs
 
 CREATE COLOR-CODES
 HERE
@@ -34,3 +35,17 @@ HERE SWAP - CONSTANT COLOR-MAX
         OVER AND IF SHARP ELSE POINT THEN
         I J AT-XY EMIT
     LOOP LOOP DROP ;
+
+
+: .SITUATION ( kh,kl,bd )
+    .NORMAL 0 .BOARD
+    DROP
+    12 0 DO
+        2DUP I -ROT
+        KEY-PIECE IF
+            ROT I NTH-PIECE SWAP
+            2SWAP .PIECE
+        ELSE
+            2DROP DROP
+        THEN
+    LOOP 2DROP ;

@@ -1,7 +1,6 @@
 \ situation.fs
 
 REQUIRE pieces.fs
-REQUIRE display.fs
 REQUIRE bitfields.fs
 
 0 CONSTANT EMPTY-BOARD
@@ -32,6 +31,13 @@ REQUIRE bitfields.fs
     2OVER 2OVER PIECE-BOARD >R
     2SWAP OVER >R SWAP 6 MOD SWAP 2SWAP
     PIECE-KEY R> 5 > IF 0 ELSE 0 SWAP THEN R> ;
+
+: KEY-PIECE ( n,kh,kl -- o,x,y,f )
+    ROT 6 /MOD SWAP                     \ kh,kl,f,j
+    >R IF DROP ELSE NIP THEN R>         \ k,j
+    10 * RSHIFT 1023 AND                \ i
+    DUP 6 RSHIFT 15 AND 8 /MOD          \ i,o,f
+    ROT 63 AND 8 /MOD ROT ;             \ o,x,y,f
 
 : MERGE-SITUATIONS ( kh0,kl0,bd0,kh1,kl1,bd1 -- kh,kl,bd )
     -ROT 2SWAP OR >R

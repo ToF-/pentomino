@@ -62,9 +62,6 @@ CHAR . CONSTANT POINT
     R> COORDS DUP COORDS% ))FLIP
     COORDS% ))CENTER ;
 
-: )WITHIN? ( x,y -- f )
-   0 8 WITHIN SWAP 0 8 WITHIN AND ;
-
 : ))WITHIN? ( piece,n,i,j -- f )
     2SWAP COORDS >R TRUE -ROT R>
     DUP COORDS% + SWAP DO
