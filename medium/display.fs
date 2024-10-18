@@ -2,7 +2,7 @@
 
 REQUIRE coords.fs
 REQUIRE pieces.fs
-REQUIRE situation.fs
+REQUIRE board.fs
 
 CREATE COLOR-CODES
 HERE
@@ -36,7 +36,6 @@ HERE SWAP - CONSTANT COLOR-MAX
         I J AT-XY EMIT
     LOOP LOOP DROP ;
 
-
 : .SITUATION ( kh,kl,bd )
     .NORMAL 0 .BOARD
     DROP
@@ -49,3 +48,4 @@ HERE SWAP - CONSTANT COLOR-MAX
             2DROP DROP
         THEN
     LOOP 2DROP ;
+

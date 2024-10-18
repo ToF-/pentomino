@@ -1,5 +1,7 @@
 \ board.fs
 
+REQUIRE coords.fs
+
 0 CONSTANT EMPTY-BOARD
 
 : BOARD<XY! ( bd,x,y -- bd' )
@@ -54,3 +56,30 @@
             2DROP DROP
         THEN
     LOOP DROP ;
+
+: ADD-ADJACENT ( bd,n -- bd' )
+    DUP 0 64 WITHIN IF
+        1 SWAP LSHIFT OR
+    ELSE
+        DROP
+    THEN ;
+
+: ADJACENT-SQUARES ( x,y -- bd )
+    2>R
+    EMPTY-BOARD 
+    2R@ -1 0 )+ 2DUP )WITHIN? IF BOARD<XY! ELSE 2DROP THEN
+    2R@ 1  0 )+ 2DUP )WITHIN? IF BOARD<XY! ELSE 2DROP THEN
+    2R@ 0 -1 )+ 2DUP )WITHIN? IF BOARD<XY! ELSE 2DROP THEN
+    2R> 0  1 )+ 2DUP )WITHIN? IF BOARD<XY! ELSE 2DROP THEN ;
+    
+
+: ADJACENT-BOARD ( bd -- bd ' )
+    EMPTY-BOARD SWAP
+    64 0 DO
+        DUP I BOARD>XY IF
+            ADJACENT-SQUARES
+            ROT OR SWAP
+        ELSE
+            2DROP DROP
+        THEN
+    LOOP -1 XOR AND ;

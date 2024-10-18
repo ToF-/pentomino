@@ -3,6 +3,7 @@
 REQUIRE pieces.fs
 REQUIRE bitfields.fs
 REQUIRE board.fs
+REQUIRE display.fs
 
 6 CONSTANT :SQUARE
 3 CONSTANT :ORIENT
@@ -31,13 +32,6 @@ REQUIRE board.fs
     2SWAP OVER >R SWAP 6 MOD SWAP 2SWAP
     PIECE-KEY R> 5 > IF 0 ELSE 0 SWAP THEN R> ;
 
-: KEY-PIECE ( n,kh,kl -- o,x,y,f )
-    ROT 6 /MOD SWAP                     \ kh,kl,f,j
-    >R IF DROP ELSE NIP THEN R>         \ k,j
-    10 * RSHIFT 1023 AND                \ i
-    DUP 6 RSHIFT 15 AND 8 /MOD          \ i,o,f
-    ROT 63 AND 8 /MOD ROT ;             \ o,x,y,f
-
 : MERGE-SITUATIONS ( kh0,kl0,bd0,kh1,kl1,bd1 -- kh,kl,bd )
     -ROT 2SWAP OR >R
     ROT OR -ROT OR SWAP R> ;
@@ -53,8 +47,15 @@ REQUIRE board.fs
         -ROT 2SWAP AND -ROT
     2 +LOOP 2DROP ;
 
+: BOARD-MERGING? ( bd0,bd1 -- f )
+    2DUP SWAP ADJACENT-BOARD SWAP AND >R
+    AND 0= R> AND ;
+
+   \  2DUP AND 0=
+   \  -ROT ADJACENT-BOARD SWAP ADJACENT-BOARD AND 0= 0= ROT AND ;
+
 : MERGING? ( kh0,kl0,bd0,kh1,kl1,bd1 -- ? )
-    -ROT 2SWAP AND 0= >R
+    -ROT 2SWAP BOARD-MERGING? >R
     ROT AND 0= -ROT
     AND 0= AND R> AND ;
 

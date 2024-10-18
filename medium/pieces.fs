@@ -154,3 +154,11 @@ HERE SWAP - CELL / CONSTANT PIECE-MAX
             NIP I SWAP LEAVE
         THEN
     LOOP DROP ;
+
+: KEY-PIECE ( n,kh,kl -- o,x,y,f )
+    ROT 6 /MOD SWAP                     \ kh,kl,f,j
+    >R IF DROP ELSE NIP THEN R>         \ k,j
+    10 * RSHIFT 1023 AND                \ i
+    DUP 6 RSHIFT 15 AND 8 /MOD          \ i,o,f
+    ROT 63 AND 8 /MOD ROT ;             \ o,x,y,f
+
