@@ -1,6 +1,7 @@
 \ coords.fs
 
 15 CONSTANT MAX-COORD
+8 CONSTANT SIZE
 
 : EXPAND ( cn -- n )
     DUP 128 AND IF -256 OR THEN ;
@@ -60,7 +61,7 @@
     2 +LOOP ;
 
 : )WITHIN? ( x,y -- f )
-    0 8 WITHIN SWAP 0 8 WITHIN AND ;
+    0 SIZE WITHIN SWAP 0 SIZE WITHIN AND ;
 
 
 

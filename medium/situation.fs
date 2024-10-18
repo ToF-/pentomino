@@ -105,8 +105,14 @@ REQUIRE bitfields.fs
 
 VARIABLE DESTINATION-SET
 
-: MERGE-SET ( <name> set1,set2 -- exec: addr )
-    4096 DUP * SITUATIONS NEW-SET HERE CELL - @ DESTINATION-SET !
+: LARGE-SET ( <name> -- exec: addr )
+    100000 DUP * NEW-SET ;
+
+: EMPTY-SET ( addr -- )
+    OFF ;
+
+: MERGE-SETS ( <name> set1,set2, addr )
+    DUP EMPTY-SET DESTINATION-SET !
     SET-COUNT SITUATIONS OVER + SWAP DO
         DUP SET-COUNT SITUATIONS OVER + SWAP DO  \ set2
             J SITUATION@ I SITUATION@ MERGING? IF
