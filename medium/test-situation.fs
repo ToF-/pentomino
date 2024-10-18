@@ -122,7 +122,7 @@ T{
     ." HOUSE-SET:" HOUSE-SET @ . CR
     CR
 }T
-
+BYE
 ."    collect all possible situations for two pieces" CR
 T{
     LARGE-SET SET-1
