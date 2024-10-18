@@ -332,4 +332,14 @@ The strategy is thus :
 - compute ABi AND Ci, ABj AND Cj … keeping only those configurations where A,B and C pieces fit together
 
 
+This strategy is taking way too much operations.
+
+What about limiting the merge to situations where at least one piece from the second set is adjacent to one piece of thef first set.
+
+the situation board is for instance 00011111  (UPPERI in 0,0) then merging is possible only with situations having one these squares : 5,8,9,10,11,12
+
+(mark N the board made of all neighbors of A, then the merge candidate is B where
+- B inter A is null
+- B inter B is non null
+
 
