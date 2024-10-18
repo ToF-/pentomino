@@ -69,6 +69,11 @@ REQUIRE bitfields.fs
 
 3 CELLS CONSTANT SITUATION% 
 
+: SITUATION@ ( addr -- kh,kl,bd )
+    DUP @ SWAP CELL+
+    DUP @ SWAP CELL+
+    @ ;
+
 : SITUATION! ( kh,kl,bd,addr )
     TUCK CELL+ CELL+ !
     TUCK CELL+ ! ! ;
@@ -88,8 +93,8 @@ REQUIRE bitfields.fs
         2DROP 2DROP DROP
     THEN ;
 
-: PIECE-SITUATIONS ( < name> n -- exec: addr)
-    4096 SITUATIONS NEW-SET HERE CELL - @
+: PIECE-SITUATIONS ( <name> -- exec: addr )
+    10000 SITUATIONS NEW-SET HERE CELL - @
     SWAP DUP NTH-PIECE ORIENT-MAX
     0 DO
         8 0 DO 8 0 DO
@@ -98,10 +103,21 @@ REQUIRE bitfields.fs
         LOOP LOOP
     LOOP 2DROP ;
 
-: SITUATION@ ( addr -- kh,kl,bd )
-    DUP @ SWAP CELL+
-    DUP @ SWAP CELL+
-    @ ;
+VARIABLE DESTINATION-SET
+
+: MERGE-SET ( <name> set1,set2 -- exec: addr )
+    4096 DUP * SITUATIONS NEW-SET HERE CELL - @ DESTINATION-SET !
+    SET-COUNT SITUATIONS OVER + SWAP DO
+        DUP SET-COUNT SITUATIONS OVER + SWAP DO  \ set2
+            J SITUATION@ I SITUATION@ MERGING? IF
+                J SITUATION@ I SITUATION@
+                MERGE-SITUATIONS
+                DESTINATION-SET @
+                +SITUATION!
+            THEN
+        SITUATION% +LOOP
+    SITUATION% +LOOP
+    DROP ;
 
 
 
