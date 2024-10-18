@@ -38,6 +38,9 @@ REQUIRE bitfields.fs
     ROT OR -ROT OR SWAP R> ;
 
 : FITTING? ( n,o,x,y -- f )
+    2OVER
+    ASSERT( 0 8 WITHIN )
+    ASSERT( 0 12 WITHIN )
     2SWAP SWAP NTH-PIECE SWAP COORDS
     COORDS% OVER + SWAP
     2>R TRUE -ROT 2R> DO
@@ -70,23 +73,22 @@ REQUIRE bitfields.fs
 : SET-COUNT ( addr -- addr, count )
     DUP CELL+ SWAP @ ;
 
+: PIECE-SITUATION?! ( addr,n,o,x,y -- )
+    2OVER 2OVER FITTING? IF
+        PIECE-SITUATION            \ addr,kh,kl,bd
+        >R ROT R> SWAP             \ kh,kl,bd,addr 
+        +SITUATION!
+    ELSE
+        2DROP 2DROP DROP
+    THEN ;
 
 : PIECE-SITUATIONS ( < name> n -- exec: addr)
-    4096 NEW-SET HERE CELL - @
+    4096 SITUATIONS NEW-SET HERE CELL - @
     SWAP DUP NTH-PIECE ORIENT-MAX
     0 DO
         8 0 DO 8 0 DO
             2DUP K I J
-            2OVER 2OVER FITTING? IF
-                PIECE-SITUATION
-                2SWAP -ROT
-                k . i . j . .s cr key drop
-                dup >r
-                +SITUATION!
-                r> set-count situations dump
-            ELSE
-                2DROP 2DROP
-            THEN
+            PIECE-SITUATION?!
         LOOP LOOP
     LOOP 2DROP ;
 
