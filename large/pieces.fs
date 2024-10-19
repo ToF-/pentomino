@@ -60,11 +60,55 @@ DECIMAL
 
 : )@ ( addr -- c )
     C@ EXPAND ;
+
+1000 CONSTANT UNKNOWN-MAX
+UNKNOWN-MAX 15 - CONSTANT UNKNOWN-MIN
+
+VARIABLE ORIGIN
+
+: UNKNOWN-ORIGIN?
+    ORIGIN @ UNKNOWN-MIN > ;
+
+: UPDATE-ORIGIN
+    UNKNOWN-ORIGIN? IF -1 ORIGIN +! THEN ;
+
+: SET-ORIGIN
+    -1000 ORIGIN +! ;
+
+: | ( cccccc| )
+    [CHAR] | WORD
+    0 SWAP COUNT OVER + SWAP DO
+        I C@ [CHAR] # = IF
+            UNKNOWN-ORIGIN? IF
+                SET-ORIGIN
+            ELSE
+                DUP ORIGIN @ + C,
+            THEN
+        THEN
+        1+
+        UPDATE-ORIGIN
+    LOOP DROP
+    16 ORIGIN +! ;
+
+: SHAPE| ( cccccc| )
+    UNKNOWN-MAX ORIGIN ! | ;
     
 CREATE SHAPE-COORDS
-    ( 0 )  15 ),  16 ),  17 ),  32 ),
-    ( 1 )  01 ),  02 ),  03 ),  04 ),
-    ( 2 )  16 ),  32 ),  48 ),  64 ),
+    SHAPE| .#.|
+         | ###|
+         | .#.|
+    SHAPE| #####|
+    SHAPE| #|
+         | #|
+         | #|
+         | #|
+         | #|
+    SHAPE| .##|
+         | .#.|
+         | ##.|
+    SHAPE| #..|
+         | ###|
+         | ..#|
 
 : COORDS ( n -- c1,c2,c3,c4 )
     1- 4 * SHAPE-COORDS + DUP 4 + SWAP DO I )@ LOOP ;
