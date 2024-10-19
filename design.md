@@ -1,4 +1,8 @@
 
+
+---
+
+
 the puzzle is solved when all the pieces are placed on a 8x8 grid, without holes
 
 pieces can rotate, flip vertically or flip horizontally
@@ -341,5 +345,7 @@ the situation board is for instance 00011111  (UPPERI in 0,0) then merging is po
 (mark N the board made of all neighbors of A, then the merge candidate is B where
 - B inter A is null
 - B inter B is non null
+
+
 
 
