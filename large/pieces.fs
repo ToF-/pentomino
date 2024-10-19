@@ -62,7 +62,9 @@ DECIMAL
     C@ EXPAND ;
     
 CREATE SHAPE-COORDS
-    ( 0 )  15 ), 16 ), 17 ), 32 ),
+    ( 0 )  15 ),  16 ),  17 ),  32 ),
+    ( 1 )  01 ),  02 ),  03 ),  04 ),
+    ( 2 )  16 ),  32 ),  48 ),  64 ),
 
 : COORDS ( n -- c1,c2,c3,c4 )
     1- 4 * SHAPE-COORDS + DUP 4 + SWAP DO I )@ LOOP ;

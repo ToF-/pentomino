@@ -2,9 +2,19 @@
 
 DEFER (.BLOCK)
 
-: .BLOCK ( c,x,y -- )
-    ROT 16 /MOD
-    ROT + -ROT + SWAP 
+: COORDS>XY ( c -- x,y )
+    DUP 16 /MOD
+    OVER 8 >= IF
+        2DROP -16 /MOD NEGATE
+    ELSE
+        ROT DROP
+    THEN ;
+
+: XY+ ( x,y,i,j -- x+i,y+j )
+    ROT + -ROT + SWAP ;
+
+: .BLOCK ( x,y,c -- )
+    COORDS>XY XY+
     (.BLOCK) ;
 
 : .SHARP ( x,y -- )
