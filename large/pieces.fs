@@ -97,18 +97,30 @@ CREATE SHAPE-COORDS
     SHAPE| .#.|
          | ###|
          | .#.|
+
     SHAPE| #####|
+
     SHAPE| #|
          | #|
          | #|
          | #|
          | #|
+
     SHAPE| .##|
          | .#.|
          | ##.|
+
     SHAPE| #..|
          | ###|
          | ..#|
+
+    SHAPE| ##.|
+         | .#.|
+         | .##|
+
+    SHAPE| ..#|
+         | ###|
+         | #..|
 
 : COORDS ( n -- c1,c2,c3,c4 )
     1- 4 * SHAPE-COORDS + DUP 4 + SWAP DO I )@ LOOP ;
