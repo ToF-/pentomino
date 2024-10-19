@@ -347,5 +347,34 @@ the situation board is for instance 00011111  (UPPERI in 0,0) then merging is po
 - B inter B is non null
 
 
+--- 
 
+shorter code for coords
+```
+: FOO
+  dup 16 /mod over 8 >=
+  IF     2drop -16 /mod negate
+  ELSE   rot drop
+  THEN ; ok
+
+-33 ⇒ -1 -2  
+-32 ⇒  0 -2  
+-31 ⇒  1 -2  
+-30 ⇒  2 -2  
+-18 ⇒ -2 -1  
+-19 ⇒ -3 -1  
+-17 ⇒ -1 -1  
+-16 ⇒  0 -1  
+-15 ⇒  1 -1  
+-14 ⇒  2 -1  
+ -1 ⇒ -1  0  
+  0 ⇒  0  0  
+  1 ⇒  1  0  
+ 15 ⇒ -1  1  
+ 16 ⇒  0  1  
+ 17 ⇒  1  1  
+ 31 ⇒ -1  2  
+ 32 ⇒  0  2  
+ 33 ⇒  1  2  
+```
 

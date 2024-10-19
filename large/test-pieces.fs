@@ -2,6 +2,7 @@
 
 REQUIRE ffl/tst.fs
 REQUIRE pieces.fs
+REQUIRE display.fs
 
 ." pieces" CR
 ."     have a category and an orientation" CR
@@ -14,7 +15,8 @@ T{
 ."     have a list of square relative coords" CR
 : REORDER 2>R SWAP 2R> SWAP 2SWAP ;
 T{
-    1 COORDS REORDER 7 ?S 8 ?S 9 ?S 16 ?S
+    1 COORDS REORDER 15 ?S 16 ?S 17 ?S 32 ?S
+    1 COORDS 10 10 .SHAPE
 }T
 
 
