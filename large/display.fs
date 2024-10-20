@@ -1,5 +1,7 @@
 \ display.fs
 
+REQUIRE colors.fs
+
 DEFER (.BLOCK)
 
 : COORDS>XY ( c -- x,y )
@@ -35,9 +37,11 @@ DEFER (.BLOCK)
 
 : .DEMO
     64 1 DO
+        I NTH-SHAPE CATEGORY .COLOR
         I COORDS
         I 8 /MOD
         6 * 3 + SWAP
         6 * 3 + SWAP
         .SHAPE
-    LOOP ;
+    LOOP
+    0 56 AT-XY .NORMAL ;
