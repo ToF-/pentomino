@@ -23,6 +23,12 @@ CREATE BOARD 64 ALLOT
 : EMPTY-SQUARE? ( x,y -- f)
     PIECE-AT 0= ;
 
+: COORD-WITHIN? ( xy -- f )
+    0 64 WITHIN ;
+
 : CAN-FIT? ( sh#,x,y -- f )
-    2DROP DROP TRUE ;
+    8 * + DUP COORD-WITHIN? IF
+    ELSE
+        2DROP FALSE
+    THEN ;
 
