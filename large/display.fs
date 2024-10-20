@@ -33,3 +33,11 @@ DEFER (.BLOCK)
         2DUP 2>R ROT .BLOCK 2R>
     LOOP 2DROP ;
 
+: .DEMO
+    64 1 DO
+        I COORDS
+        I 8 /MOD
+        6 * 3 + SWAP
+        6 * 3 + SWAP
+        .SHAPE
+    LOOP ;
