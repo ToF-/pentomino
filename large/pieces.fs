@@ -41,7 +41,7 @@ CREATE SHAPES
 : NTH-SHAPE ( n -- sh )
     SHAPES 1- + C@ ;
 
-: CATEGORY ( sh -- n )
+: PIECE ( sh -- n )
     4 RSHIFT 15 AND ;
 
 : ORIENTATION ( sh -- n )
@@ -88,7 +88,7 @@ VARIABLE ORIGIN
         1+
         UPDATE-ORIGIN
     LOOP DROP
-    16 ORIGIN +! ;
+    8 ORIGIN +! ;
 
 : SHAPE| ( cccccc| )
     UNKNOWN-MAX ORIGIN ! | ;
@@ -342,3 +342,7 @@ CREATE SHAPE-COORDS
  
 : COORDS ( n -- c1,c2,c3,c4 )
     1- 4 * SHAPE-COORDS + DUP 4 + SWAP DO I )@ LOOP ;
+
+: COORDS@ ( n,i -- c )
+    SWAP 1- 4 * SHAPE-COORDS + + )@ ;
+    

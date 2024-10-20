@@ -1,6 +1,7 @@
 \ display.fs
 
 REQUIRE colors.fs
+REQUIRE board.fs
 
 DEFER (.BLOCK)
 
@@ -31,13 +32,26 @@ DEFER (.BLOCK)
 
 : .SHAPE ( c1,c2,c3,c4,x,y -- )
     0 -ROT
-    5 0 DO
+    5 1 DO
         2DUP 2>R ROT .BLOCK 2R>
     LOOP 2DROP ;
 
+: .BOARD
+    8 0 DO
+        8 0 DO
+            I J 2DUP EMPTY-SQUARE? IF
+                .NORMAL
+                AT-XY [CHAR] . EMIT
+            ELSE
+                2DUP PIECE-AT .COLOR
+                AT-XY [CHAR] # EMIT
+            THEN
+        LOOP
+    LOOP .NORMAL ;
+
 : .DEMO
     64 1 DO
-        I NTH-SHAPE CATEGORY .COLOR
+        I NTH-SHAPE PIECE .COLOR
         I COORDS
         I 8 /MOD
         6 * 3 + SWAP
@@ -45,3 +59,5 @@ DEFER (.BLOCK)
         .SHAPE
     LOOP
     0 56 AT-XY .NORMAL ;
+
+
