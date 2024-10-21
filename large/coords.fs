@@ -24,7 +24,37 @@
 : +XY ( i,j,x,y -- i+x,j+y )
     ROT + -ROT + SWAP ;
 
-: COORDS+XY? ( x,y,rc -- i,j,1|0 )
-    COORDS>XY +XY 2DUP
+: COORDS+XY? ( rc,x,y -- i,j,1|0 )
+    ROT COORDS>XY +XY 2DUP
     COORDS-WITHIN? DUP
     0= IF -ROT 2DROP THEN ;
+
+VARIABLE RESULT
+
+: RESULT!++ ( x,y -- )
+    SWAP
+    RESULT @ C!
+    1 RESULT +!
+    RESULT @ C! 
+    1 RESULT +! ;
+
+: SHAPE+XY? ( 0,a,b,c,d,x,y -- x0,y0 … x4,y4,1 | 0 )
+    PAD RESULT !
+    TRUE -ROT
+    5 0 DO                    \ 0,a,b,c,d,f,x,y
+        2SWAP 2OVER           \ 0,a,b,c,x,y,d,f,x,y
+        ROT IF                \ 0,a,b,c,x,y,d,x,y
+            COORDS+XY? IF     \ 0,a,b,c,x,y,i,j,f
+                RESULT!++
+                TRUE          \ 0,a,b,c,x,y,f
+            ELSE
+                FALSE         \ 0,a,b,c,x,y,f
+            THEN
+            -ROT              \ 0,a,b,c,f,x,y
+        THEN
+    LOOP
+    IF 10 0 DO PAD I + C@ LOOP TRUE ELSE FALSE THEN ;
+
+
+
+    
