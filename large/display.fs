@@ -46,8 +46,7 @@ DEFER (.BLOCK)
                 2DUP PIECE-AT .COLOR
                 AT-XY [CHAR] # EMIT
             THEN
-        LOOP
-    LOOP .NORMAL ;
+        LOOP LOOP .NORMAL ;
 
 : .DEMO
     64 1 DO
@@ -57,7 +56,6 @@ DEFER (.BLOCK)
         6 * 3 + SWAP
         6 * 3 + SWAP
         .SHAPE
-    LOOP
-    0 56 AT-XY .NORMAL ;
+    LOOP .NORMAL DROP ;
 
 

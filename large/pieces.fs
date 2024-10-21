@@ -88,7 +88,7 @@ VARIABLE ORIGIN
         1+
         UPDATE-ORIGIN
     LOOP DROP
-    8 ORIGIN +! ;
+    10 ORIGIN +! ;
 
 : SHAPE| ( cccccc| )
     UNKNOWN-MAX ORIGIN ! | ;

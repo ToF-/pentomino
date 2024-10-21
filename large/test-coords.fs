@@ -1,0 +1,25 @@
+\ test-coords.fs
+
+REQUIRE ffl/tst.fs
+REQUIRE coords.fs
+
+." coords" CR
+
+."    must check relatively to a square" CR
+T{
+    7 0  0 SQUARE-PLACE? ?TRUE
+    7 0  1 SQUARE-PLACE? ?FALSE
+    7 0  2 SQUARE-PLACE? ?FALSE
+    7 0  3 SQUARE-PLACE? ?FALSE
+    7 0  8 SQUARE-PLACE? ?TRUE
+    7 0  7 SQUARE-PLACE? ?TRUE
+    7 0  6 SQUARE-PLACE? ?TRUE
+    7 0 -1 SQUARE-PLACE? ?TRUE
+    7 0 -8 SQUARE-PLACE? ?FALSE
+    7 0 -7 SQUARE-PLACE? ?FALSE
+    7 0 -6 SQUARE-PLACE? ?FALSE
+    7 0 -5 SQUARE-PLACE? ?FALSE
+    7 0 -9 SQUARE-PLACE? ?FALSE
+    7 7 1 SQUARE-PLACE? ?FALSE
+    7 7 8 SQUARE-PLACE? ?FALSE
+}T

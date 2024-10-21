@@ -1,7 +1,8 @@
 \ tests.fs
 
 PAGE
-REQUIRE test-pieces.fs
-REQUIRE test-board.fs
+REQUIRE test-coords.fs
+\ REQUIRE test-board.fs
+\ REQUIRE test-pieces.fs
 BYE
 

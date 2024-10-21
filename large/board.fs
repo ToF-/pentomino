@@ -1,5 +1,8 @@
 \ board.fs
 
+REQUIRE coords.fs
+REQUIRE pieces.fs
+
 CREATE BOARD 64 ALLOT
 
 : EMPTY-BOARD
@@ -9,10 +12,11 @@ CREATE BOARD 64 ALLOT
     8 * + BOARD + C@ ;
 
 : PLACE-BLOCK ( p,xy -- )
+    10 /MOD 8 * SWAP +
     BOARD + C! ;
 
 : PLACE-SHAPE ( sh#,x,y -- )
-    8 * + OVER NTH-SHAPE PIECE       \ sh#,xy,p
+    10 * + OVER NTH-SHAPE PIECE       \ sh#,xy,p
     2DUP SWAP PLACE-BLOCK            \ sh#,xy,p
     -ROT SWAP 4 0 DO                 \ p,xy,sh#
         2DUP I COORDS@ +             \ p,xy,sh#,ij
@@ -23,12 +27,6 @@ CREATE BOARD 64 ALLOT
 : EMPTY-SQUARE? ( x,y -- f)
     PIECE-AT 0= ;
 
-: COORD-WITHIN? ( xy -- f )
-    0 64 WITHIN ;
-
-: CAN-FIT? ( sh#,x,y -- f )
-    8 * + DUP COORD-WITHIN? IF
-    ELSE
-        2DROP FALSE
-    THEN ;
+: )+ ( x,y,i,j -- x+i,y+j )
+    ROT + -ROT + SWAP ;
 
