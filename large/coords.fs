@@ -24,5 +24,7 @@
 : +XY ( i,j,x,y -- i+x,j+y )
     ROT + -ROT + SWAP ;
 
-: SQUARE-PLACE? ( x,y,rc -- f )
-    COORDS>XY +XY COORDS-WITHIN? ;
+: COORDS+XY? ( x,y,rc -- i,j,1|0 )
+    COORDS>XY +XY 2DUP
+    COORDS-WITHIN? DUP
+    0= IF -ROT 2DROP THEN ;
