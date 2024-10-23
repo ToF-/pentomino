@@ -27,11 +27,8 @@ T{
 
 ."    can be checked in a group" CR
 T{
-    0 1 2 3 4  3 3 SHAPE+XY? ?TRUE
-    SWAP 3 ?S 3 ?S
-    SWAP 4 ?S 3 ?S
-    SWAP 5 ?S 3 ?S
-    SWAP 6 ?S 3 ?S
-    SWAP 7 ?S 3 ?S
-    .S
+    0 1 2 3 4  3 3 SHAPE-XY? ?TRUE
+    0 1 2 3 4  7 0 SHAPE-XY? ?FALSE
+    0 8 16 24 32 7 0 SHAPE-XY? ?TRUE
+    0 8 16 24 32 7 6 SHAPE-XY? ?FALSE
 }T

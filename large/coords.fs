@@ -33,28 +33,18 @@ VARIABLE RESULT
 
 : RESULT!++ ( x,y -- )
     SWAP
-    RESULT @ C!
-    1 RESULT +!
-    RESULT @ C! 
-    1 RESULT +! ;
+    RESULT @ C!  1 RESULT +!
+    RESULT @ C!  1 RESULT +! ;
 
-: SHAPE+XY? ( 0,a,b,c,d,x,y -- x0,y0 … x4,y4,1 | 0 )
-    PAD RESULT !
-    TRUE -ROT
-    5 0 DO                    \ 0,a,b,c,d,f,x,y
-        2SWAP 2OVER           \ 0,a,b,c,x,y,d,f,x,y
-        ROT IF                \ 0,a,b,c,x,y,d,x,y
-            COORDS+XY? IF     \ 0,a,b,c,x,y,i,j,f
-                RESULT!++
-                TRUE          \ 0,a,b,c,x,y,f
-            ELSE
-                FALSE         \ 0,a,b,c,x,y,f
-            THEN
-            -ROT              \ 0,a,b,c,f,x,y
+2VARIABLE TARGET
+
+: SHAPE-XY? ( c0,c1,c2,c3,c4,x,y -- f )
+    TARGET 2!  TRUE
+    5 0 DO
+        SWAP TARGET 2@ COORDS+XY? IF
+            2DROP TRUE
+        ELSE
+            FALSE
         THEN
-    LOOP
-    IF 10 0 DO PAD I + C@ LOOP TRUE ELSE FALSE THEN ;
-
-
-
-    
+        AND
+    LOOP ;
