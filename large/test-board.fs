@@ -8,10 +8,8 @@ REQUIRE display.fs
 ."     can place a shape" CR
 T{
     EMPTY-BOARD
-    BOARD 64 DUMP
     2 0 0 PLACE-SHAPE
-    1 5 0 PLACE-SHAPE
-    .BOARD
+    1 5 0 dbg PLACE-SHAPE
     BOARD 64 DUMP
 }T
 ."     can check if a shape fits on it" CR

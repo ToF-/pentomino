@@ -38,10 +38,13 @@ VARIABLE RESULT
 
 2VARIABLE TARGET
 
+: TARGET-XY ( -- x,y )
+    TARGET 2@ ;
+
 : SHAPE-XY? ( c0,c1,c2,c3,c4,x,y -- f )
     TARGET 2!  TRUE
     5 0 DO
-        SWAP TARGET 2@ COORDS+XY? IF
+        SWAP TARGET-XY COORDS+XY? IF
             2DROP TRUE
         ELSE
             FALSE

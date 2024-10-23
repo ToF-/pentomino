@@ -11,18 +11,21 @@ CREATE BOARD 64 ALLOT
 : PIECE-AT ( x,y -- n )
     8 * + BOARD + C@ ;
 
-: PLACE-BLOCK ( p,xy -- )
-    10 /MOD 8 * SWAP +
+: PLACE-BLOCK ( p,x,y -- )
+    10 / 8 * SWAP +
     BOARD + C! ;
 
 : PLACE-SHAPE ( sh#,x,y -- )
-    10 * + OVER NTH-SHAPE PIECE       \ sh#,xy,p
-    2DUP SWAP PLACE-BLOCK            \ sh#,xy,p
-    -ROT SWAP 4 0 DO                 \ p,xy,sh#
-        2DUP I COORDS@ +             \ p,xy,sh#,ij
-        2>R OVER 2R> ROT SWAP        \ p,xy,sh#,p,ij
-        PLACE-BLOCK
-    LOOP 2DROP DROP ;
+    TARGET 2!
+    DUP NTH-SHAPE PIECE           \ sh#,p#
+    >R COORDS R>                  \ c1,c2,c3,c4,p#
+    DUP TARGET-XY PLACE-BLOCK     \ c1,c2,c3,c4,p# 
+    4 0 DO
+        DUP ROT
+        TARGET-XY COORDS+XY? IF
+            PLACE-BLOCK
+        THEN
+    LOOP DROP ;
 
 : EMPTY-SQUARE? ( x,y -- f)
     PIECE-AT 0= ;
