@@ -3,10 +3,14 @@
 REQUIRE coords.fs
 REQUIRE pieces.fs
 
-CREATE BOARD 64 ALLOT
+SIZE DUP * CONSTANT BOARD%
+
+2VARIABLE TARGET
+
+CREATE BOARD BOARD% ALLOT
 
 : EMPTY-BOARD
-    BOARD 64 ERASE ;
+    BOARD BOARD% ERASE ;
 
 : PIECE-AT ( x,y -- n )
     8 * + BOARD + C@ ;
@@ -15,21 +19,16 @@ CREATE BOARD 64 ALLOT
     8 * SWAP +
     BOARD + C! ;
 
+: PLACE-NEXT ( c,p -- )
+    TARGET 2@ COORDS+XY PLACE-BLOCK ;
+
 : PLACE-SHAPE ( sh#,x,y -- )
-    TARGET 2!
-    DUP NTH-SHAPE PIECE           \ sh#,p#
-    >R COORDS R>                  \ c1,c2,c3,c4,p#
-    DUP TARGET-XY PLACE-BLOCK     \ c1,c2,c3,c4,p# 
-    4 0 DO
-        DUP ROT
-        TARGET-XY COORDS+XY? IF
-            PLACE-BLOCK
-        THEN
+    TARGET 2!  DUP NTH-SHAPE PIECE  \ sh#,p#
+    >R COORDS 0 R>                  \ c1,c2,c3,c4,0,p#
+    5 0 DO
+        DUP ROT PLACE-NEXT
     LOOP DROP ;
 
 : EMPTY-SQUARE? ( x,y -- f)
     PIECE-AT 0= ;
-
-: )+ ( x,y,i,j -- x+i,y+j )
-    ROT + -ROT + SWAP ;
 

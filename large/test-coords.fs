@@ -26,11 +26,4 @@ T{
     -10 7 7 COORDS+XY? ?TRUE SWAP 7 ?S 6 ?S
 }T
 
-."    can be checked in a group" CR
-T{
-    0 1 2 3 4  3 3 SHAPE-XY? ?TRUE
-    0 1 2 3 4  7 0 SHAPE-XY? ?FALSE
-    0 10 20 30 40 7 0 SHAPE-XY? ?TRUE
-    0 10 20 30 40 7 6 SHAPE-XY? ?FALSE
-}T
 

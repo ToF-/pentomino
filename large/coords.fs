@@ -8,48 +8,38 @@
 \ a) convert relative coords : 1,0 2,0 3,0 4,0
 \ b) add to destination coords : 8,0, 9,0 3,0 4,0
 
+8 CONSTANT SIZE
+10 CONSTANT XMAX
+5 CONSTANT HALF
+
+: -XY ( x,y -- -x,-y )
+    NEGATE SWAP NEGATE SWAP ;
+
+: XY-+ ( x,y -- 10-x,y+1 )
+    SWAP 10 - SWAP 1+ ;
+
 : COORDS>XY ( co -- x,y )
-    DUP 0 < >R ABS
-    10 /MOD OVER 5 > IF SWAP 10 - SWAP 1+ THEN
-    R> IF NEGATE SWAP NEGATE SWAP THEN ;
+    DUP 0 < SWAP
+    ABS XMAX /MOD
+    OVER HALF > IF XY-+ THEN
+    ROT IF -XY THEN ;
 
 : COORD-WITHIN? ( n -- f )
-    0 8 WITHIN ;
+    0 SIZE WITHIN ;
 
 : COORDS-WITHIN? ( x,y -- f )
-    COORD-WITHIN?
-    SWAP COORD-WITHIN? AND ;
-
-: REL-COORDS-WITHIN? ( rc -- f )
-    COORDS>XY COORDS-WITHIN? ;
+    COORD-WITHIN? SWAP
+    COORD-WITHIN? AND ;
 
 : +XY ( i,j,x,y -- i+x,j+y )
     ROT + -ROT + SWAP ;
 
+: COORDS+XY ( rc,x,y -- i,j )
+    ROT COORDS>XY +XY ;
+
 : COORDS+XY? ( rc,x,y -- i,j,1|0 )
-    ROT COORDS>XY +XY 2DUP
+    COORDS+XY 2DUP
     COORDS-WITHIN? DUP
     0= IF -ROT 2DROP THEN ;
 
-VARIABLE RESULT
 
-: RESULT!++ ( x,y -- )
-    SWAP
-    RESULT @ C!  1 RESULT +!
-    RESULT @ C!  1 RESULT +! ;
-
-2VARIABLE TARGET
-
-: TARGET-XY ( -- x,y )
-    TARGET 2@ ;
-
-: SHAPE-XY? ( c0,c1,c2,c3,c4,x,y -- f )
-    TARGET 2!  TRUE
-    5 0 DO
-        SWAP TARGET-XY COORDS+XY? IF
-            2DROP TRUE
-        ELSE
-            FALSE
-        THEN
-        AND
-    LOOP ;
