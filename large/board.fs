@@ -12,7 +12,7 @@ CREATE BOARD 64 ALLOT
     8 * + BOARD + C@ ;
 
 : PLACE-BLOCK ( p,x,y -- )
-    10 / 8 * SWAP +
+    8 * SWAP +
     BOARD + C! ;
 
 : PLACE-SHAPE ( sh#,x,y -- )

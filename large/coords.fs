@@ -9,7 +9,9 @@
 \ b) add to destination coords : 8,0, 9,0 3,0 4,0
 
 : COORDS>XY ( co -- x,y )
-      8 /MOD OVER 4 > IF SWAP 8 - SWAP 1+ THEN ;
+    DUP 0 < >R ABS
+    10 /MOD OVER 5 > IF SWAP 10 - SWAP 1+ THEN
+    R> IF NEGATE SWAP NEGATE SWAP THEN ;
 
 : COORD-WITHIN? ( n -- f )
     0 8 WITHIN ;

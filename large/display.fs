@@ -2,16 +2,9 @@
 
 REQUIRE colors.fs
 REQUIRE board.fs
+REQUIRE coords.fs
 
 DEFER (.BLOCK)
-
-: COORDS>XY ( c -- x,y )
-    DUP 16 /MOD
-    OVER 8 >= IF
-        2DROP -16 /MOD NEGATE
-    ELSE
-        ROT DROP
-    THEN ;
 
 : XY+ ( x,y,i,j -- x+i,y+j )
     ROT + -ROT + SWAP ;
@@ -46,7 +39,8 @@ DEFER (.BLOCK)
                 2DUP PIECE-AT .COLOR
                 AT-XY [CHAR] # EMIT
             THEN
-        LOOP LOOP .NORMAL ;
+    LOOP LOOP
+    .NORMAL ;
 
 : .DEMO
     64 1 DO
