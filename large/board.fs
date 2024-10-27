@@ -32,3 +32,12 @@ CREATE BOARD BOARD% ALLOT
 : EMPTY-SQUARE? ( x,y -- f)
     PIECE-AT 0= ;
 
+: FITTING? ( sh#,x,y -- f )
+    TARGET 2!
+    COORDS 0 TRUE
+    5 0 DO
+        SWAP
+        TARGET 2@ COORDS+XY
+        EMPTY-SQUARE? AND
+    LOOP ;
+
