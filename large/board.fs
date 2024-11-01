@@ -32,7 +32,7 @@ CREATE BOARD BOARD% ALLOT
 : EMPTY-SQUARE? ( x,y -- f)
     PIECE-AT 0= ;
 
-: FITTING? ( sh#,x,y -- f )
+: (FITTING?) ( sh#,x,y -- f )
     TARGET 2!
     COORDS 0 TRUE
     5 0 DO
@@ -40,4 +40,30 @@ CREATE BOARD BOARD% ALLOT
         TARGET 2@ COORDS+XY
         EMPTY-SQUARE? AND
     LOOP ;
+
+: ALREADY-IN ( sh# -- f )
+    NTH-SHAPE PIECE FALSE SWAP
+    BOARD% 0 DO
+        I BOARD + C@
+        OVER =
+        ROT OR SWAP
+    LOOP DROP ;
+
+: FITTING? ( sh#,x,y -- f)
+    ROT DUP ALREADY-IN IF
+       2DROP DROP FALSE
+    ELSE
+        -ROT (FITTING?)
+    THEN ;
+
+: FIRST-FREE-SQUARE ( x,y -- x,y,f )
+    8 * 1+ + DUP BOARD% < IF 
+        BOARD% SWAP DO
+            I BOARD + C@ 0= IF
+                I 8 /MOD TRUE LEAVE
+            THEN
+        LOOP
+    ELSE
+        DROP 0 0 FALSE
+    THEN ;
 
