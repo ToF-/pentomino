@@ -23,7 +23,7 @@ CREATE BOARD BOARD% ALLOT
     TARGET 2@ COORDS+XY PLACE-BLOCK ;
 
 : PLACE-SHAPE ( sh#,x,y -- )
-    TARGET 2!  DUP NTH-SHAPE PIECE  \ sh#,p#
+    TARGET 2!  DUP NTH-SHAPE CATEGORY  \ sh#,p#
     >R COORDS 0 R>                  \ c1,c2,c3,c4,0,p#
     5 0 DO
         DUP ROT PLACE-NEXT
@@ -42,7 +42,7 @@ CREATE BOARD BOARD% ALLOT
     LOOP ;
 
 : ALREADY-IN ( sh# -- f )
-    NTH-SHAPE PIECE FALSE SWAP
+    NTH-SHAPE CATEGORY FALSE SWAP
     BOARD% 0 DO
         I BOARD + C@
         OVER =
@@ -54,16 +54,5 @@ CREATE BOARD BOARD% ALLOT
        2DROP DROP FALSE
     ELSE
         -ROT (FITTING?)
-    THEN ;
-
-: FIRST-FREE-SQUARE ( x,y -- x,y,f )
-    8 * 1+ + DUP BOARD% < IF 
-        BOARD% SWAP DO
-            I BOARD + C@ 0= IF
-                I 8 /MOD TRUE LEAVE
-            THEN
-        LOOP
-    ELSE
-        DROP 0 0 FALSE
     THEN ;
 

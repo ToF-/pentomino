@@ -44,7 +44,7 @@ DEFER (.BLOCK)
 
 : .DEMO
     64 1 DO
-        I NTH-SHAPE PIECE .COLOR
+        I NTH-SHAPE CATEGORY .COLOR
         I COORDS
         I 8 /MOD
         6 * 3 + SWAP
