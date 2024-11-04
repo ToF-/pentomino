@@ -15,22 +15,28 @@ CREATE BOARD BOARD% ALLOT
 : PIECE-AT ( x,y -- n )
     8 * + BOARD + C@ ;
 
-: PLACE-BLOCK ( p,x,y -- )
-    8 * SWAP +
-    BOARD + C! ;
+: PLACE-BLOCK-AT ( p,x,y -- )
+    8 * + BOARD + C! ;
 
-: PLACE-NEXT ( c,p -- )
-    TARGET 2@ COORDS+XY PLACE-BLOCK ;
+: PLACE-BLOCK ( c,p -- )
+    TARGET 2@ COORDS+XY PLACE-BLOCK-AT ;
 
 : PLACE-SHAPE ( sh#,x,y -- )
     TARGET 2!  DUP NTH-SHAPE CATEGORY  \ sh#,p#
     >R COORDS 0 R>                  \ c1,c2,c3,c4,0,p#
     5 0 DO
-        DUP ROT PLACE-NEXT
+        DUP ROT PLACE-BLOCK
     LOOP DROP ;
 
 : EMPTY-SQUARE? ( x,y -- f)
     PIECE-AT 0= ;
+
+: ON-BOARD? ( categ -- f )
+    FALSE SWAP
+    BOARD DUP BOARD% + SWAP DO
+        DUP I C@ =
+        ROT OR SWAP
+    LOOP DROP ;
 
 : (FITTING?) ( sh#,x,y -- f )
     TARGET 2!
@@ -41,17 +47,10 @@ CREATE BOARD BOARD% ALLOT
         EMPTY-SQUARE? AND
     LOOP ;
 
-: ALREADY-IN ( sh# -- f )
-    NTH-SHAPE CATEGORY FALSE SWAP
-    BOARD% 0 DO
-        I BOARD + C@
-        OVER =
-        ROT OR SWAP
-    LOOP DROP ;
-
 : FITTING? ( sh#,x,y -- f)
-    ROT DUP ALREADY-IN IF
-       2DROP DROP FALSE
+    ROT DUP NTH-SHAPE
+    CATEGORY ON-BOARD? IF
+        2DROP DROP FALSE
     ELSE
         -ROT (FITTING?)
     THEN ;
