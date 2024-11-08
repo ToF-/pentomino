@@ -9,7 +9,7 @@ CHAR # CONSTANT SQUARE
 : <<COORD! ( coords,n -- coords' )
     SWAP 8 LSHIFT OR ;
 
-: | ( ccccc | )
+: | ( ccccc | coords -- coords' )
     BAR WORD
     COUNT OVER + SWAP DO
         I C@ SQUARE = IF
@@ -18,14 +18,10 @@ CHAR # CONSTANT SQUARE
         THEN
         1 COL +!
     LOOP
-    1 ROW +!
     COL OFF ;
+    1 ROW +!
 
-: SHAPE| ( ccccc | )
-    COL OFF ROW OFF
-    0 | ;
-
-
-
+: SHAPE| ( ccccc | -- coords )
+    COL OFF ROW OFF 0 | ;
 
 
