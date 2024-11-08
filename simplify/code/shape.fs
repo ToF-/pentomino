@@ -20,19 +20,12 @@ CHAR # CONSTANT SQUARE
     LOOP
     1 ROW +!
     COL OFF ;
-            
 
 : SHAPE| ( ccccc | )
     COL OFF ROW OFF
     0 | ;
 
 
-SHAPE| ##·|
-     | ·#·|
-     | ·#·|
-     | ·#·|
-
-HEX U. BYE
 
 
 
