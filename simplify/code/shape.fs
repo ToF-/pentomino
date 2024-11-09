@@ -27,11 +27,14 @@ CHAR # CONSTANT SQUARE
 
 CREATE XYS 10 CELLS ALLOT
 
+: #XY ( n -- addr )
+    2* CELLS XYS + ;
+
 : #XY@ ( n -- x,y )
-    2* CELLS XYS + 2@ SWAP ;
+    #XY 2@ SWAP ;
 
 : #XY! ( x,y,n -- )
-    2* CELLS XYS + 2! ;
+    #XY 2! ;
 
 : XYS! ( n -- )
     5 0 DO
