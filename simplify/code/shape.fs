@@ -6,7 +6,7 @@ VARIABLE ROW
 CHAR | CONSTANT BAR
 CHAR # CONSTANT SQUARE
 
-: <<XY! ( coords,x,y -- coords' )
+: COORD<<XY! ( coords,x,y -- coords' )
     ROT 4 LSHIFT
     ROT OR
     4 LSHIFT OR ;
@@ -15,7 +15,7 @@ CHAR # CONSTANT SQUARE
     BAR WORD
     COUNT OVER + SWAP DO
         I C@ SQUARE = IF
-            COL @ ROW @ <<XY!
+            COL @ ROW @ COORD<<XY!
         THEN
         1 COL +!
     LOOP
@@ -77,3 +77,5 @@ CREATE XYS 10 CELLS ALLOT
     5 0 DO I #XY@ FLIP-XY I #XY!  LOOP
     CALIBRATE ;
 
+: XYS>>COORDS ( -- n )
+    0 5 0 DO I #XY@ COORD<<XY! LOOP ;

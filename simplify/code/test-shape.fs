@@ -20,7 +20,6 @@ SHAPE| ##.|
 
 0010112112 ?S
 }T
-DECIMAL
 ." getting coordinates" CR
 T{
 SHAPE| ##.|
@@ -32,15 +31,14 @@ XYS!
 2 #XY@ SWAP 1 ?S 1 ?S
 3 #XY@ SWAP 2 ?S 1 ?S
 4 #XY@ SWAP 1 ?S 2 ?S
+XYS>>COORDS
+0010112112 ?S
 }T
 ." rotating coordinates" CR
 T{
 ROTATE-XYS
-0 #XY@ SWAP 2 ?S 0 ?S         \ ..#
-1 #XY@ SWAP 2 ?S 1 ?S         \ ###
-2 #XY@ SWAP 1 ?S 1 ?S         \ .#.
-3 #XY@ SWAP 1 ?S 2 ?S
-4 #XY@ SWAP 0 ?S 1 ?S
+XYS>>COORDS
+2021111201 ?S
 }T
 ." flipping coordinates" CR
 T{
