@@ -47,15 +47,18 @@ CREATE XYS 10 CELLS ALLOT
 : ROTATE-XY ( x,y -- -y,x )
     NEGATE SWAP ;
 
+: FLIP-XY ( x,y -- -x,y )
+    SWAP NEGATE SWAP ;
+
 : +XY ( x,y,i,j -- x+i,y+j )
     ROT + -ROT + SWAP ;
 
+: XY-MIN ( x,y,i,j -- m,n )
+    ROT MIN -ROT MIN SWAP ;
+
 : MIN-XYS ( -- x,y )
     5 5
-    5 0 DO
-        I #XY@
-        ROT MIN -ROT MIN SWAP
-    LOOP ;
+    5 0 DO I #XY@ XY-MIN LOOP ;
 
 : NEGATE-XY ( x,y -- -x,-y )
     NEGATE SWAP NEGATE sWAP ;
@@ -67,10 +70,10 @@ CREATE XYS 10 CELLS ALLOT
     LOOP 2DROP ;
 
 : ROTATE-XYS
-    5 0 DO
-        I #XY@
-        ROTATE-XY
-        I #XY!
-    LOOP
+    5 0 DO I #XY@ ROTATE-XY I #XY!  LOOP
+    CALIBRATE ;
+
+: FLIP-XYS
+    5 0 DO I #XY@ FLIP-XY I #XY!  LOOP
     CALIBRATE ;
 
