@@ -6,15 +6,16 @@ VARIABLE ROW
 CHAR | CONSTANT BAR
 CHAR # CONSTANT SQUARE
 
-: <<COORD! ( coords,n -- coords' )
-    SWAP 4 LSHIFT OR ;
+: <<XY! ( coords,x,y -- coords' )
+    ROT 4 LSHIFT
+    ROT OR
+    4 LSHIFT OR ;
 
 : | ( ccccc | coords -- coords' )
     BAR WORD
     COUNT OVER + SWAP DO
         I C@ SQUARE = IF
-            COL @ <<COORD!
-            ROW @ <<COORD!
+            COL @ ROW @ <<XY!
         THEN
         1 COL +!
     LOOP
@@ -24,44 +25,49 @@ CHAR # CONSTANT SQUARE
 : SHAPE| ( ccccc | -- coords )
     COL OFF ROW OFF 0 | ;
 
-CREATE SHAPE-COORDS 10 CELLS ALLOT
+CREATE XYS 10 CELLS ALLOT
 
-: NTH-COORDS@ ( n -- x,y )
-    2* CELLS SHAPE-COORDS + 2@ SWAP ;
+: #XY@ ( n -- x,y )
+    2* CELLS XYS + 2@ SWAP ;
 
-: NTH-COORDS! ( x,y,n -- )
-    2* CELLS SHAPE-COORDS + 2! ;
+: #XY! ( x,y,n -- )
+    2* CELLS XYS + 2! ;
 
-: GET-SHAPE-COORDS ( n -- )
+: XYS! ( n -- )
     5 0 DO
         DUP 5 I 1+ -
         8 * RSHIFT 255 AND
         DUP 15 AND SWAP 4 RSHIFT
-        I NTH-COORDS!
+        I #XY!
     LOOP DROP ;
 
-: ROTATE-COORD ( x,y -- -y,x )
+: ROTATE-XY ( x,y -- -y,x )
     NEGATE SWAP ;
 
-: MIN-COORDS ( -- x,y )
+: +XY ( x,y,i,j -- x+i,y+j )
+    ROT + -ROT + SWAP ;
+
+: MIN-XYS ( -- x,y )
     5 5
     5 0 DO
-        I NTH-COORDS@
+        I #XY@
         ROT MIN -ROT MIN SWAP
     LOOP ;
 
+: NEGATE-XY ( x,y -- -x,-y )
+    NEGATE SWAP NEGATE sWAP ;
+
 : CALIBRATE
-    MIN-COORDS
-    NEGATE SWAP NEGATE SWAP
+    MIN-XYS NEGATE-XY
     5 0 DO
-        I NTH-COORDS@
-        2OVER ROT + -ROT + SWAP
-        I NTH-COORDS!
+        I #XY@ 2OVER +XY I #XY!
     LOOP 2DROP ;
 
-: ROTATE-SHAPE-COORDS
+: ROTATE-XYS
     5 0 DO
-        I NTH-COORDS@ ROTATE-COORD I NTH-COORDS!
+        I #XY@
+        ROTATE-XY
+        I #XY!
     LOOP
     CALIBRATE ;
 

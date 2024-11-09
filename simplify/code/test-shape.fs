@@ -27,18 +27,19 @@ SHAPE| ##.|
      | .##|
      | .#.|
 
-GET-SHAPE-COORDS
-0 NTH-COORDS@ SWAP 0 ?S 0 ?S
-1 NTH-COORDS@ SWAP 1 ?S 0 ?S
-2 NTH-COORDS@ SWAP 1 ?S 1 ?S
-3 NTH-COORDS@ SWAP 2 ?S 1 ?S
-4 NTH-COORDS@ SWAP 1 ?S 2 ?S
-ROTATE-SHAPE-COORDS
-0 NTH-COORDS@ SWAP 2 ?S 0 ?S         \ ..#
-1 NTH-COORDS@ SWAP 2 ?S 1 ?S         \ ###
-2 NTH-COORDS@ SWAP 1 ?S 1 ?S         \ .#.
-3 NTH-COORDS@ SWAP 1 ?S 2 ?S
-4 NTH-COORDS@ SWAP 0 ?S 1 ?S
+XYS!
+
+0 #XY@ SWAP 0 ?S 0 ?S
+1 #XY@ SWAP 1 ?S 0 ?S
+2 #XY@ SWAP 1 ?S 1 ?S
+3 #XY@ SWAP 2 ?S 1 ?S
+4 #XY@ SWAP 1 ?S 2 ?S
+ROTATE-XYS
+0 #XY@ SWAP 2 ?S 0 ?S         \ ..#
+1 #XY@ SWAP 2 ?S 1 ?S         \ ###
+2 #XY@ SWAP 1 ?S 1 ?S         \ .#.
+3 #XY@ SWAP 1 ?S 2 ?S
+4 #XY@ SWAP 0 ?S 1 ?S
 
 }T
 CR
