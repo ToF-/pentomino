@@ -7,7 +7,7 @@ CHAR | CONSTANT BAR
 CHAR # CONSTANT SQUARE
 
 : <<COORD! ( coords,n -- coords' )
-    SWAP 8 LSHIFT OR ;
+    SWAP 4 LSHIFT OR ;
 
 : | ( ccccc | coords -- coords' )
     BAR WORD
@@ -18,8 +18,8 @@ CHAR # CONSTANT SQUARE
         THEN
         1 COL +!
     LOOP
-    COL OFF ;
-    1 ROW +!
+    COL OFF
+    1 ROW +! ;
 
 : SHAPE| ( ccccc | -- coords )
     COL OFF ROW OFF 0 | ;
