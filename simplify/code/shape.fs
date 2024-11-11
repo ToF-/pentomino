@@ -5,11 +5,30 @@ VARIABLE ROW
 
 CHAR | CONSTANT BAR
 CHAR # CONSTANT SQUARE
+HEX  FFFFFFFFFFFFFFF0 CONSTANT EXPAND-MASK DECIMAL
+
+: COORD! ( coords,n -- coords' )
+    15 AND OR ;
+
+: EXPAND-SIGN ( n -- n )
+    EXPAND-MASK OR ;
+    
+: COORD@ ( coords -- n )
+    15 AND
+    DUP 8 AND IF EXPAND-SIGN THEN ;
+
+: << ( coords -- coords' )
+    4 LSHIFT ;
+
+: >> ( coords -- coords' )
+    4 RSHIFT ;
 
 : COORD<<XY! ( coords,x,y -- coords' )
-    ROT 4 LSHIFT
-    ROT OR
-    4 LSHIFT OR ;
+    ROT << ROT COORD! << SWAP COORD! ;
+
+: COORD>>XY@ ( coords -- coords',x,y )
+    DUP COORD@ SWAP >> DUP COORD@ SWAP >>
+    -ROT SWAP ;
 
 : | ( ccccc | coords -- coords' )
     BAR WORD
@@ -25,57 +44,44 @@ CHAR # CONSTANT SQUARE
 : SHAPE| ( ccccc | -- coords )
     COL OFF ROW OFF 0 | ;
 
-CREATE XYS 10 CELLS ALLOT
-
-: #XY ( n -- addr )
-    2* CELLS XYS + ;
-
-: #XY@ ( n -- x,y )
-    #XY 2@ SWAP ;
-
-: #XY! ( x,y,n -- )
-    #XY 2! ;
-
-: XYS! ( n -- )
-    5 0 DO
-        DUP 5 I 1+ -
-        8 * RSHIFT 255 AND
-        DUP 15 AND SWAP 4 RSHIFT
-        I #XY!
-    LOOP DROP ;
-
-: ROTATE-XY ( x,y -- -y,x )
-    NEGATE SWAP ;
-
-: FLIP-XY ( x,y -- -x,y )
-    SWAP NEGATE SWAP ;
-
-: +XY ( x,y,i,j -- x+i,y+j )
-    ROT + -ROT + SWAP ;
-
-: XY-MIN ( x,y,i,j -- m,n )
+: XY-MIN ( x,y,i,j -- k,l )
     ROT MIN -ROT MIN SWAP ;
 
-: MIN-XYS ( -- x,y )
-    5 5
-    5 0 DO I #XY@ XY-MIN LOOP ;
+: MIN-COORDS ( coords -- x,y )
+    7 7 ROT 5 0 DO
+        COORD>>XY@ ROT >R
+        XY-MIN R>
+    LOOP DROP ;
 
-: NEGATE-XY ( x,y -- -x,-y )
-    NEGATE SWAP NEGATE sWAP ;
+: XY-NEGATE ( x,y -- -x,-y )
+    NEGATE SWAP NEGATE SWAP ;
 
-: CALIBRATE
-    MIN-XYS NEGATE-XY
-    5 0 DO
-        I #XY@ 2OVER +XY I #XY!
-    LOOP 2DROP ;
+: XY-ADD ( x,y,i,j -- x+i,y+j )
+    ROT + -ROT + SWAP ;
 
-: ROTATE-XYS
-    5 0 DO I #XY@ ROTATE-XY I #XY!  LOOP
-    CALIBRATE ;
+: CALIBRATE ( coords,x,y -- coords' )
+    ROT 0 5 0 DO
+        SWAP COORD>>XY@ 2>R SWAP
+        2OVER 2R> XY-ADD COORD<<XY!
+    LOOP NIP -ROT 2DROP ;
 
-: FLIP-XYS
-    5 0 DO I #XY@ FLIP-XY I #XY!  LOOP
-    CALIBRATE ;
+: XY-ROTATE ( x,y -- y,-x )
+    SWAP NEGATE ;
 
-: XYS>>COORDS ( -- n )
-    0 5 0 DO I #XY@ COORD<<XY! LOOP ;
+: XY-FLIP ( x,y -- -x,y )
+    SWAP NEGATE SWAP ;
+
+: ROTATE ( coords -- coords' )
+    0 5 0 DO
+        SWAP COORD>>XY@ 2>R SWAP
+        2R> XY-ROTATE COORD<<XY!
+    LOOP NIP
+    DUP MIN-COORDS XY-NEGATE CALIBRATE ;
+
+: FLIP ( coords -- coords' )
+    0 5 0 DO
+        SWAP COORD>>XY@ 2>R SWAP
+        2R> XY-FLIP COORD<<XY!
+    LOOP NIP
+    DUP MIN-COORDS XY-NEGATE CALIBRATE ;
+

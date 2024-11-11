@@ -5,49 +5,66 @@ REQUIRE shape.fs
 
 ." acquiring a shape" CR
 T{
-
 HEX
 SHAPE| ##.|
      | .#.|
      | .#.|
      | .#.|
 
-0010111213 ?S
-
+COORD>>XY@ SWAP 1 ?S 3 ?S
+COORD>>XY@ SWAP 1 ?S 2 ?S
+COORD>>XY@ SWAP 1 ?S 1 ?S
+COORD>>XY@ SWAP 1 ?S 0 ?S
+COORD>>XY@ SWAP 0 ?S 0 ?S
+DROP
 SHAPE| ##.|
      | .##|
      | .#.|
 
-0010112112 ?S
+COORD>>XY@ SWAP 1 ?S 2 ?S
+COORD>>XY@ SWAP 2 ?S 1 ?S
+COORD>>XY@ SWAP 1 ?S 1 ?S
+COORD>>XY@ SWAP 1 ?S 0 ?S
+COORD>>XY@ SWAP 0 ?S 0 ?S
+DROP
 }T
-." getting coordinates" CR
+." calibrating" CR
 T{
 SHAPE| ##.|
      | .##|
      | .#.|
-XYS!
-0 #XY@ SWAP 0 ?S 0 ?S
-1 #XY@ SWAP 1 ?S 0 ?S
-2 #XY@ SWAP 1 ?S 1 ?S
-3 #XY@ SWAP 2 ?S 1 ?S
-4 #XY@ SWAP 1 ?S 2 ?S
-XYS>>COORDS
-0010112112 ?S
+1 1 CALIBRATE
+COORD>>XY@ SWAP 1 ?S 1 ?S
+COORD>>XY@ SWAP 2 ?S 1 ?S
+COORD>>XY@ SWAP 2 ?S 2 ?S
+COORD>>XY@ SWAP 3 ?S 2 ?S
+COORD>>XY@ SWAP 2 ?S 3 ?S
+DROP
 }T
-." rotating coordinates" CR
+." rotating" CR
 T{
-ROTATE-XYS
-XYS>>COORDS
-2021111201 ?S
+SHAPE| ##.|
+     | .##|
+     | .#.|
+ROTATE
+COORD>>XY@ SWAP 2 ?S 1 ?S
+COORD>>XY@ SWAP 1 ?S 0 ?S
+COORD>>XY@ SWAP 1 ?S 1 ?S
+COORD>>XY@ SWAP 0 ?S 1 ?S
+COORD>>XY@ SWAP 0 ?S 2 ?S
+DROP
 }T
-." flipping coordinates" CR
+." flipping" CR
 T{
-FLIP-XYS
-0 #XY@ SWAP 0 ?S 0 ?S         \ #..
-1 #XY@ SWAP 0 ?S 1 ?S         \ ###
-2 #XY@ SWAP 1 ?S 1 ?S         \ .#.
-3 #XY@ SWAP 1 ?S 2 ?S
-4 #XY@ SWAP 2 ?S 1 ?S
+SHAPE| ##.|
+     | .##|
+     | .#.|
+FLIP
+COORD>>XY@ SWAP 1 ?S 2 ?S
+COORD>>XY@ SWAP 0 ?S 1 ?S
+COORD>>XY@ SWAP 1 ?S 1 ?S
+COORD>>XY@ SWAP 1 ?S 0 ?S
+COORD>>XY@ SWAP 2 ?S 0 ?S
+DROP
 }T
-CR
 BYE
