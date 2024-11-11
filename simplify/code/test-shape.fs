@@ -10,61 +10,57 @@ SHAPE| ##.|
      | .#.|
      | .#.|
      | .#.|
+EXTRACT
+SWAP 0 ?S 0 ?S
+SWAP 1 ?S 0 ?S
+SWAP 1 ?S 1 ?S
+SWAP 1 ?S 2 ?S
+SWAP 1 ?S 3 ?S
 
-COORD>>XY@ SWAP 1 ?S 3 ?S
-COORD>>XY@ SWAP 1 ?S 2 ?S
-COORD>>XY@ SWAP 1 ?S 1 ?S
-COORD>>XY@ SWAP 1 ?S 0 ?S
-COORD>>XY@ SWAP 0 ?S 0 ?S
-DROP
 SHAPE| ##.|
      | .##|
      | .#.|
-
-COORD>>XY@ SWAP 1 ?S 2 ?S
-COORD>>XY@ SWAP 2 ?S 1 ?S
-COORD>>XY@ SWAP 1 ?S 1 ?S
-COORD>>XY@ SWAP 1 ?S 0 ?S
-COORD>>XY@ SWAP 0 ?S 0 ?S
-DROP
+EXTRACT
+SWAP 0 ?S 0 ?S
+SWAP 1 ?S 0 ?S
+SWAP 1 ?S 1 ?S
+SWAP 2 ?S 1 ?S
+SWAP 1 ?S 2 ?S
 }T
-." calibrating" CR
+." translating CR
 T{
 SHAPE| ##.|
      | .##|
      | .#.|
-1 1 CALIBRATE
-COORD>>XY@ SWAP 1 ?S 1 ?S
-COORD>>XY@ SWAP 2 ?S 1 ?S
-COORD>>XY@ SWAP 2 ?S 2 ?S
-COORD>>XY@ SWAP 3 ?S 2 ?S
-COORD>>XY@ SWAP 2 ?S 3 ?S
-DROP
+1 2 (TRANSLATE) EXTRACT
+SWAP 1 ?S 2 ?S
+SWAP 2 ?S 2 ?S
+SWAP 2 ?S 3 ?S
+SWAP 3 ?S 3 ?S
+SWAP 2 ?S 4 ?S
 }T
 ." rotating" CR
 T{
 SHAPE| ##.|
      | .##|
      | .#.|
-ROTATE
-COORD>>XY@ SWAP 2 ?S 1 ?S
-COORD>>XY@ SWAP 1 ?S 0 ?S
-COORD>>XY@ SWAP 1 ?S 1 ?S
-COORD>>XY@ SWAP 0 ?S 1 ?S
-COORD>>XY@ SWAP 0 ?S 2 ?S
-DROP
+ROTATE EXTRACT
+SWAP 0 ?S 2 ?S
+SWAP 0 ?S 1 ?S  \ .#.
+SWAP 1 ?S 1 ?S  \ ###
+SWAP 1 ?S 0 ?S  \ #..
+SWAP 2 ?S 1 ?S
 }T
 ." flipping" CR
 T{
 SHAPE| ##.|
      | .##|
      | .#.|
-FLIP
-COORD>>XY@ SWAP 1 ?S 2 ?S
-COORD>>XY@ SWAP 0 ?S 1 ?S
-COORD>>XY@ SWAP 1 ?S 1 ?S
-COORD>>XY@ SWAP 1 ?S 0 ?S
-COORD>>XY@ SWAP 2 ?S 0 ?S
-DROP
+FLIP EXTRACT
+SWAP 2 ?S 0 ?S
+SWAP 1 ?S 0 ?S  \ .##
+SWAP 1 ?S 1 ?S  \ ##.
+SWAP 0 ?S 1 ?S  \ ...
+SWAP 1 ?S 2 ?S
 }T
 BYE

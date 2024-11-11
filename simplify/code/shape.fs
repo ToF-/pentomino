@@ -12,7 +12,7 @@ HEX  FFFFFFFFFFFFFFF0 CONSTANT EXPAND-MASK DECIMAL
 
 : EXPAND-SIGN ( n -- n )
     EXPAND-MASK OR ;
-    
+
 : COORD@ ( coords -- n )
     15 AND
     DUP 8 AND IF EXPAND-SIGN THEN ;
@@ -44,14 +44,14 @@ HEX  FFFFFFFFFFFFFFF0 CONSTANT EXPAND-MASK DECIMAL
 : SHAPE| ( ccccc | -- coords )
     COL OFF ROW OFF 0 | ;
 
+: EXTRACT ( coords -- x0,y0..x4,y4 )
+    5 0 DO COORD>>XY@ ROT LOOP DROP ;
+
 : XY-MIN ( x,y,i,j -- k,l )
     ROT MIN -ROT MIN SWAP ;
 
 : MIN-COORDS ( coords -- x,y )
-    7 7 ROT 5 0 DO
-        COORD>>XY@ ROT >R
-        XY-MIN R>
-    LOOP DROP ;
+    EXTRACT 7 7 5 0 DO XY-MIN LOOP ;
 
 : XY-NEGATE ( x,y -- -x,-y )
     NEGATE SWAP NEGATE SWAP ;
@@ -59,11 +59,10 @@ HEX  FFFFFFFFFFFFFFF0 CONSTANT EXPAND-MASK DECIMAL
 : XY-ADD ( x,y,i,j -- x+i,y+j )
     ROT + -ROT + SWAP ;
 
-: CALIBRATE ( coords,x,y -- coords' )
-    ROT 0 5 0 DO
-        SWAP COORD>>XY@ 2>R SWAP
-        2OVER 2R> XY-ADD COORD<<XY!
-    LOOP NIP -ROT 2DROP ;
+: (TRANSLATE) ( coords,x,y -- coords' )
+    2>R EXTRACT 0 2R> 5 0 DO
+        2>R -ROT 2R@ XY-ADD COORD<<XY! 2R>
+    LOOP 2DROP ;
 
 : XY-ROTATE ( x,y -- y,-x )
     SWAP NEGATE ;
@@ -71,17 +70,14 @@ HEX  FFFFFFFFFFFFFFF0 CONSTANT EXPAND-MASK DECIMAL
 : XY-FLIP ( x,y -- -x,y )
     SWAP NEGATE SWAP ;
 
+: CALIBRATE ( coords -- coords' )
+    DUP MIN-COORDS XY-NEGATE (TRANSLATE) ;
+
 : ROTATE ( coords -- coords' )
-    0 5 0 DO
-        SWAP COORD>>XY@ 2>R SWAP
-        2R> XY-ROTATE COORD<<XY!
-    LOOP NIP
-    DUP MIN-COORDS XY-NEGATE CALIBRATE ;
+    EXTRACT 0 5 0 DO -ROT XY-ROTATE COORD<<XY! LOOP
+    CALIBRATE ;
 
 : FLIP ( coords -- coords' )
-    0 5 0 DO
-        SWAP COORD>>XY@ 2>R SWAP
-        2R> XY-FLIP COORD<<XY!
-    LOOP NIP
-    DUP MIN-COORDS XY-NEGATE CALIBRATE ;
+    EXTRACT 0 5 0 DO -ROT XY-FLIP COORD<<XY! LOOP
+    CALIBRATE ;
 
