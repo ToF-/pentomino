@@ -27,17 +27,17 @@ SWAP 1 ?S 1 ?S
 SWAP 2 ?S 1 ?S
 SWAP 1 ?S 2 ?S
 }T
-." translating CR
+." translating" CR
 T{
 SHAPE| ##.|
      | .##|
      | .#.|
 1 2 (TRANSLATE) EXTRACT
-SWAP 1 ?S 2 ?S
-SWAP 2 ?S 2 ?S
-SWAP 2 ?S 3 ?S
-SWAP 3 ?S 3 ?S
-SWAP 2 ?S 4 ?S
+SWAP 1 ?S 2 ?S   \ ....
+SWAP 2 ?S 2 ?S   \ ....
+SWAP 2 ?S 3 ?S   \ .##.
+SWAP 3 ?S 3 ?S   \ ..##
+SWAP 2 ?S 4 ?S   \ ..#.
 }T
 ." rotating" CR
 T{
@@ -60,7 +60,7 @@ FLIP EXTRACT
 SWAP 2 ?S 0 ?S
 SWAP 1 ?S 0 ?S  \ .##
 SWAP 1 ?S 1 ?S  \ ##.
-SWAP 0 ?S 1 ?S  \ ...
+SWAP 0 ?S 1 ?S  \ .#.
 SWAP 1 ?S 2 ?S
 }T
 BYE
