@@ -5,17 +5,21 @@ VARIABLE ROW
 
 CHAR | CONSTANT BAR
 CHAR # CONSTANT SQUARE
-HEX  FFFFFFFFFFFFFFF0 CONSTANT EXPAND-MASK DECIMAL
+HEX  FFFFFFFFFFFFFFF0 CONSTANT EXPAND-MASK
+     000000000000000F CONSTANT VALUE-MASK
 
-: COORD! ( coords,n -- coords' )
-    15 AND OR ;
+: NEGATIVE? ( b -- f )
+    8 AND ;
+
+: SHAPE<< ( coords,n -- coords' )
+    VALUE-MASK AND OR ;
 
 : EXPAND-SIGN ( n -- n )
     EXPAND-MASK OR ;
 
-: COORD@ ( coords -- n )
-    15 AND
-    DUP 8 AND IF EXPAND-SIGN THEN ;
+: SHAPE>> ( coords -- n )
+    VALUE-MASK AND
+    DUP NEGATIVE? IF EXPAND-SIGN THEN ;
 
 : << ( coords -- coords' )
     4 LSHIFT ;
@@ -23,18 +27,23 @@ HEX  FFFFFFFFFFFFFFF0 CONSTANT EXPAND-MASK DECIMAL
 : >> ( coords -- coords' )
     4 RSHIFT ;
 
-: COORD<<XY! ( coords,x,y -- coords' )
-    ROT << ROT COORD! << SWAP COORD! ;
+: SHAPE<<XY ( coords,x,y -- coords' )
+    ROT <<
+    ROT SHAPE<< <<
+    SWAP SHAPE<< ;
 
-: COORD>>XY@ ( coords -- coords',x,y )
-    DUP COORD@ SWAP >> DUP COORD@ SWAP >>
+: SHAPE>>XY ( coords -- coords',x,y )
+    DUP SHAPE>>
+    SWAP >>
+    DUP SHAPE>>
+    SWAP >>
     -ROT SWAP ;
 
 : | ( ccccc | coords -- coords' )
     BAR WORD
     COUNT OVER + SWAP DO
         I C@ SQUARE = IF
-            COL @ ROW @ COORD<<XY!
+            COL @ ROW @ SHAPE<<XY
         THEN
         1 COL +!
     LOOP
@@ -45,12 +54,12 @@ HEX  FFFFFFFFFFFFFFF0 CONSTANT EXPAND-MASK DECIMAL
     COL OFF ROW OFF 0 | ;
 
 : EXTRACT ( coords -- x0,y0..x4,y4 )
-    5 0 DO COORD>>XY@ ROT LOOP DROP ;
+    5 0 DO SHAPE>>XY ROT LOOP DROP ;
 
 : XY-MIN ( x,y,i,j -- k,l )
     ROT MIN -ROT MIN SWAP ;
 
-: MIN-COORDS ( coords -- x,y )
+: MINIMUM ( coords -- x,y )
     EXTRACT 7 7 5 0 DO XY-MIN LOOP ;
 
 : XY-NEGATE ( x,y -- -x,-y )
@@ -61,7 +70,7 @@ HEX  FFFFFFFFFFFFFFF0 CONSTANT EXPAND-MASK DECIMAL
 
 : (TRANSLATE) ( coords,x,y -- coords' )
     2>R EXTRACT 0 2R> 5 0 DO
-        2>R -ROT 2R@ XY-ADD COORD<<XY! 2R>
+        2>R -ROT 2R@ XY-ADD SHAPE<<XY 2R>
     LOOP 2DROP ;
 
 : XY-ROTATE ( x,y -- y,-x )
@@ -71,13 +80,13 @@ HEX  FFFFFFFFFFFFFFF0 CONSTANT EXPAND-MASK DECIMAL
     SWAP NEGATE SWAP ;
 
 : CALIBRATE ( coords -- coords' )
-    DUP MIN-COORDS XY-NEGATE (TRANSLATE) ;
+    DUP MINIMUM XY-NEGATE (TRANSLATE) ;
 
 : ROTATE ( coords -- coords' )
-    EXTRACT 0 5 0 DO -ROT XY-ROTATE COORD<<XY! LOOP
+    EXTRACT 0 5 0 DO -ROT XY-ROTATE SHAPE<<XY LOOP
     CALIBRATE ;
 
 : FLIP ( coords -- coords' )
-    EXTRACT 0 5 0 DO -ROT XY-FLIP COORD<<XY! LOOP
+    EXTRACT 0 5 0 DO -ROT XY-FLIP SHAPE<<XY LOOP
     CALIBRATE ;
 
