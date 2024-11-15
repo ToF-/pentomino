@@ -1,34 +1,19 @@
 \ shape.fs
 
-CHAR | CONSTANT BAR
-CHAR # CONSTANT SQUARE
-HEX  FFFFFFFFFFFFFFF0 CONSTANT EXPAND-MASK
-     000000000000000F CONSTANT VALUE-MASK
+CHAR | CONSTANT BAR CHAR # CONSTANT SQUARE
+-16 CONSTANT EXPAND-MASK 15 CONSTANT VALUE-MASK
+8 CONSTANT NEGATIVE-MASK 4 CONSTANT NIBBLE
+7 CONSTANT MAX-NIBBLE 0 CONSTANT EMPTY-COORDS
+VARIABLE COL VARIABLE ROW
 
-VARIABLE COL
-VARIABLE ROW
-
-: NEGATIVE? ( b -- f )
-    8 AND ;
-
-: SHAPE<<! ( n,coords -- coords' )
-    4 LSHIFT SWAP VALUE-MASK AND OR ;
-
-: EXPAND-SIGN ( n -- n )
-    EXPAND-MASK AND ;
+: SHAPE<<N ( n,coords -- coords' )
+    NIBBLE LSHIFT SWAP VALUE-MASK AND OR ;
 
 : EXPAND ( b -- n )
-    DUP EXPAND-SIGN IF EXPAND-MASK OR THEN ;
-
-: SHAPE>>@  ( coords -- n,coord' )
-    DUP VALUE-MASK AND EXPAND
-    SWAP 4 RSHIFT ;
-
-: SHAPE>>XY ( coords -- x,y,coords' )
-    SHAPE>>@ SHAPE>>@ ;
+    DUP NEGATIVE-MASK AND IF EXPAND-MASK OR THEN ;
 
 : SHAPE<<XY ( x,y,coords -- coords' )
-    SHAPE<<! SHAPE<<! ;
+    SHAPE<<N SHAPE<<N ;
 
 : | ( ccccc | coords -- coords' )
     BAR WORD
@@ -41,17 +26,24 @@ VARIABLE ROW
     COL OFF
     1 ROW +! ;
 
-: SHAPE| ( ccccc | -- coords )
-    COL OFF ROW OFF 0 | ;
+: NEW-SHAPE ( ccccc | -- coords )
+    COL OFF ROW OFF EMPTY-COORDS ;
 
-: EXTRACT ( coords -- x0,y0..x4,y4 )
+: SHAPE>>N  ( coords -- n,coord' )
+    DUP VALUE-MASK AND EXPAND
+    SWAP 4 RSHIFT ;
+
+: SHAPE>>XY ( coords -- x,y,coords' )
+    SHAPE>>N SHAPE>>N ;
+
+: XYS ( coords -- x0,y0..x4,y4 )
     5 0 DO SHAPE>>XY LOOP DROP ;
 
 : XY-MIN ( x,y,i,j -- k,l )
     ROT MIN -ROT MIN SWAP ;
 
-: MINIMUM ( coords -- x,y )
-    EXTRACT 7 7 5 0 DO XY-MIN LOOP ;
+: MINIMUM-XY ( coords -- x,y )
+    XYS MAX-NIBBLE MAX-NIBBLE 5 0 DO XY-MIN LOOP ;
 
 : XY-NEGATE ( x,y -- -x,-y )
     NEGATE SWAP NEGATE SWAP ;
@@ -60,9 +52,11 @@ VARIABLE ROW
     ROT + -ROT + SWAP ;
 
 : (TRANSLATE) ( coords,x,y -- coords' )
-    2>R EXTRACT 0 2R> 5 0 DO
-        2>R -ROT 2R@ XY-ADD SHAPE<<XY 2R>
-    LOOP 2DROP ;
+    ROW ! COL ! XYS
+    0 5 0 DO
+        -ROT COL @ ROW @ XY-ADD
+        ROT SHAPE<<XY
+    LOOP ;
 
 : XY-ROTATE ( x,y -- y,-x )
     SWAP NEGATE ;
@@ -70,14 +64,20 @@ VARIABLE ROW
 : XY-FLIP ( x,y -- -x,y )
     SWAP NEGATE SWAP ;
 
-: CALIBRATE ( coords -- coords' )
-    DUP MINIMUM XY-NEGATE (TRANSLATE) ;
+: (CALIBRATE) ( coords -- coords' )
+    DUP MINIMUM-XY XY-NEGATE (TRANSLATE) ;
 
 : ROTATE ( coords -- coords' )
-    EXTRACT 0 5 0 DO -ROT XY-ROTATE SHAPE<<XY LOOP
-    CALIBRATE ;
+    XYS 0 5 EMPTY-COORDS DO
+        -ROT XY-ROTATE
+        ROT SHAPE<<XY
+        LOOP
+    (CALIBRATE) ;
 
 : FLIP ( coords -- coords' )
-    EXTRACT 0 5 0 DO -ROT XY-FLIP SHAPE<<XY LOOP
-    CALIBRATE ;
+    XYS 0 5 EMPTY-COORDS DO
+        -ROT XY-FLIP
+        ROT SHAPE<<XY
+    LOOP
+    (CALIBRATE) ;
 
