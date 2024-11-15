@@ -11,11 +11,12 @@ SHAPE| ##.|
      | .#.|
      | .#.|
 EXTRACT
-SWAP 0 ?S 0 ?S
-SWAP 1 ?S 0 ?S
-SWAP 1 ?S 1 ?S
-SWAP 1 ?S 2 ?S
-SWAP 1 ?S 3 ?S
+0 ?S 0 ?S
+0 ?S 1 ?S
+1 ?S 1 ?S
+2 ?S 1 ?S
+3 ?S 1 ?S
+BYE
 
 SHAPE| ##.|
      | .##|

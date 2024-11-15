@@ -1,49 +1,40 @@
 \ shape.fs
 
-VARIABLE COL
-VARIABLE ROW
-
 CHAR | CONSTANT BAR
 CHAR # CONSTANT SQUARE
 HEX  FFFFFFFFFFFFFFF0 CONSTANT EXPAND-MASK
      000000000000000F CONSTANT VALUE-MASK
 
+VARIABLE COL
+VARIABLE ROW
+
 : NEGATIVE? ( b -- f )
     8 AND ;
 
-: SHAPE<< ( coords,n -- coords' )
-    VALUE-MASK AND OR ;
+: SHAPE<<! ( n,coords -- coords' )
+    4 LSHIFT SWAP VALUE-MASK AND OR ;
 
 : EXPAND-SIGN ( n -- n )
-    EXPAND-MASK OR ;
+    EXPAND-MASK AND ;
 
-: SHAPE>> ( coords -- n )
-    VALUE-MASK AND
-    DUP NEGATIVE? IF EXPAND-SIGN THEN ;
+: EXPAND ( b -- n )
+    DUP EXPAND-SIGN IF EXPAND-MASK OR THEN ;
 
-: << ( coords -- coords' )
-    4 LSHIFT ;
+: SHAPE>>@  ( coords -- n,coord' )
+    DUP VALUE-MASK AND EXPAND
+    SWAP 4 RSHIFT ;
 
-: >> ( coords -- coords' )
-    4 RSHIFT ;
+: SHAPE>>XY ( coords -- x,y,coords' )
+    SHAPE>>@ SHAPE>>@ ;
 
-: SHAPE<<XY ( coords,x,y -- coords' )
-    ROT <<
-    ROT SHAPE<< <<
-    SWAP SHAPE<< ;
-
-: SHAPE>>XY ( coords -- coords',x,y )
-    DUP SHAPE>>
-    SWAP >>
-    DUP SHAPE>>
-    SWAP >>
-    -ROT SWAP ;
+: SHAPE<<XY ( x,y,coords -- coords' )
+    SHAPE<<! SHAPE<<! ;
 
 : | ( ccccc | coords -- coords' )
     BAR WORD
     COUNT OVER + SWAP DO
         I C@ SQUARE = IF
-            COL @ ROW @ SHAPE<<XY
+            COL @ ROW @ ROT SHAPE<<XY
         THEN
         1 COL +!
     LOOP
@@ -54,7 +45,7 @@ HEX  FFFFFFFFFFFFFFF0 CONSTANT EXPAND-MASK
     COL OFF ROW OFF 0 | ;
 
 : EXTRACT ( coords -- x0,y0..x4,y4 )
-    5 0 DO SHAPE>>XY ROT LOOP DROP ;
+    5 0 DO SHAPE>>XY LOOP DROP ;
 
 : XY-MIN ( x,y,i,j -- k,l )
     ROT MIN -ROT MIN SWAP ;
