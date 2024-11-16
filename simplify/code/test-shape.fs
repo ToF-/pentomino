@@ -3,6 +3,12 @@
 REQUIRE ffl/tst.fs
 REQUIRE shape.fs
 
+REQUIRE ffl/tst.fs
+REQUIRE shape.fs
+HEX
+1 1 2 1 3 1 3 2 3 3 0 SHAPE<<XY SHAPE<<XY SHAPE<<XY SHAPE<<XY SHAPE<<XY
+3323131211 ?S
+BYE
 ." acquiring a shape" CR
 T{
 HEX

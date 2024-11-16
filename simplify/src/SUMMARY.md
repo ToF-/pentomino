@@ -1,4 +1,4 @@
 # Summary
 
 - [Introduction](./chapter_1.md)
-- [Acquiring Shapes](./chapter_2.md)
+- [Shape coordinates](./chapter_2.md)
