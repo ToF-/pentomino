@@ -1,0 +1,91 @@
+<pre style="color:#000000;background:#F2F2F2;"><span style="color:#669999; font-weight:bold;">\</span> <span style="color:#669999; font-weight:bold;">shape.fs
+</span> <span style="color:#800000; font-weight:bold;">4</span> <span style="color:#F07F00; font-weight:bold;">CONSTANT</span> <span style="color:#336699; font-weight:bold;">NIBBLE</span>
+ <span style="color:#800000; font-weight:bold;">15</span> <span style="color:#F07F00; font-weight:bold;">CONSTANT</span> <span style="color:#336699; font-weight:bold;">VALUE-MASK</span>
+
+<span style="color:#F07F00; font-weight:bold;">:</span> <span style="color:#336699; font-weight:bold;">SHAPE&lt;&lt;N</span> <span style="color:#669999; font-weight:bold;">(</span> <span style="color:#669999; font-weight:bold;">n,coords -- coords' )</span>
+    <span style="color:#336699; font-weight:bold;">NIBBLE</span> <span style="color:#CC6600; font-weight:bold;">LSHIFT</span> <span style="color:#009999; font-weight:bold;">SWAP</span> <span style="color:#336699; font-weight:bold;">VALUE-MASK</span> <span style="color:#CC6600; font-weight:bold;">AND</span> <span style="color:#CC6600; font-weight:bold;">OR</span> <span style="color:#993300; font-weight:bold;">;</span>
+
+<span style="color:#F07F00; font-weight:bold;">:</span> <span style="color:#336699; font-weight:bold;">SHAPE&lt;&lt;XY</span> <span style="color:#669999; font-weight:bold;">(</span> <span style="color:#669999; font-weight:bold;">x,y,coords -- coords' )</span>
+    <span style="color:#336699; font-weight:bold;">SHAPE&lt;&lt;N</span> <span style="color:#336699; font-weight:bold;">SHAPE&lt;&lt;N</span> <span style="color:#993300; font-weight:bold;">;</span>
+
+<span style="color:#800000; font-weight:bold;">0</span> <span style="color:#F07F00; font-weight:bold;">CONSTANT</span> <span style="color:#336699; font-weight:bold;">EMPTY-COORDS</span>
+<span style="color:#F07F00; font-weight:bold;">VARIABLE</span> <span style="color:#336699; font-weight:bold;">COL</span> <span style="color:#F07F00; font-weight:bold;">VARIABLE</span> <span style="color:#336699; font-weight:bold;">ROW</span>
+<span style="color:#3D3D5C; font-weight:bold;">CHAR</span> <span style="color:#800000; font-weight:bold;">|</span> <span style="color:#F07F00; font-weight:bold;">CONSTANT</span> <span style="color:#336699; font-weight:bold;">BAR</span> <span style="color:#3D3D5C; font-weight:bold;">CHAR</span> <span style="color:#3D3D5C; font-weight:bold;">#</span> <span style="color:#F07F00; font-weight:bold;">CONSTANT</span> <span style="color:#336699; font-weight:bold;">SQUARE</span>
+
+<span style="color:#F07F00; font-weight:bold;">:</span> <span style="color:#336699; font-weight:bold;">|</span> <span style="color:#669999; font-weight:bold;">(</span> <span style="color:#669999; font-weight:bold;">ccccc | coords -- coords' )</span>
+    <span style="color:#336699; font-weight:bold;">BAR</span> <span style="color:#3D3D5C; font-weight:bold;">WORD</span>
+    <span style="color:#3D3D5C; font-weight:bold;">COUNT</span> <span style="color:#009999; font-weight:bold;">OVER</span> <span style="color:#CC6600; font-weight:bold;">+</span> <span style="color:#009999; font-weight:bold;">SWAP</span> <span style="color:#993300; font-weight:bold;">DO</span>
+        <span style="color:#993300; font-weight:bold;">I</span> <span style="color:#CC3300; font-weight:bold;">C@</span> <span style="color:#336699; font-weight:bold;">SQUARE</span> <span style="color:#CC6600; font-weight:bold;">=</span> <span style="color:#993300; font-weight:bold;">IF</span>
+            <span style="color:#336699; font-weight:bold;">COL</span> <span style="color:#CC3300; font-weight:bold;">@</span> <span style="color:#336699; font-weight:bold;">ROW</span> <span style="color:#CC3300; font-weight:bold;">@</span> <span style="color:#009999; font-weight:bold;">ROT</span> <span style="color:#336699; font-weight:bold;">SHAPE&lt;&lt;XY</span>
+        <span style="color:#993300; font-weight:bold;">THEN</span>
+        <span style="color:#800000; font-weight:bold;">1</span> <span style="color:#336699; font-weight:bold;">COL</span> <span style="color:#CC3300; font-weight:bold;">+!</span>
+    <span style="color:#993300; font-weight:bold;">LOOP</span>
+    <span style="color:#336699; font-weight:bold;">COL</span> <span style="color:#CC3300; font-weight:bold;">OFF</span>
+    <span style="color:#800000; font-weight:bold;">1</span> <span style="color:#336699; font-weight:bold;">ROW</span> <span style="color:#CC3300; font-weight:bold;">+!</span> <span style="color:#993300; font-weight:bold;">;</span>
+
+<span style="color:#F07F00; font-weight:bold;">:</span> <span style="color:#336699; font-weight:bold;">NEW-SHAPE</span> <span style="color:#669999; font-weight:bold;">(</span> <span style="color:#669999; font-weight:bold;">ccccc | -- coords )</span>
+    <span style="color:#336699; font-weight:bold;">COL</span> <span style="color:#CC3300; font-weight:bold;">OFF</span> <span style="color:#336699; font-weight:bold;">ROW</span> <span style="color:#CC3300; font-weight:bold;">OFF</span> <span style="color:#336699; font-weight:bold;">EMPTY-COORDS</span> <span style="color:#993300; font-weight:bold;">;</span>
+
+<span style="color:#800000; font-weight:bold;">8</span> <span style="color:#F07F00; font-weight:bold;">CONSTANT</span> <span style="color:#336699; font-weight:bold;">NEGATIVE-MASK</span>
+ <span style="color:#800000; font-weight:bold;">-16</span> <span style="color:#F07F00; font-weight:bold;">CONSTANT</span> <span style="color:#336699; font-weight:bold;">EXPAND-MASK</span>
+
+<span style="color:#F07F00; font-weight:bold;">:</span> <span style="color:#336699; font-weight:bold;">EXPAND</span> <span style="color:#669999; font-weight:bold;">(</span> <span style="color:#669999; font-weight:bold;">b -- n )</span>
+    <span style="color:#009999; font-weight:bold;">DUP</span> <span style="color:#336699; font-weight:bold;">NEGATIVE-MASK</span> <span style="color:#CC6600; font-weight:bold;">AND</span> <span style="color:#993300; font-weight:bold;">IF</span> <span style="color:#336699; font-weight:bold;">EXPAND-MASK</span> <span style="color:#CC6600; font-weight:bold;">OR</span> <span style="color:#993300; font-weight:bold;">THEN</span> <span style="color:#993300; font-weight:bold;">;</span>
+
+<span style="color:#F07F00; font-weight:bold;">:</span> <span style="color:#336699; font-weight:bold;">SHAPE&gt;&gt;N</span>  <span style="color:#669999; font-weight:bold;">(</span> <span style="color:#669999; font-weight:bold;">coords -- n,coord' )</span>
+    <span style="color:#009999; font-weight:bold;">DUP</span> <span style="color:#336699; font-weight:bold;">VALUE-MASK</span> <span style="color:#CC6600; font-weight:bold;">AND</span> <span style="color:#336699; font-weight:bold;">EXPAND</span>
+    <span style="color:#009999; font-weight:bold;">SWAP</span> <span style="color:#336699; font-weight:bold;">NIBBLE</span> <span style="color:#CC6600; font-weight:bold;">RSHIFT</span> <span style="color:#993300; font-weight:bold;">;</span>
+
+<span style="color:#F07F00; font-weight:bold;">:</span> <span style="color:#336699; font-weight:bold;">SHAPE&gt;&gt;XY</span> <span style="color:#669999; font-weight:bold;">(</span> <span style="color:#669999; font-weight:bold;">coords -- x,y,coords' )</span>
+    <span style="color:#336699; font-weight:bold;">SHAPE&gt;&gt;N</span> <span style="color:#336699; font-weight:bold;">SHAPE&gt;&gt;N</span> <span style="color:#993300; font-weight:bold;">;</span>
+
+<span style="color:#800000; font-weight:bold;">5</span> <span style="color:#F07F00; font-weight:bold;">CONSTANT</span> <span style="color:#336699; font-weight:bold;">NBCOORDS</span>
+
+<span style="color:#F07F00; font-weight:bold;">:</span> <span style="color:#336699; font-weight:bold;">XYS</span> <span style="color:#669999; font-weight:bold;">(</span> <span style="color:#669999; font-weight:bold;">coords -- x0,y0..x4,y4 )</span>
+    <span style="color:#336699; font-weight:bold;">NBCOORDS</span> <span style="color:#800000; font-weight:bold;">0</span> <span style="color:#993300; font-weight:bold;">DO</span> <span style="color:#336699; font-weight:bold;">SHAPE&gt;&gt;XY</span> <span style="color:#993300; font-weight:bold;">LOOP</span> <span style="color:#009999; font-weight:bold;">DROP</span> <span style="color:#993300; font-weight:bold;">;</span>
+
+<span style="color:#F07F00; font-weight:bold;">:</span> <span style="color:#336699; font-weight:bold;">XY-MIN</span> <span style="color:#669999; font-weight:bold;">(</span> <span style="color:#669999; font-weight:bold;">x,y,i,j -- k,l )</span>
+    <span style="color:#009999; font-weight:bold;">ROT</span> <span style="color:#CC6600; font-weight:bold;">MIN</span> <span style="color:#009999; font-weight:bold;">-ROT</span> <span style="color:#CC6600; font-weight:bold;">MIN</span> <span style="color:#009999; font-weight:bold;">SWAP</span> <span style="color:#993300; font-weight:bold;">;</span>
+
+<span style="color:#800000; font-weight:bold;">7</span> <span style="color:#F07F00; font-weight:bold;">CONSTANT</span> <span style="color:#336699; font-weight:bold;">MAX-NIBBLE</span>
+
+<span style="color:#F07F00; font-weight:bold;">:</span> <span style="color:#336699; font-weight:bold;">MINIMUM-XY</span> <span style="color:#669999; font-weight:bold;">(</span> <span style="color:#669999; font-weight:bold;">coords -- x,y )</span>
+    <span style="color:#336699; font-weight:bold;">XYS</span> <span style="color:#336699; font-weight:bold;">MAX-NIBBLE</span> <span style="color:#336699; font-weight:bold;">MAX-NIBBLE</span> <span style="color:#336699; font-weight:bold;">NBCOORDS</span> <span style="color:#800000; font-weight:bold;">0</span> <span style="color:#993300; font-weight:bold;">DO</span> <span style="color:#336699; font-weight:bold;">XY-MIN</span> <span style="color:#993300; font-weight:bold;">LOOP</span> <span style="color:#993300; font-weight:bold;">;</span>
+
+<span style="color:#F07F00; font-weight:bold;">:</span> <span style="color:#336699; font-weight:bold;">XY-NEGATE</span> <span style="color:#669999; font-weight:bold;">(</span> <span style="color:#669999; font-weight:bold;">x,y -- -x,-y )</span>
+    <span style="color:#CC6600; font-weight:bold;">NEGATE</span> <span style="color:#009999; font-weight:bold;">SWAP</span> <span style="color:#CC6600; font-weight:bold;">NEGATE</span> <span style="color:#009999; font-weight:bold;">SWAP</span> <span style="color:#993300; font-weight:bold;">;</span>
+
+<span style="color:#F07F00; font-weight:bold;">:</span> <span style="color:#336699; font-weight:bold;">XY-TRANSLATE</span> <span style="color:#669999; font-weight:bold;">(</span> <span style="color:#669999; font-weight:bold;">x,y,i,j -- x+i,y+j )</span>
+    <span style="color:#009999; font-weight:bold;">ROT</span> <span style="color:#CC6600; font-weight:bold;">+</span> <span style="color:#009999; font-weight:bold;">-ROT</span> <span style="color:#CC6600; font-weight:bold;">+</span> <span style="color:#009999; font-weight:bold;">SWAP</span> <span style="color:#993300; font-weight:bold;">;</span>
+
+<span style="color:#F07F00; font-weight:bold;">:</span> <span style="color:#336699; font-weight:bold;">(TRANSLATE)</span> <span style="color:#669999; font-weight:bold;">(</span> <span style="color:#669999; font-weight:bold;">coords,x,y -- coords' )</span>
+    <span style="color:#336699; font-weight:bold;">ROW</span> <span style="color:#CC3300; font-weight:bold;">!</span> <span style="color:#336699; font-weight:bold;">COL</span> <span style="color:#CC3300; font-weight:bold;">!</span> <span style="color:#336699; font-weight:bold;">XYS</span>
+    <span style="color:#336699; font-weight:bold;">EMPTY-COORDS</span> <span style="color:#336699; font-weight:bold;">NBCOORDS</span> <span style="color:#800000; font-weight:bold;">0</span> <span style="color:#993300; font-weight:bold;">DO</span>
+        <span style="color:#009999; font-weight:bold;">-ROT</span> <span style="color:#336699; font-weight:bold;">COL</span> <span style="color:#CC3300; font-weight:bold;">@</span> <span style="color:#336699; font-weight:bold;">ROW</span> <span style="color:#CC3300; font-weight:bold;">@</span> <span style="color:#336699; font-weight:bold;">XY-TRANSLATE</span>
+        <span style="color:#009999; font-weight:bold;">ROT</span> <span style="color:#336699; font-weight:bold;">SHAPE&lt;&lt;XY</span>
+    <span style="color:#993300; font-weight:bold;">LOOP</span> <span style="color:#993300; font-weight:bold;">;</span>
+
+<span style="color:#F07F00; font-weight:bold;">:</span> <span style="color:#336699; font-weight:bold;">XY-ROTATE</span> <span style="color:#669999; font-weight:bold;">(</span> <span style="color:#669999; font-weight:bold;">x,y -- y,-x )</span>
+    <span style="color:#009999; font-weight:bold;">SWAP</span> <span style="color:#CC6600; font-weight:bold;">NEGATE</span> <span style="color:#993300; font-weight:bold;">;</span>
+
+<span style="color:#F07F00; font-weight:bold;">:</span> <span style="color:#336699; font-weight:bold;">XY-FLIP</span> <span style="color:#669999; font-weight:bold;">(</span> <span style="color:#669999; font-weight:bold;">x,y -- -x,y )</span>
+    <span style="color:#009999; font-weight:bold;">SWAP</span> <span style="color:#CC6600; font-weight:bold;">NEGATE</span> <span style="color:#009999; font-weight:bold;">SWAP</span> <span style="color:#993300; font-weight:bold;">;</span>
+
+<span style="color:#F07F00; font-weight:bold;">:</span> <span style="color:#336699; font-weight:bold;">(CALIBRATE)</span> <span style="color:#669999; font-weight:bold;">(</span> <span style="color:#669999; font-weight:bold;">coords -- coords' )</span>
+    <span style="color:#009999; font-weight:bold;">DUP</span> <span style="color:#336699; font-weight:bold;">MINIMUM-XY</span> <span style="color:#336699; font-weight:bold;">XY-NEGATE</span> <span style="color:#336699; font-weight:bold;">(TRANSLATE)</span> <span style="color:#993300; font-weight:bold;">;</span>
+
+<span style="color:#F07F00; font-weight:bold;">:</span> <span style="color:#336699; font-weight:bold;">ROTATE</span> <span style="color:#669999; font-weight:bold;">(</span> <span style="color:#669999; font-weight:bold;">coords -- coords' )</span>
+    <span style="color:#336699; font-weight:bold;">XYS</span> <span style="color:#336699; font-weight:bold;">EMPTY-COORDS</span> <span style="color:#336699; font-weight:bold;">NBCOORDS</span> <span style="color:#800000; font-weight:bold;">0</span> <span style="color:#993300; font-weight:bold;">DO</span>
+        <span style="color:#009999; font-weight:bold;">-ROT</span> <span style="color:#336699; font-weight:bold;">XY-ROTATE</span>
+        <span style="color:#009999; font-weight:bold;">ROT</span> <span style="color:#336699; font-weight:bold;">SHAPE&lt;&lt;XY</span>
+        <span style="color:#993300; font-weight:bold;">LOOP</span>
+    <span style="color:#336699; font-weight:bold;">(CALIBRATE)</span> <span style="color:#993300; font-weight:bold;">;</span>
+
+<span style="color:#F07F00; font-weight:bold;">:</span> <span style="color:#336699; font-weight:bold;">FLIP</span> <span style="color:#669999; font-weight:bold;">(</span> <span style="color:#669999; font-weight:bold;">coords -- coords' )</span>
+    <span style="color:#336699; font-weight:bold;">XYS</span> <span style="color:#336699; font-weight:bold;">EMPTY-COORDS</span> <span style="color:#336699; font-weight:bold;">NBCOORDS</span> <span style="color:#800000; font-weight:bold;">0</span> <span style="color:#993300; font-weight:bold;">DO</span>
+        <span style="color:#009999; font-weight:bold;">-ROT</span> <span style="color:#336699; font-weight:bold;">XY-FLIP</span>
+        <span style="color:#009999; font-weight:bold;">ROT</span> <span style="color:#336699; font-weight:bold;">SHAPE&lt;&lt;XY</span>
+    <span style="color:#993300; font-weight:bold;">LOOP</span>
+    <span style="color:#336699; font-weight:bold;">(CALIBRATE)</span> <span style="color:#993300; font-weight:bold;">;</span>
+
+</pre>

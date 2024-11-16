@@ -8,9 +8,6 @@
 : SHAPE<<XY ( x,y,coords -- coords' )
     SHAPE<<N SHAPE<<N ;
 
-: ++! ( addr -- )
-    1 SWAP +! ;
-
 0 CONSTANT EMPTY-COORDS
 VARIABLE COL VARIABLE ROW
 CHAR | CONSTANT BAR CHAR # CONSTANT SQUARE
@@ -21,10 +18,10 @@ CHAR | CONSTANT BAR CHAR # CONSTANT SQUARE
         I C@ SQUARE = IF
             COL @ ROW @ ROT SHAPE<<XY
         THEN
-        COL ++!
+        1 COL +!
     LOOP
     COL OFF
-    ROW ++! ;
+    1 ROW +! ;
 
 : NEW-SHAPE ( ccccc | -- coords )
     COL OFF ROW OFF EMPTY-COORDS ;
