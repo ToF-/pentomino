@@ -3,6 +3,7 @@
 REQUIRE ffl/tst.fs
 REQUIRE piece.fs
 
+
 SUITE piece
 TEST defining pieces
 T{

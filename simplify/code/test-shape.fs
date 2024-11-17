@@ -56,7 +56,7 @@ NEW-SHAPE
 | ##.
 | .##
 | .#.
-ROTATE XYS
+ROTATE HEX .S CR DECIMAL XYS .S
 \ row  col
    2 ?S 0 ?S
    1 ?S 0 ?S  \ .#.
@@ -64,6 +64,7 @@ ROTATE XYS
    0 ?S 1 ?S  \ #..
    1 ?S 2 ?S
 }T
+bye
 TEST flipping
 T{
 NEW-SHAPE

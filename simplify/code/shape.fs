@@ -71,20 +71,30 @@ CHAR # CONSTANT SQUARE
 : XY-FLIP ( x,y -- -x,y )
     SWAP NEGATE SWAP ;
 
+: (SORT) ( coords -- coords' )
+    XYS 0 5 0 DO
+        -ROT 8 * + 1 SWAP LSHIFT OR
+    LOOP
+    EMPTY-COORDS
+    63 0 DO
+        OVER 1 I LSHIFT AND IF
+            I 8 /MOD
+            ROT SHAPE<<XY
+        THEN
+    LOOP NIP ;
+
 : (CALIBRATE) ( coords -- coords' )
-    DUP MINIMUM-XY XY-NEGATE (TRANSLATE) ;
+    DUP MINIMUM-XY XY-NEGATE (TRANSLATE) (SORT) ;
 
 : ROTATE ( coords -- coords' )
     XYS EMPTY-COORDS NBCOORDS 0 DO
         -ROT XY-ROTATE
         ROT SHAPE<<XY
-        LOOP
-    (CALIBRATE) ;
+        LOOP (CALIBRATE) ;
 
 : FLIP ( coords -- coords' )
     XYS EMPTY-COORDS NBCOORDS 0 DO
         -ROT XY-FLIP
         ROT SHAPE<<XY
-    LOOP
-    (CALIBRATE) ;
+    LOOP (CALIBRATE) ;
 
