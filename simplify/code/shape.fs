@@ -71,15 +71,16 @@ CHAR # CONSTANT SQUARE
 : XY-FLIP ( x,y -- -x,y )
     SWAP NEGATE SWAP ;
 
-: (SORT) ( coords -- coords' )
+: (SIGNATURE) ( coords -- n )
     XYS 0 5 0 DO
         -ROT 8 * + 1 SWAP LSHIFT OR
-    LOOP
-    EMPTY-COORDS
+    LOOP ;
+
+: (SORT) ( coords -- coords' )
+    (SIGNATURE) EMPTY-COORDS
     63 0 DO
         OVER 1 I LSHIFT AND IF
-            I 8 /MOD
-            ROT SHAPE<<XY
+            I 8 /MOD ROT SHAPE<<XY
         THEN
     LOOP NIP ;
 

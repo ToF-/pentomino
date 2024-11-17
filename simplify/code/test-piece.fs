@@ -23,11 +23,10 @@ NEW-SHAPE
 HEX
 ?S
 DECIMAL
-11 NTH-PIECE DUP @ 8 ?S CELL+ @ @ 
+11 NTH-PIECE DUP @ 8 ?S CELL+ @ 7 CELLS + @
 NEW-SHAPE
-| #.
-| ##
-| ##
+| ##.
+| ###
 ?S
 }T
 
@@ -47,4 +46,3 @@ NEW-SHAPE
         I 10 /MOD 6 * SWAP 8 * SWAP
         AT-XY I . CR CR CR
     LOOP ;
-

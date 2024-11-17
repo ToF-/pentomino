@@ -42,13 +42,14 @@ NEW-SHAPE
 | ##.
 | .##
 | .#.
-1 2 (TRANSLATE) XYS
-\ row  col
-   2 ?S 1 ?S   \ ....
-   2 ?S 2 ?S   \ ....
-   3 ?S 2 ?S   \ .##.
-   3 ?S 3 ?S   \ ..##
-   4 ?S 2 ?S   \ ..#.
+1 2 (TRANSLATE)
+NEW-SHAPE
+| ....
+| ....
+| .##.
+| ..##
+| ..#.
+?S
 }T
 TEST rotating
 T{
@@ -56,26 +57,23 @@ NEW-SHAPE
 | ##.
 | .##
 | .#.
-ROTATE HEX .S CR DECIMAL XYS .S
-\ row  col
-   2 ?S 0 ?S
-   1 ?S 0 ?S  \ .#.
-   1 ?S 1 ?S  \ ###
-   0 ?S 1 ?S  \ #..
-   1 ?S 2 ?S
+ROTATE 
+NEW-SHAPE
+| .#.
+| ###
+| #..
+?S
 }T
-bye
 TEST flipping
 T{
 NEW-SHAPE
 | ##.
 | .##
 | .#.
-FLIP XYS
-\ row  col
-   0 ?S 2 ?S
-   0 ?S 1 ?S  \ .##
-   1 ?S 1 ?S  \ ##.
-   1 ?S 0 ?S  \ .#.
-   2 ?S 1 ?S
+FLIP
+NEW-SHAPE
+| .##
+| ##.
+| .#.
+?S
 }T
