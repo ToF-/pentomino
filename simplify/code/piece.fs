@@ -15,16 +15,18 @@ SHAPES SHAPE^ !
     SHAPE^ @ ! CELL SHAPE^ +! ;
 
 : ROTATE-FLIP-ROTATE, ( n -- )
-    DUP SHAPE,
-    DUP DUP ROTATE SHAPE,
-    FLIP DUP SHAPE,
-    ROTATE SHAPE, ;
+    DUP 2DUP
+    SHAPE,
+    ROTATE SHAPE,
+    FLIP SHAPE,
+    FLIP ROTATE SHAPE, ;
 
 : 4-ROTATE, ( n -- )
-    DUP SHAPE,
-    ROTATE DUP SHAPE,
-    ROTATE DUP SHAPE,
-    ROTATE SHAPE, ;
+    DUP 2DUP
+    SHAPE,
+    ROTATE SHAPE,
+    ROTATE ROTATE SHAPE,
+    ROTATE ROTATE ROTATE SHAPE, ;
 
 : 8-ROTATE, ( n -- )
     DUP 4-ROTATE,
@@ -89,30 +91,12 @@ ROTATE-FLIP-ROTATE,
 | ..##|
 8-ROTATE,
 8 NEW-SHAPE,
-| .#|
+| #.|
 | ##|
 | ##|
 8-ROTATE,
-PIECES 13 2* CELLS DUMP
 
-KEY DROP
-
-: .SHAPE 
-    XYS 5 0 DO
-        AT-XY [CHAR] # EMIT
-    LOOP ;
-
-: TEST
-    63 0 DO
-        I NTH-SHAPE @
-        PAGE .SHAPE
-        0 10 AT-XY I . CR
-        KEY DROP
-    LOOP ;
-
-TEST
-BYE
-
-
+: NTH-PIECE ( n -- addr )
+    2* CELLS PIECES + ;
 
 
