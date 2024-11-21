@@ -9,6 +9,7 @@
 
 REQUIRE test-shape.fs
 REQUIRE test-piece.fs
+REQUIRE test-board.fs
 
 BYE
 
